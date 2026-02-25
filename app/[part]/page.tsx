@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
-  CoursePlayerLayout,
+  TutorialLayout,
   LessonHeader,
   QABlock,
   QuizBlock,
@@ -24,6 +24,20 @@ import {
   getAdjacentParts,
 } from "@/data/course";
 import type { CoursePartMeta } from "@/data/course";
+import { LessonTopBar } from "@/app/components/LessonTopBar";
+
+// ─── Type icons/labels (matches PartTypeBadge META) ───────────────────────
+
+const TYPE_META: Record<string, { icon: string; label: string }> = {
+  video: { icon: "▶", label: "Video" },
+  reading: { icon: "📖", label: "Reading" },
+  "video-code": { icon: "💻", label: "Video with Code" },
+  quiz: { icon: "📝", label: "Quiz" },
+  podcast: { icon: "🎙", label: "Podcast" },
+  slideshow: { icon: "📑", label: "Slides" },
+  article: { icon: "📰", label: "Article" },
+  lab: { icon: "🧪", label: "Lab" },
+};
 
 // ─── Static params (for output: 'export') ────────────────────────────────
 
@@ -65,63 +79,72 @@ export default async function LessonPage({
   if (!part) notFound();
 
   const { prev, next } = getAdjacentParts(slug);
-
-  const sidebarProps = {
-    courseTitle: COURSE.title,
-    parts: COURSE.parts,
-    currentSlug: slug,
-    basePath: "",
-    totalDuration: COURSE.totalDuration,
-  };
+  const currentIndex = COURSE.parts.findIndex((p) => p.slug === slug);
+  const meta = TYPE_META[part.type] ?? { icon: "📄", label: part.type };
 
   return (
-    <CoursePlayerLayout
+    <TutorialLayout
       header={{
         ...SITE_CONFIG.header,
         currentPath: `/${slug}/`,
       }}
       footer={SITE_CONFIG.footer}
-      sidebar={sidebarProps}
-      showFooter={false}
+      maxWidth="content"
     >
-      {/* ── Part header ─────────────────────────────────────────────────── */}
-      <LessonHeader
-        type={part.type}
-        duration={part.duration}
+      {/* ── Lesson navigation strip ────────────────────────────────────── */}
+      <LessonTopBar
+        currentIndex={currentIndex}
+        totalLessons={COURSE.parts.length}
         title={part.title}
-        description={part.description}
+        typeLabel={meta.label}
+        typeIcon={meta.icon}
+        duration={part.duration}
+        prevHref={prev ? `/${prev.slug}/` : undefined}
+        nextHref={next ? `/${next.slug}/` : undefined}
+        courseHref="/"
       />
 
-      {/* ── Content by type ─────────────────────────────────────────────── */}
-      <PartContent part={part} />
+      {/* ── Lesson content ─────────────────────────────────────────────── */}
+      <div className="lesson-content">
+        {/* Part header */}
+        <LessonHeader
+          type={part.type}
+          duration={part.duration}
+          title={part.title}
+          description={part.description}
+        />
 
-      {/* ── Navigation ──────────────────────────────────────────────────── */}
-      <SectionDivider />
-      <TutorialNav
-        prev={
-          prev
-            ? {
-                label: prev.title,
-                href: `/${prev.slug}/`,
-                description: prev.duration,
-              }
-            : {
-                label: "Course Overview",
-                href: "/",
-                description: "All lessons",
-              }
-        }
-        next={
-          next
-            ? {
-                label: next.title,
-                href: `/${next.slug}/`,
-                description: next.duration,
-              }
-            : undefined
-        }
-      />
-    </CoursePlayerLayout>
+        {/* Content by type */}
+        <PartContent part={part} />
+
+        {/* Navigation */}
+        <SectionDivider />
+        <TutorialNav
+          prev={
+            prev
+              ? {
+                  label: prev.title,
+                  href: `/${prev.slug}/`,
+                  description: prev.duration,
+                }
+              : {
+                  label: "Course Overview",
+                  href: "/",
+                  description: "All lessons",
+                }
+          }
+          next={
+            next
+              ? {
+                  label: next.title,
+                  href: `/${next.slug}/`,
+                  description: next.duration,
+                }
+              : undefined
+          }
+        />
+      </div>
+    </TutorialLayout>
   );
 }
 

@@ -4,14 +4,13 @@ import {
   HeroSection,
   SectionDivider,
   SectionHeading,
-  ConceptCard,
-  ConceptGrid,
   KeyPoint,
   ShareButtons,
   LessonList,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
 import { COURSE } from "@/data/course";
+import { CourseStatsBar } from "./components/CourseStatsBar";
 
 // ─── Metadata ─────────────────────────────────────────────────────────────
 
@@ -33,7 +32,7 @@ export default function CourseOverviewPage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
     >
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection
@@ -51,43 +50,10 @@ export default function CourseOverviewPage() {
         tags={COURSE.tags}
       />
 
-      {/* ── Course stats ──────────────────────────────────────────────────── */}
-      <ConceptGrid columns={4}>
-        <ConceptCard
-          title={`${COURSE.parts.length} Lessons`}
-          description="From introduction to advanced security concepts."
-          icon="📚"
-          variant="primary"
-          tag="Content"
-        />
-        <ConceptCard
-          title={COURSE.totalDuration}
-          description="Focused, no-fluff video lessons."
-          icon="⏱"
-          variant="accent"
-          tag="Duration"
-        />
-        <ConceptCard
-          title="6 Frameworks"
-          description="Vertex AI, ADK, LangGraph, BeeAI, MSFT AF, Agent Stack."
-          icon="🔧"
-          variant="success"
-          tag="Coverage"
-        />
-        <ConceptCard
-          title="Open Source"
-          description="All code is on GitHub with MIT license."
-          icon="🔓"
-          variant="default"
-          tag="License"
-        />
-      </ConceptGrid>
-
-      {/* ── Lesson List ───────────────────────────────────────────────────── */}
-      <SectionDivider label="What You'll Learn" />
+      {/* ── Course Curriculum ─────────────────────────────────────────────── */}
+      <SectionDivider label="Course Curriculum" />
 
       <SectionHeading
-        eyebrow="Course Curriculum"
         title={`${COURSE.parts.length} lessons, zero fluff`}
         subtitle="Each lesson is focused and builds on the previous one — from first principles to production-ready multi-agent systems."
       />
@@ -102,6 +68,10 @@ export default function CourseOverviewPage() {
         account with Vertex AI enabled. No prior agent framework experience
         required.
       </KeyPoint>
+
+      {/* ── Course Stats ──────────────────────────────────────────────────── */}
+      <SectionDivider />
+      <CourseStatsBar course={COURSE} />
 
       {/* ── Share ─────────────────────────────────────────────────────────── */}
       <SectionDivider variant="gradient" />
