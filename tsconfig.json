@@ -28,10 +28,10 @@
         "./*"
       ],
       "@localm/tutorial-framework": [
-        "./packages/tutorial-framework/src/index.ts"
+        "./_common/frontend/tutorial-framework/src/index.ts"
       ],
       "@tf/*": [
-        "./packages/tutorial-framework/src/*"
+        "./_common/frontend/tutorial-framework/src/*"
       ]
     }
   },
@@ -40,11 +40,11 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "packages/**/*.ts",
-    "packages/**/*.tsx"
+    "_common/**/*.ts",
+    "_common/**/*.tsx"
   ],
   "exclude": [
     "node_modules",
-    "packages/*/node_modules"
+    "_common/*/node_modules"
   ]
 }

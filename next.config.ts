@@ -1,16 +1,16 @@
 import type { NextConfig } from "next";
 import path from "path";
 
-// Vendored framework source lives inside this repo at packages/tutorial-framework/
+// Framework source lives in the _common git submodule.
 // Using path.resolve ensures it works on all platforms in both local and CI environments.
 const frameworkSrc = path.resolve(
   __dirname,
-  "./packages/tutorial-framework/src",
+  "./_common/frontend/tutorial-framework/src",
 );
 
 // POSIX-relative path for Turbopack (it cannot handle Windows absolute paths)
-// Relative to project root → ./packages/...
-const frameworkRelative = "./packages/tutorial-framework/src/index.ts";
+// Relative to project root → ./_common/...
+const frameworkRelative = "./_common/frontend/tutorial-framework/src/index.ts";
 
 const nextConfig: NextConfig = {
   /**

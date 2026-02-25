@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -31,8 +33,8 @@ jobs:
           # package-lock.json is at the repo root (no _tuts/ subdirectory)
           cache-dependency-path: package-lock.json
 
-      # npm workspaces automatically installs packages/tutorial-framework deps
-      # No separate step needed — it's vendored in packages/ inside this repo.
+      # _common is a git submodule (checked out above with submodules: recursive).
+      # npm install picks up the framework via the file:./_common/... reference.
       - name: Install dependencies
         run: npm ci
 

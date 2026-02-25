@@ -1,58 +1,33 @@
 <#
 .SYNOPSIS
-    Sync the vendored @localm/tutorial-framework from common/.
+    Update the _common git submodule to the latest commit on its remote.
 
 .DESCRIPTION
-    Copies the framework source from common/frontend/tutorial-framework/src/
-    into this repo's packages/tutorial-framework/src/.
+    Fetches and merges the latest changes from the upstream
+    https://github.com/nilayparikh/_tuts_common.git into _common/.
 
-    Use this after updating components in the common repo.
+    Run this after the common repo receives new framework components or
+    doc updates and you want to pull them into this tutorial repo.
 
-.PARAMETER CommonRoot
-    Path to the common/ directory. Defaults to ../../common relative to this
-    repo, which works in the localm-tuts multi-repo workspace.
+    After running, review the changes with `git diff --submodule` and
+    then commit to pin the new submodule SHA:
+        git add _common
+        git commit -m "chore: update _common submodule"
 
 .EXAMPLE
     ./scripts/sync-common.ps1
-    ./scripts/sync-common.ps1 -CommonRoot "C:\repos\common"
 #>
-
-param(
-    [string]$CommonRoot
-)
 
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 
-if (-not $CommonRoot) {
-    $CommonRoot = Join-Path $ProjectRoot "..\..\common"
+Push-Location $ProjectRoot
+try {
+    Write-Host "`n━━━ Updating _common submodule ━━━" -ForegroundColor Cyan
+    git submodule update --remote --merge _common 2>&1 | Write-Host
+    Write-Host "`n[OK] _common is up to date" -ForegroundColor Green
+    Write-Host "Review changes: git diff --submodule" -ForegroundColor DarkGray
+    Write-Host "Commit update:  git add _common && git commit -m 'chore: update _common'" -ForegroundColor DarkGray
+} finally {
+    Pop-Location
 }
-
-$SourceDir = Join-Path $CommonRoot "frontend\tutorial-framework\src"
-$TargetDir = Join-Path $ProjectRoot "packages\tutorial-framework\src"
-
-# ── Validate ────────────────────────────────────────────────────────────
-if (-not (Test-Path $SourceDir)) {
-    Write-Host "ERROR: Source not found at $SourceDir" -ForegroundColor Red
-    Write-Host "Pass -CommonRoot to point to your common/ directory." -ForegroundColor Yellow
-    exit 1
-}
-
-if (-not (Test-Path $TargetDir)) {
-    Write-Host "ERROR: Target not found at $TargetDir" -ForegroundColor Red
-    exit 1
-}
-
-# ── Sync ────────────────────────────────────────────────────────────────
-Write-Host "`n━━━ Syncing @localm/tutorial-framework ━━━" -ForegroundColor Cyan
-Write-Host "From: $SourceDir" -ForegroundColor DarkGray
-Write-Host "  To: $TargetDir" -ForegroundColor DarkGray
-
-# Remove old source, copy fresh
-Remove-Item -Recurse -Force $TargetDir
-Copy-Item -Recurse -Force $SourceDir $TargetDir
-
-# Count files synced
-$fileCount = (Get-ChildItem -Recurse -File $TargetDir).Count
-Write-Host "`n[OK] Synced $fileCount files" -ForegroundColor Green
-Write-Host "Run 'npm run build' to verify." -ForegroundColor DarkGray

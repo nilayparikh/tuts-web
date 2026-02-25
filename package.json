@@ -12,11 +12,8 @@
     "export": "next build",
     "preview": "npx serve out"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "dependencies": {
-    "@localm/tutorial-framework": "file:./packages/tutorial-framework",
+    "@localm/tutorial-framework": "file:./_common/frontend/tutorial-framework",
     "next": "^15.5.10",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
