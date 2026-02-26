@@ -17,6 +17,7 @@ import {
   PollBlock,
   ConceptCard,
   ConceptGrid,
+  LabSettings,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
 import { COURSE } from "@/data/course";
@@ -62,38 +63,29 @@ export default function CourseOverviewPage() {
 
       {/* ── What You'll Build ─────────────────────────────────────────────── */}
       <SectionDivider label="What You'll Build" />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--tf-space-8)",
-          alignItems: "center",
-        }}
-      >
-        <Paragraph lead center>
-          By the end of this course you will be able to build production-grade
-          multi-agent systems using the A2A protocol, from architecture to
-          deployment.
-        </Paragraph>
+      <Paragraph lead center>
+        By the end of this course you will be able to build production-grade
+        multi-agent systems using the A2A protocol, from architecture to
+        deployment.
+      </Paragraph>
 
-        <ConceptGrid columns={3}>
-          <ConceptCard
-            title="Agent Cards"
-            description="Design self-describing JSON-LD agent metadata that enables discovery and capability negotiation."
-            variant="primary"
-          />
-          <ConceptCard
-            title="Task Lifecycle"
-            description="Implement the full send → stream → complete lifecycle with proper error handling."
-            variant="accent"
-          />
-          <ConceptCard
-            title="Multi-Agent Orchestration"
-            description="Wire multiple agents together with push notifications and real-time SSE streaming."
-            variant="success"
-          />
-        </ConceptGrid>
-      </div>
+      <ConceptGrid columns={3}>
+        <ConceptCard
+          title="Agent Cards"
+          description="Design self-describing JSON-LD agent metadata that enables discovery and capability negotiation."
+          variant="primary"
+        />
+        <ConceptCard
+          title="Task Lifecycle"
+          description="Implement the full send → stream → complete lifecycle with proper error handling."
+          variant="accent"
+        />
+        <ConceptCard
+          title="Multi-Agent Orchestration"
+          description="Wire multiple agents together with push notifications and real-time SSE streaming."
+          variant="success"
+        />
+      </ConceptGrid>
 
       {/* ── Architecture Diagram ──────────────────────────────────────────── */}
       <SectionDivider label="Architecture Overview" />
@@ -156,11 +148,37 @@ export default function CourseOverviewPage() {
       {/* ── Prerequisites ─────────────────────────────────────────────────── */}
       <SectionDivider label="Prerequisites" />
 
-      <InfoBox title="What you need before starting">
-        Basic Python (3.11+), familiarity with REST APIs, and a Google Cloud
-        account with Vertex AI enabled. No prior agent framework experience
-        required.
-      </InfoBox>
+      <LabSettings
+        title="Lab Requirements"
+        description="Make sure you have the following tools installed before starting the course."
+        difficulty="beginner"
+        setupTime="~5 min"
+        requirements={[
+          {
+            name: "Python",
+            version: "3.11+",
+            description: "Core runtime for all exercises",
+            link: "https://python.org/downloads/",
+          },
+          {
+            name: "Google Cloud SDK",
+            description: "For Vertex AI access",
+            link: "https://cloud.google.com/sdk/docs/install",
+          },
+          {
+            name: "Git",
+            version: "2.x",
+            description: "Clone the course repository",
+            link: "https://git-scm.com/downloads",
+          },
+          {
+            name: "VS Code",
+            description: "Recommended editor",
+            link: "https://code.visualstudio.com",
+            optional: true,
+          },
+        ]}
+      />
 
       {/* ── Getting Started Guide ─────────────────────────────────────────── */}
       <SectionDivider label="Quick Start" />
@@ -225,29 +243,21 @@ export default function CourseOverviewPage() {
       {/* ── Callout Box Showcase ──────────────────────────────────────────── */}
       <SectionDivider label="Tips & Notices" />
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--tf-space-4)",
-        }}
-      >
-        <TipBox title="Learning Strategy">
-          Watch each video lesson at 1x speed first, then code along in the
-          second pass. This two-pass method is proven to improve retention by
-          40%.
-        </TipBox>
+      <TipBox title="Learning Strategy">
+        Watch each video lesson at 1x speed first, then code along in the
+        second pass. This two-pass method is proven to improve retention by
+        40%.
+      </TipBox>
 
-        <SuccessBox title="Certification Available">
-          Complete all lessons and pass the final quiz to earn your A2A Protocol
-          Developer certificate.
-        </SuccessBox>
+      <SuccessBox title="Certification Available">
+        Complete all lessons and pass the final quiz to earn your A2A Protocol
+        Developer certificate.
+      </SuccessBox>
 
-        <NoteBox title="Self-Paced">
-          This course is completely self-paced. Each lesson builds on the
-          previous one, but you can revisit any lesson at any time.
-        </NoteBox>
-      </div>
+      <NoteBox title="Self-Paced">
+        This course is completely self-paced. Each lesson builds on the
+        previous one, but you can revisit any lesson at any time.
+      </NoteBox>
 
       {/* ── Course Stats ──────────────────────────────────────────────────── */}
       <SectionDivider />
