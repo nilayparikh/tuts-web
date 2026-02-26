@@ -1,6 +1,6 @@
-# A2A: The Agent2Agent Protocol — Tutorial Site
+# Agentic AI — Tutorial Site
 
-A single-course tutorial website built with the [LocalM Tutorial Template](https://github.com/nilayparikh). Covers building multi-agent AI systems using Google's A2A protocol.
+A multi-course tutorial website built with the [LocalM Tutorial Framework](https://github.com/nilayparikh). Each site covers a single **topic** (e.g. Agentic AI) and hosts one or more **courses** under that topic.
 
 **Live site**: [nilayparikh.github.io/\_tuts/](https://nilayparikh.github.io/_tuts/)
 
@@ -21,10 +21,11 @@ npm install
 npm run dev          # → http://localhost:3000
 ```
 
-## What This Template Provides
+## What This Site Provides
 
-- **Course overview page** (`/`) — hero, stats, full lesson list
-- **Lesson pages** (`/[part]/`) — sidebar navigation + content by type
+- **Topic home page** (`/`) — hero, course catalogue, instructor card
+- **Course overview pages** (`/[course]/`) — hero, lesson list, instructor card
+- **Lesson pages** (`/[course]/[part]/`) — sidebar navigation + content by type
 - **8 part types** — video, video-code, reading, quiz, article, podcast, slideshow, lab
 - **Static export** — deploys to GitHub Pages with zero server
 - **Dark theme** — design-token-based, fully customizable
@@ -40,16 +41,27 @@ _common/                     # Git submodule → nilayparikh/_tuts_common
 
 app/
 ├── layout.tsx               # Root layout
-├── page.tsx                 # Course overview
+├── page.tsx                 # Topic home — lists all courses
 ├── globals.css              # Theme overrides
-└── [part]/page.tsx          # Lesson pages
+├── components/              # Site-specific UI (InstructorDetailCard)
+├── [course]/
+│   ├── page.tsx             # Course overview (dynamic)
+│   └── [part]/
+│       └── page.tsx         # Lesson pages (dynamic)
+├── examples/page.tsx        # Code examples (aggregated from all courses)
+├── privacy/page.tsx         # Privacy policy
+└── terms/page.tsx           # Terms of use
 
 config/site.ts               # Site name, nav, social links
-data/course.ts               # Course definition (all lessons)
+data/
+├── courses/
+│   ├── types.ts             # Shared TypeScript interfaces
+│   ├── index.ts             # Course registry + helpers
+│   └── a2a.ts               # A2A course data (first course)
 scripts/
 ├── run.ps1                  # Dev launcher
 └── sync-common.ps1          # Sync _common submodule
-docs/                        # Template documentation
+docs/                        # Site documentation
 .github/
 ├── agents/                  # Copilot agent definitions
 ├── instructions/            # AI coding rules (auto-applied)
@@ -57,6 +69,15 @@ docs/                        # Template documentation
 ├── skills/                  # Copilot agent skills
 └── workflows/               # GitHub Actions (deploy)
 ```
+
+## Route Architecture
+
+| Route                | Page                       | Data source                 |
+| -------------------- | -------------------------- | --------------------------- |
+| `/`                  | Topic home (course list)   | `data/courses/index.ts`     |
+| `/[course]/`         | Course overview             | `data/courses/<slug>.ts`   |
+| `/[course]/[part]/`  | Lesson page                | Course `parts[]` array      |
+| `/examples/`         | Code examples               | All courses aggregated      |
 
 ## The `_common` Submodule
 
@@ -66,12 +87,20 @@ The shared component library (`@localm/tutorial-framework`) and AI agent configu
 - **Sync updates**: `./scripts/sync-common.ps1`
 - **Full guide**: [`docs/_common-submodule.md`](docs/_common-submodule.md)
 
-## Create Your Own Tutorial
+## Adding a New Course
+
+1. Create `data/courses/<slug>.ts` exporting a `CourseDefinition`
+2. Import it in `data/courses/index.ts` and add to `ALL_COURSES`
+3. The site automatically generates pages at `/<slug>/` and `/<slug>/<part>/`
+4. Run `npm run build` to verify
+
+## Create Your Own Tutorial Site
 
 1. Fork this repo (or "Use this template"), then `git submodule update --init --recursive`
-2. Edit `data/course.ts` with your lessons
-3. Edit `config/site.ts` with your branding
-4. `npm run build` → deploy `out/` to GitHub Pages
+2. Edit `data/courses/index.ts` — update `SITE_TOPIC` for your topic
+3. Create course data files under `data/courses/`
+4. Edit `config/site.ts` with your branding
+5. `npm run build` → deploy `out/` to GitHub Pages
 
 See [`docs/README.md`](docs/README.md) for the full guide.
 

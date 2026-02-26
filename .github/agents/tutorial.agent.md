@@ -1,6 +1,6 @@
 ---
 name: _tuts_agent
-description: Agent for creating and editing pages in the _tuts Next.js course site. Uses @localm/tutorial-framework exclusively — no custom components allowed.
+description: Agent for creating and editing pages in the _tuts Next.js multi-course tutorial site. Uses @localm/tutorial-framework exclusively — no custom components allowed.
 tools:
   [
     "vscode",
@@ -35,23 +35,37 @@ _tuts/
 ├── app/
 │   ├── layout.tsx          # Root layout — TutorialGlobalStyles + fonts
 │   ├── globals.css         # Token overrides only
-│   ├── page.tsx            # Course overview / home page
-│   ├── [part]/
-│   │   └── page.tsx        # Course lesson pages (dynamic route)
-│   ├── components/         # Site-specific UI (CourseStatsBar, LessonTopBar)
+│   ├── page.tsx            # Topic home — lists all courses
+│   ├── [course]/
+│   │   ├── page.tsx        # Course overview (dynamic route)
+│   │   └── [part]/
+│   │       └── page.tsx    # Lesson pages (dynamic route)
+│   ├── components/         # Site-specific UI (InstructorDetailCard)
 │   └── tutorials/          # (Optional) standalone tutorial pages
 │       └── <slug>/
 │           └── page.tsx
 ├── config/
 │   └── site.ts             # SITE_CONFIG — header + footer props
 ├── data/
-│   └── course.ts           # Course definition — parts[], slugs, metadata
+│   └── courses/
+│       ├── types.ts        # Shared TypeScript interfaces
+│       ├── index.ts        # Course registry + SITE_TOPIC + helpers
+│       └── <slug>.ts       # One file per course (e.g. a2a.ts)
 ├── docs/                   # Site-specific documentation
 │   ├── _common-submodule.md  # How _common works + when to edit it
 │   ├── design-principles.md  # Architecture + guardrails
 │   └── deployment.md         # GitHub Pages deployment
 └── public/                 # Static assets
 ```
+
+## Route Architecture
+
+| Route                | Page                     | Data Source                    |
+| -------------------- | ------------------------ | ------------------------------ |
+| `/`                  | Topic home (course list) | `SITE_TOPIC` + `ALL_COURSES`   |
+| `/[course]/`         | Course overview           | `findCourse(slug)`            |
+| `/[course]/[part]/`  | Lesson page               | `findCoursePart(course, part)`|
+| `/examples/`         | Code examples             | `ALL_COURSES` (aggregated)    |
 
 ## The `_common` Submodule
 
@@ -83,28 +97,76 @@ All imports from `@localm/tutorial-framework`. Full prop API in `_common/docs/tu
 
 ## Page Patterns
 
-### Course Lesson Page (`app/[part]/page.tsx`)
+### Topic Home Page (`app/page.tsx`)
 
-This site primarily uses `CoursePlayerLayout` with data-driven lessons from `data/course.ts`:
+Lists all courses in the site:
 
 ```tsx
-import { CoursePlayerLayout, LessonHeader, YouTubeEmbed, ShareButtons, TutorialNav } from "@localm/tutorial-framework";
+import { TutorialLayout, HeroSection, ConceptGrid, ConceptCard } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
-import { COURSE, COURSE_SLUGS, findPart, getAdjacentParts } from "@/data/course";
+import { SITE_TOPIC, ALL_COURSES } from "@/data/courses";
+
+export default function TopicHomePage() {
+  return (
+    <TutorialLayout header={...} footer={...} maxWidth="narrow">
+      <HeroSection ... />
+      <ConceptGrid columns={2}>
+        {ALL_COURSES.map((course) => (
+          <a href={`/${course.slug}/`}><ConceptCard ... /></a>
+        ))}
+      </ConceptGrid>
+    </TutorialLayout>
+  );
+}
+```
+
+### Course Overview Page (`app/[course]/page.tsx`)
+
+Dynamic route for each course:
+
+```tsx
+import { TutorialLayout, HeroSection, LessonList } from "@localm/tutorial-framework";
+import { SITE_CONFIG } from "@/config/site";
+import { ALL_COURSE_SLUGS, findCourse } from "@/data/courses";
 
 export function generateStaticParams() {
-  return COURSE_SLUGS.map((slug) => ({ part: slug }));
+  return ALL_COURSE_SLUGS.map((slug) => ({ course: slug }));
+}
+
+export default async function CourseOverviewPage({ params }: Props) {
+  const { course: slug } = await params;
+  const course = findCourse(slug);
+  return (
+    <TutorialLayout header={...} footer={...} maxWidth="narrow">
+      <HeroSection ... />
+      <LessonList parts={course.parts} basePath={`/${slug}`} />
+    </TutorialLayout>
+  );
+}
+```
+
+### Course Lesson Page (`app/[course]/[part]/page.tsx`)
+
+Dynamic route for each lesson within a course:
+
+```tsx
+import { CoursePlayerLayout, LessonHeader, TutorialNav } from "@localm/tutorial-framework";
+import { SITE_CONFIG } from "@/config/site";
+import { findCourse, findCoursePart, getAdjacentParts, allCoursePartParams } from "@/data/courses";
+
+export function generateStaticParams() {
+  return allCoursePartParams();
 }
 
 export default async function LessonPage({ params }: Props) {
-  const { part: slug } = await params;
-  const meta = findPart(slug);
-  const { prev, next } = getAdjacentParts(slug);
+  const { course: courseSlug, part: partSlug } = await params;
+  const course = findCourse(courseSlug);
+  const part = findCoursePart(courseSlug, partSlug);
+  const { prev, next } = getAdjacentParts(courseSlug, partSlug);
   return (
     <CoursePlayerLayout header={...} footer={...} sidebar={...}>
-      <LessonHeader title={meta.title} ... />
-      {/* Render content based on meta.type */}
-      <ShareButtons ... />
+      <LessonHeader title={part.title} ... />
+      {/* Render content based on part.type */}
       <TutorialNav prev={prev} next={next} />
     </CoursePlayerLayout>
   );
@@ -140,10 +202,35 @@ export default function MyTutorialPage() {
 }
 ```
 
-## Course Data (`data/course.ts`)
+## Course Data (`data/courses/`)
 
-The course is defined as a single `CourseDefinition` with a `parts[]` array.
-Each part has a `type` that determines rendering. Read the file to see the full `CoursePartMeta` interface.
+Courses are defined in individual files under `data/courses/` and registered in `data/courses/index.ts`.
+
+### Types (`data/courses/types.ts`)
+
+- `CourseDefinition` — slug, title, description, totalDuration, tags, githubUrl, icon, parts
+- `CoursePartMeta` — extends `CoursePart` with videoId, description, objectives, qa, quizQuestions, codeUrl, readingUrl, tags
+- `SiteTopicConfig` — topicName, tagline, description, tags, courses
+
+### Registry (`data/courses/index.ts`)
+
+| Export                  | Purpose                                         |
+| ----------------------- | ----------------------------------------------- |
+| `ALL_COURSES`           | Array of all `CourseDefinition`s (display order) |
+| `SITE_TOPIC`            | Topic-level metadata for the home page           |
+| `ALL_COURSE_SLUGS`      | All course slugs for `generateStaticParams`      |
+| `findCourse(slug)`      | Look up a course by slug                         |
+| `findCoursePart(c, p)`  | Look up a part within a course                   |
+| `getAdjacentParts(c,p)` | Prev/next parts for navigation                   |
+| `allCoursePartParams()` | All `{course, part}` combos for static gen       |
+
+### Adding a new course
+
+1. Create `data/courses/<slug>.ts` exporting a `CourseDefinition`
+2. Import it in `data/courses/index.ts` and add to `ALL_COURSES`
+3. Pages are generated automatically — no new page files needed
+
+### Part types
 
 | Part type    | Required fields                                   | Renders with                 |
 | ------------ | ------------------------------------------------- | ---------------------------- |
@@ -168,8 +255,10 @@ Each part has a `type` that determines rendering. Read the file to see the full 
 9. **No progress tracking** — no progress bars, completion checkmarks, or "X/Y completed" counters in the sidebar.
 10. **Video sharing** — use `<YouTubeEmbed showShare shareHashtags={[...]} />` to enable share buttons under video embeds.
 11. **Page sharing** — every page must have `<ShareButtons>` before `<TutorialNav>` at the bottom.
-12. **No duplicate slugs** — every course part must have a unique `slug` in `data/course.ts`.
-13. **`generateStaticParams`** — required for `[part]` pages; must return all valid slugs.
+12. **No duplicate slugs** — every course part must have a unique `slug` within its course.
+13. **`generateStaticParams`** — required for `[course]` and `[course]/[part]` pages; must return all valid combos.
+14. **Unique course slugs** — every course must have a unique `slug` in `data/courses/index.ts`.
+15. **All internal links must include course prefix** — e.g. `/${courseSlug}/${partSlug}/`, not `/${partSlug}/`.
 
 ## KeyPoint Variant Guide
 
@@ -200,7 +289,7 @@ Always declare multi-line code strings as `const` outside the component function
 1. Read the existing page most similar to what you are building.
 2. Read `_common/docs/tutorial-framework.md` for full component API and token reference.
 3. Read `_common/frontend/tutorial-framework/src/index.ts` to verify available exports.
-4. For course lessons: read `data/course.ts` to understand course structure.
+4. For course lessons: read `data/courses/index.ts` and the relevant course file to understand the course structure.
 5. Create or edit the page file.
 6. Run `get_errors` on the file — fix all TypeScript errors.
 7. Confirm the build passes: `npm run build` from `_tuts/`.

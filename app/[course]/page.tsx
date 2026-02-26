@@ -15,10 +15,7 @@ import {
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import { InstructorDetailCard } from "@/app/components/InstructorDetailCard";
-import {
-  ALL_COURSE_SLUGS,
-  findCourse,
-} from "@/data/courses";
+import { ALL_COURSE_SLUGS, findCourse } from "@/data/courses";
 import type { CourseDefinition } from "@/data/courses";
 
 // ─── Static params ────────────────────────────────────────────────────────
@@ -108,7 +105,31 @@ export default async function CourseOverviewPage({
         name="Nilay Parikh"
         imageSrc="/brand/nilay_parikh.jpeg"
         role="Founder · LocalM · ErgoSum"
-        bio={<>Technologist with 20+ years of engineering experience and an ML/AI practitioner since 2010. Founder of <a href="https://ergosum.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--tf-color-primary)', fontWeight: 600 }}>ErgoSum</a> (quantitative &amp; equity research) and <a href="https://localm.ai" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--tf-color-primary)', fontWeight: 600 }}>LocalM</a> (AI-assisted SDLC). Currently focused on AI Platform Engineering, Agentic AI, and Context Engineering.</>}
+        bio={
+          <>
+            Technologist with 20+ years of engineering experience and an ML/AI
+            practitioner since 2010. Founder of{" "}
+            <a
+              href="https://ergosum.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--tf-color-primary)", fontWeight: 600 }}
+            >
+              ErgoSum
+            </a>{" "}
+            (quantitative &amp; equity research) and{" "}
+            <a
+              href="https://localm.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--tf-color-primary)", fontWeight: 600 }}
+            >
+              LocalM
+            </a>{" "}
+            (AI-assisted SDLC). Currently focused on AI Platform Engineering,
+            Agentic AI, and Context Engineering.
+          </>
+        }
         socials={{
           twitter: BRAND.socials.twitter,
           twitterHandle: BRAND.socials.twitterHandle,

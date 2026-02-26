@@ -1,6 +1,6 @@
-# LocalM Tutorial Template — Docs
+# LocalM Tutorial Site — Docs
 
-This is a **template repository** for creating single-course tutorial websites. Fork it, replace the course data, deploy to GitHub Pages.
+This is a **multi-course tutorial site** for a single topic (e.g. "Agentic AI"). Each topic site hosts one or more courses, each with its own overview page and lesson pages.
 
 ## Quick Start
 
@@ -25,36 +25,53 @@ npm run dev          # → http://localhost:3000
 ## Architecture
 
 ```
-_tuts/                          # ← Your forked repo
-├── _common/                    # Git submodule → nilayparikh/_tuts_common
+_tuts/                           # ← Your forked repo
+├── _common/                     # Git submodule → nilayparikh/_tuts_common
 │   ├── frontend/
-│   │   └── tutorial-framework/ # @localm/tutorial-framework (source)
-│   ├── .github/                # Shared agent configs, instructions, skills
-│   └── docs/                   # Framework documentation
+│   │   └── tutorial-framework/  # @localm/tutorial-framework (source)
+│   ├── .github/                 # Shared agent configs, instructions, skills
+│   └── docs/                    # Framework documentation
 ├── app/
-│   ├── layout.tsx              # Root layout (global styles, fonts)
-│   ├── page.tsx                # Course overview (lesson list)
-│   ├── globals.css             # Token overrides
-│   ├── components/             # Site-specific data wrappers
-│   └── [part]/
-│       └── page.tsx            # Individual lesson page (sidebar + content)
+│   ├── layout.tsx               # Root layout (global styles, fonts)
+│   ├── page.tsx                 # Topic home — lists all courses
+│   ├── globals.css              # Token overrides
+│   ├── components/              # Site-specific components (InstructorDetailCard)
+│   ├── [course]/
+│   │   ├── page.tsx             # Course overview (dynamic route)
+│   │   └── [part]/
+│   │       └── page.tsx         # Lesson page (dynamic route)
+│   ├── examples/page.tsx        # Code examples aggregated from all courses
+│   ├── privacy/page.tsx         # Privacy policy
+│   └── terms/page.tsx           # Terms of use
 ├── config/
-│   └── site.ts                 # Header, footer, nav links, social URLs
+│   └── site.ts                  # Header, footer, nav links, social URLs
 ├── data/
-│   └── course.ts               # THE course definition (all lessons)
+│   └── courses/
+│       ├── types.ts             # Shared TypeScript interfaces
+│       ├── index.ts             # Course registry, SITE_TOPIC, helper functions
+│       └── <slug>.ts            # One file per course (e.g. a2a.ts)
 ├── .github/
-│   ├── agents/                 # Copilot agent definitions
-│   ├── instructions/           # AI coding rules (auto-applied)
-│   ├── prompts/                # Reusable prompt templates
-│   ├── skills/                 # Copilot agent skills
-│   └── workflows/              # GitHub Actions (deploy to Pages)
+│   ├── agents/                  # Copilot agent definitions
+│   ├── instructions/            # AI coding rules (auto-applied)
+│   ├── prompts/                 # Reusable prompt templates
+│   ├── skills/                  # Copilot agent skills
+│   └── workflows/               # GitHub Actions (deploy to Pages)
 ├── scripts/
-│   ├── run.ps1                 # One-command dev launcher
-│   └── sync-common.ps1         # Pull latest _common submodule
-├── docs/                       # This directory
-├── next.config.ts              # Static export + framework alias config
+│   ├── run.ps1                  # One-command dev launcher
+│   └── sync-common.ps1          # Pull latest _common submodule
+├── docs/                        # This directory
+├── next.config.ts               # Static export + framework alias config
 └── package.json
 ```
+
+## Route Structure
+
+| Route               | Page                     | Source                          |
+| ------------------- | ------------------------ | ------------------------------- |
+| `/`                 | Topic home (course list) | `SITE_TOPIC` + `ALL_COURSES`    |
+| `/[course]/`        | Course overview           | `findCourse(slug)`             |
+| `/[course]/[part]/` | Lesson page               | `findCoursePart(course, part)` |
+| `/examples/`        | Code examples             | `ALL_COURSES` (aggregated)     |
 
 ## The `_common` Submodule
 
@@ -62,30 +79,47 @@ The shared component library and AI agent configurations live in a separate repo
 
 See [\_common-submodule.md](_common-submodule.md) for the full guide on how `_common` works, when to edit it, and how to sync updates.
 
-## How to Create Your Own Tutorial
+## How to Create Your Own Tutorial Site
 
 ### 1. Fork this template
 
 Use the GitHub "Use this template" button or:
 
 ```bash
-gh repo create my-tutorial --template nilayparikh/a2a-agent2agent-protocol-tutorial
+gh repo create my-tutorial --template nilayparikh/_tuts
 cd my-tutorial
 git submodule update --init --recursive
 ```
 
-### 2. Replace course data
+### 2. Configure your topic
 
-Edit `data/course.ts`:
+Edit `data/courses/index.ts`:
 
 ```typescript
-export const COURSE: CourseDefinition = {
+export const SITE_TOPIC: SiteTopicConfig = {
+  topicName: "My Topic",
+  tagline: "Short tagline for the hero section",
+  description: "Fuller description of this tutorial site.",
+  tags: ["Tag1", "Tag2", "Tag3"],
+  courses: ALL_COURSES,
+};
+```
+
+### 3. Create course data
+
+Create a file at `data/courses/<slug>.ts`:
+
+```typescript
+import type { CourseDefinition } from "./types";
+
+export const MY_COURSE: CourseDefinition = {
   slug: "my-course",
   title: "My Course Title",
   description: "What learners will build.",
   totalDuration: "~45 mins",
   tags: ["Topic1", "Topic2"],
   githubUrl: "https://github.com/you/repo",
+  icon: "🚀",
   parts: [
     {
       slug: "intro",
@@ -101,11 +135,19 @@ export const COURSE: CourseDefinition = {
 };
 ```
 
-### 3. Update site config
+Then register it in `data/courses/index.ts`:
+
+```typescript
+import { MY_COURSE } from "./my-course";
+
+export const ALL_COURSES: CourseDefinition[] = [MY_COURSE];
+```
+
+### 4. Update site config
 
 Edit `config/site.ts` — change site name, GitHub URL, social links.
 
-### 4. Customize theme (optional)
+### 5. Customize theme (optional)
 
 Override tokens in `app/globals.css`:
 
@@ -115,25 +157,49 @@ Override tokens in `app/globals.css`:
 }
 ```
 
-### 5. Build and deploy
+### 6. Build and deploy
 
 ```bash
 npm run build        # Generates out/ with static HTML
 ```
 
-## Documentation Index
+## Adding a New Course to an Existing Site
 
-| Document                                      | Content                                    |
-| --------------------------------------------- | ------------------------------------------ |
-| [README.md](README.md)                        | This file — overview + quick start         |
-| [\_common-submodule.md](_common-submodule.md) | How the `_common` submodule works          |
-| [design-principles.md](design-principles.md)  | Architecture, component rules, guardrails  |
-| [deployment.md](deployment.md)                | GitHub Pages deployment guide              |
-| [`_common/docs/`](../_common/docs/README.md)  | Framework library + AI agent documentation |
+1. Create `data/courses/<slug>.ts` with a `CourseDefinition` export
+2. Import it in `data/courses/index.ts` and append to `ALL_COURSES`
+3. The site automatically generates:
+   - `/<slug>/` — course overview page
+   - `/<slug>/<part>/` — lesson pages for all parts
+4. Run `npm run build` to verify all routes generate
+
+## Data Layer Reference
+
+### `data/courses/types.ts`
+
+Shared interfaces used across all course files:
+
+- `CourseDefinition` — slug, title, description, totalDuration, tags, githubUrl, icon, parts
+- `CoursePartMeta` — extends `CoursePart` with videoId, description, objectives, qa, quizQuestions, codeUrl, readingUrl, tags
+- `SiteTopicConfig` — topicName, tagline, description, tags, courses
+- `PartQA`, `PartQuizQuestion` — nested types for content
+
+### `data/courses/index.ts`
+
+Central registry and helper functions:
+
+| Export                 | Type                        | Purpose                                        |
+| ---------------------- | --------------------------- | ---------------------------------------------- |
+| `ALL_COURSES`          | `CourseDefinition[]`        | All courses in display order                   |
+| `SITE_TOPIC`           | `SiteTopicConfig`           | Topic-level metadata for the home page         |
+| `ALL_COURSE_SLUGS`     | `string[]`                  | All course slugs (for `generateStaticParams`)  |
+| `findCourse(slug)`     | `CourseDefinition \| undef` | Look up a course by slug                       |
+| `findCoursePart(c, p)` | `CoursePartMeta \| undef`   | Look up a part within a course                 |
+| `getAdjacentParts(c,p)`| `{prev, next}`              | Prev/next parts for navigation                 |
+| `allCoursePartParams()`| `{course, part}[]`          | All course+part combos for static generation   |
 
 ## Part Types
 
-Each lesson in `data/course.ts` has a `type` that controls how it renders:
+Each lesson in a course has a `type` that controls how it renders:
 
 | Type         | Renders                              | Required Fields      |
 | ------------ | ------------------------------------ | -------------------- |
@@ -144,6 +210,16 @@ Each lesson in `data/course.ts` has a `type` that controls how it renders:
 | `article`    | Long-form article block              | `objectives`         |
 | `podcast`    | Audio player embed                   | —                    |
 | `slideshow`  | Slide deck embed                     | —                    |
+
+## Documentation Index
+
+| Document                                      | Content                                    |
+| --------------------------------------------- | ------------------------------------------ |
+| [README.md](README.md)                        | This file — overview + quick start         |
+| [\_common-submodule.md](_common-submodule.md) | How the `_common` submodule works          |
+| [design-principles.md](design-principles.md)  | Architecture, component rules, guardrails  |
+| [deployment.md](deployment.md)                | GitHub Pages deployment guide              |
+| [`_common/docs/`](../_common/docs/README.md)  | Framework library + AI agent documentation |
 
 ## GitHub Pages Deployment
 

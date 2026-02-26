@@ -20,7 +20,7 @@ Before acting, gather the context you need:
 | Deployment question   | `docs/deployment.md`                                 |
 | Architecture question | `docs/design-principles.md`                          |
 | Submodule operations  | `docs/_common-submodule.md`                          |
-| Course structure      | `data/course.ts` + `config/site.ts`                  |
+| Course structure      | `data/courses/index.ts` + `config/site.ts`           |
 
 ## Standing Rules
 

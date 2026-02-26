@@ -166,23 +166,32 @@ Site-specific responsive rules live in `app/globals.css`:
 app/
 ├── layout.tsx              # Root layout — TutorialGlobalStyles + fonts (DO NOT duplicate)
 ├── globals.css             # Site-specific CSS overrides only
-├── page.tsx                # Course overview page
-├── components/             # Site-specific data wrappers (minimal)
-└── [part]/
-    └── page.tsx            # Dynamic lesson pages
+├── page.tsx                # Topic home — lists all courses
+├── components/             # Site-specific components (InstructorDetailCard)
+├── [course]/
+│   ├── page.tsx            # Dynamic course overview
+│   └── [part]/
+│       └── page.tsx        # Dynamic lesson pages
+├── examples/page.tsx       # Code examples (aggregated)
+├── privacy/page.tsx        # Privacy policy
+└── terms/page.tsx          # Terms of use
 
 config/
 └── site.ts                 # Header/footer/nav configuration (single source of truth)
 
 data/
-└── course.ts               # Course definition + helpers (THE data file)
+└── courses/
+    ├── types.ts            # Shared TypeScript interfaces
+    ├── index.ts            # Course registry + SITE_TOPIC + helpers
+    └── <slug>.ts           # One file per course (e.g. a2a.ts)
 ```
 
 ### Naming Conventions
 
 - Route slugs: lowercase kebab-case (`qa-agent-vertex-ai`)
-- Component files: PascalCase (`CourseStatsBar.tsx`)
-- Config/data files: lowercase (`site.ts`, `course.ts`)
+- Course slugs: short lowercase (`a2a`, `rag`, `mcp`)
+- Component files: PascalCase (`InstructorDetailCard.tsx`)
+- Config/data files: lowercase (`site.ts`, `a2a.ts`)
 - CSS class names: BEM-style (`lesson-topbar__back`)
 
 ---

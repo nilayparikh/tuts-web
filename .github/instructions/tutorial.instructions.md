@@ -17,11 +17,13 @@ export const metadata: Metadata = { title: '...', description: '...' };
 export default function MyPage() { ... }
 ```
 
-For dynamic routes (`[part]`), also export `generateStaticParams()`.
+For dynamic routes (`[course]`, `[course]/[part]`), also export `generateStaticParams()`.
 
 ## Mandatory Component Usage
 
-- **Course lesson pages** (`app/[part]/`): wrap in `<CoursePlayerLayout>` with sidebar from `data/course.ts`.
+- **Course lesson pages** (`app/[course]/[part]/`): wrap in `<CoursePlayerLayout>` with sidebar from `data/courses/`.
+- **Course overview pages** (`app/[course]/`): wrap in `<TutorialLayout>` with `SITE_CONFIG.header` and `SITE_CONFIG.footer`.
+- **Topic home page** (`app/page.tsx`): wrap in `<TutorialLayout>` with `SITE_CONFIG.header` and `SITE_CONFIG.footer`.
 - **Standalone tutorial pages** (`app/tutorials/`): wrap in `<TutorialLayout>` with `SITE_CONFIG.header` and `SITE_CONFIG.footer`.
 - **First component inside layout**: `<HeroSection>` (tutorials) or `<LessonHeader>` (course lessons).
 - **Last components**: always `<ShareButtons>` then `<TutorialNav>`.
@@ -86,7 +88,8 @@ import { Icon } from 'lucide-react';
 
 - **Footer**: Single slim row — brand, copyright, links, socials. No tagline rendered.
 - **Sidebar**: No progress bars, no completion status, no "X/Y" counters.
-- **Course title in sidebar**: Clickable link back to course overview.
+- **Course title in sidebar**: Clickable link back to course overview (`/${courseSlug}/`).
+- **Internal links**: All links within a course must include the course prefix (`/${courseSlug}/${partSlug}/`).
 
 ## Content Quality
 
@@ -96,12 +99,16 @@ import { Icon } from 'lucide-react';
 - Prefer `maxWidth="narrow"` for text-heavy pages; `"content"` for wide diagrams/multi-column.
 - Declare multi-line code strings as `const` outside the component function.
 
-## Course Data Guardrails (`data/course.ts`)
+## Course Data Guardrails (`data/courses/`)
 
-- Every part must have a unique `slug`.
+- Course data lives in `data/courses/<slug>.ts` — one file per course.
+- All courses are registered in `data/courses/index.ts` via the `ALL_COURSES` array.
+- Every course must have a unique `slug` in `ALL_COURSES`.
+- Every part must have a unique `slug` within its course.
 - `type` determines rendering — match required fields per type (see agent docs).
-- `generateStaticParams` must return ALL valid slugs — missing ones → 404 at build.
+- `generateStaticParams` must return ALL valid `{course, part}` combos — missing ones → 404 at build.
 - Add new parts at the correct position for learning flow.
+- To add a new course: create `data/courses/<slug>.ts`, import it in `index.ts`, add to `ALL_COURSES`.
 
 ## Verification
 

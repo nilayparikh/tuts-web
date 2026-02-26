@@ -114,7 +114,7 @@ This is the most important decision to get right. The rule is simple:
 
 ### Edit `_tuts` for:
 
-- Page content (`app/`, `data/course.ts`)
+- Page content (`app/`, `data/courses/`)
 - Site config (`config/site.ts`)
 - Site-specific token overrides (`app/globals.css`)
 - Site-specific AI agent/prompt files (`.github/agents/`, `.github/prompts/`)

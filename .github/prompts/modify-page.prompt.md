@@ -11,7 +11,7 @@ ${input:task:Describe what to change — e.g. "add a KeyPoint warning about API 
 
 ## Target file
 
-${input:file:Path to the page file to modify, e.g. app/[part]/page.tsx or app/page.tsx}
+${input:file:Path to the page file to modify, e.g. app/[course]/[part]/page.tsx, app/[course]/page.tsx, or app/page.tsx}
 
 ---
 
@@ -25,6 +25,7 @@ ${input:file:Path to the page file to modify, e.g. app/[part]/page.tsx or app/pa
 6. **Use `--tf-*` CSS tokens** — no hardcoded colours, spacing, or transitions.
 7. **Declare multi-line code strings as `const`** outside the component function.
 8. **Keep `metadata.title` ≤ 60 chars** and `metadata.description` ≤ 155 chars.
+9. **All internal links include the course prefix** — `/${courseSlug}/${partSlug}/`.
 
 ## Quality Gate
 
