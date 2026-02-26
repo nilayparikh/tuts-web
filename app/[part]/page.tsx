@@ -13,8 +13,6 @@ import {
   SectionDivider,
   CodeBlock,
   TutorialNav,
-  ConceptCard,
-  ConceptGrid,
   CalloutBox,
   InfoBox,
   NoteBox,
@@ -27,10 +25,9 @@ import {
   MermaidDiagram,
   PollBlock,
   Paragraph,
-  ShareButtons,
   CodePreview,
   VideoTranscript,
-  FollowBar,
+  LessonSocialBar,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import {
@@ -108,42 +105,43 @@ export default async function LessonPage({
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "var(--tf-space-8)",
-          maxWidth: "var(--tf-narrow-width)",
+          gap: "var(--tf-space-6)",
           width: "100%",
         }}
       >
-        {/* ── Lesson header ────────────────────────────────────────── */}
-        <LessonHeader
-          type={part.type}
-          duration={part.duration}
-          title={part.title}
-          description={part.description}
-        />
+        {/* ── Header + social bar: tight unit ─────────────────────── */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--tf-space-3)",
+          }}
+        >
+          <LessonHeader
+            type={part.type}
+            duration={part.duration}
+            title={part.title}
+          />
+          <LessonSocialBar
+            instructorName="Nilay Parikh"
+            instructorImageSrc="/brand/nilay_parikh.jpeg"
+            twitterUrl={BRAND.socials.twitter}
+            twitterHandle={BRAND.socials.twitterHandle}
+            linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
+            youtubeSubscribeUrl={BRAND.socials.youtube}
+            shareTitle={`${part.title} — ${COURSE.title}`}
+            shareDescription={part.description ?? COURSE.description}
+            shareHashtags={part.tags ?? COURSE.tags}
+          />
+        </div>
 
-        {/* ── Follow / Subscribe ───────────────────────────────────── */}
-        <FollowBar
-          twitterUrl={BRAND.socials.twitter}
-          twitterHandle={BRAND.socials.twitterHandle}
-          linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
-        />
+        {/* ── Description (full width) ─────────────────────────────── */}
+        {part.description && <Paragraph>{part.description}</Paragraph>}
 
         {/* ── Main content by type ─────────────────────────────────── */}
         <PartContent part={part} />
 
-        {/* ── Share + Navigation ────────────────────────────────────── */}
-        <SectionDivider />
-        <FollowBar
-          twitterUrl={BRAND.socials.twitter}
-          twitterHandle={BRAND.socials.twitterHandle}
-          linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
-        />
-        <ShareButtons
-          title={`${part.title} — ${COURSE.title}`}
-          description={part.description ?? COURSE.description}
-          hashtags={part.tags ?? COURSE.tags}
-          platforms={["twitter", "linkedin", "email"]}
-        />
+        {/* ── Navigation ───────────────────────────────────────────────── */}
         <TutorialNav
           prev={
             prev
@@ -207,8 +205,6 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
           title={part.title}
           lazyLoad
           caption={`${part.title} · ${part.duration}`}
-          showShare
-          shareHashtags={part.tags ?? []}
         />
       )}
 
@@ -542,27 +538,17 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
       {part.objectives && part.objectives.length > 0 && (
         <section>
           <SectionDivider label="In this reading" />
-          <ConceptGrid columns={2}>
-            {part.objectives.map((obj, i) => (
-              <ConceptCard
-                key={i}
-                title={`Step ${i + 1}`}
-                description={obj}
-                variant={
-                  (
-                    [
-                      "primary",
-                      "accent",
-                      "success",
-                      "default",
-                      "warning",
-                      "danger",
-                    ] as const
-                  )[i % 6]
-                }
-              />
-            ))}
-          </ConceptGrid>
+          <Paragraph>
+            Here&apos;s what you will cover in this reading:
+          </Paragraph>
+          <StepByStepGuide
+            title="Objectives"
+            interactive={false}
+            steps={part.objectives.map((obj) => ({
+              title: obj,
+              description: "",
+            }))}
+          />
         </section>
       )}
 
@@ -708,16 +694,11 @@ function PodcastContent({ part }: { part: CoursePartMeta }) {
       {part.objectives && part.objectives.length > 0 && (
         <section>
           <SectionDivider label="Episode highlights" />
-          <ConceptGrid columns={2}>
-            {part.objectives.map((obj, i) => (
-              <ConceptCard
-                key={i}
-                title={`${i + 1}.`}
-                description={obj}
-                variant="default"
-              />
-            ))}
-          </ConceptGrid>
+          {part.objectives.map((obj, i) => (
+            <Paragraph key={i}>
+              <strong>{i + 1}.</strong> {obj}
+            </Paragraph>
+          ))}
         </section>
       )}
 

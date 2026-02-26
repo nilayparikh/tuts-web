@@ -23,55 +23,44 @@ export const metadata: Metadata = {
   },
 };
 
-// ─── Styles ───────────────────────────────────────────────────────────────
+// ─── Shared legal text styles ─────────────────────────────────────────────
 
-const s: Record<string, React.CSSProperties> = {
-  section: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "var(--tf-space-4)",
-  },
-  heading: {
-    fontFamily: "var(--tf-font-display)",
-    fontWeight: 700,
-    fontSize: "var(--tf-text-lg)",
-    color: "var(--tf-text-primary)",
-    margin: 0,
-  },
-  subheading: {
-    fontFamily: "var(--tf-font-display)",
-    fontWeight: 600,
-    fontSize: "var(--tf-text-md)",
-    color: "var(--tf-text-primary)",
-    margin: 0,
-  },
-  legalText: {
-    fontFamily: "var(--tf-font-body)",
-    fontSize: "var(--tf-text-sm)",
-    color: "var(--tf-text-secondary)",
-    lineHeight: 1.7,
-    margin: 0,
-  },
-  list: {
-    fontFamily: "var(--tf-font-body)",
-    fontSize: "var(--tf-text-sm)",
-    color: "var(--tf-text-secondary)",
-    lineHeight: 1.7,
-    paddingLeft: "1.5rem",
-    margin: 0,
-    display: "flex",
-    flexDirection: "column" as const,
-    gap: "var(--tf-space-2)",
-  },
-  effectiveDate: {
-    fontFamily: "var(--tf-font-mono)",
-    fontSize: "var(--tf-text-xs)",
-    color: "var(--tf-text-muted)",
-    padding: "var(--tf-space-2) var(--tf-space-4)",
-    borderLeft: "3px solid var(--tf-border-default)",
-    background: "var(--tf-bg-surface)",
-    borderRadius: "var(--tf-radius-sm)",
-  },
+const sectionStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: "var(--tf-space-4)",
+  padding: "var(--tf-space-6) 0",
+};
+
+const headingStyle: React.CSSProperties = {
+  fontFamily: "var(--tf-font-display)",
+  fontWeight: 700,
+  fontSize: "var(--tf-text-xl)",
+  color: "var(--tf-text-primary)",
+  margin: 0,
+  paddingBottom: "var(--tf-space-2)",
+  borderBottom: "1px solid var(--tf-border-subtle)",
+};
+
+const subheadingStyle: React.CSSProperties = {
+  fontFamily: "var(--tf-font-display)",
+  fontWeight: 600,
+  fontSize: "var(--tf-text-md)",
+  color: "var(--tf-text-primary)",
+  margin: 0,
+  marginTop: "var(--tf-space-2)",
+};
+
+const listStyle: React.CSSProperties = {
+  fontFamily: "var(--tf-font-body)",
+  fontSize: "var(--tf-text-sm)",
+  color: "var(--tf-text-secondary)",
+  lineHeight: 1.7,
+  paddingLeft: "1.5rem",
+  margin: 0,
+  display: "flex",
+  flexDirection: "column" as const,
+  gap: "var(--tf-space-2)",
 };
 
 // ─── Page ─────────────────────────────────────────────────────────────────
@@ -90,10 +79,9 @@ export default function TermsPage() {
         tags={["Legal", "Terms", "Conditions"]}
       />
 
-      <div style={s.effectiveDate}>
-        Effective Date: February 26, 2026 &middot; Last Updated: February 26,
-        2026
-      </div>
+      <NoteBox title="Effective Date">
+        February 26, 2026 &middot; Last Updated: February 26, 2026
+      </NoteBox>
 
       {/* ── Plain-Language Summary ─────────────────────────────────────── */}
       <SectionDivider label="Summary (Plain Language)" />
@@ -103,66 +91,61 @@ export default function TermsPage() {
         use of the site.
       </InfoBox>
 
-      <div style={s.section}>
-        <Paragraph>
-          <strong>What this site is:</strong> LocalM™ Tuts is an educational
-          platform that provides video tutorials, articles, and interactive
-          lessons about software engineering and AI.
-        </Paragraph>
-        <Paragraph>
-          <strong>What you can do:</strong> View tutorials, follow along with
-          code examples, and learn at your own pace — all for personal and
-          educational use.
-        </Paragraph>
-        <Paragraph>
-          <strong>What you cannot do:</strong> Redistribute, resell, or
-          republish our content. Do not scrape, mirror, or use automated tools
-          to copy our material.
-        </Paragraph>
-        <Paragraph>
-          <strong>Your privacy:</strong> We use Google Analytics to understand
-          how visitors use the site. See our{" "}
-          <a
-            href="/privacy/"
-            style={{ color: "var(--tf-color-primary-light)" }}
-          >
-            Privacy Policy
-          </a>{" "}
-          for details.
-        </Paragraph>
-      </div>
+      <Paragraph>
+        <strong>What this site is:</strong> LocalM™ Tuts is an educational
+        platform that provides video tutorials, articles, and interactive
+        lessons about software engineering and AI.
+      </Paragraph>
+      <Paragraph>
+        <strong>What you can do:</strong> View tutorials, follow along with code
+        examples, and learn at your own pace — all for personal and educational
+        use.
+      </Paragraph>
+      <Paragraph>
+        <strong>What you cannot do:</strong> Redistribute, resell, or republish
+        our content. Do not scrape, mirror, or use automated tools to copy our
+        material.
+      </Paragraph>
+      <Paragraph>
+        <strong>Your privacy:</strong> We use Google Analytics to understand how
+        visitors use the site. See our{" "}
+        <a href="/privacy/" style={{ color: "var(--tf-color-primary-light)" }}>
+          Privacy Policy
+        </a>{" "}
+        for details.
+      </Paragraph>
 
       {/* ── Full Terms ─────────────────────────────────────────────────── */}
       <SectionDivider label="Full Terms & Conditions" />
 
       {/* 1. Acceptance */}
-      <div style={s.section}>
-        <h2 style={s.heading}>1. Acceptance of Terms</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>1. Acceptance of Terms</h2>
+        <Paragraph>
           By accessing or using the LocalM™ Tuts website (&ldquo;the
           Site&rdquo;), operated by LocalM™ (&ldquo;we&rdquo;, &ldquo;us&rdquo;,
           or &ldquo;our&rdquo;), you agree to be bound by these Terms &amp;
           Conditions (&ldquo;Terms&rdquo;). If you do not agree, you must not
           use the Site.
-        </p>
+        </Paragraph>
       </div>
 
       {/* 2. Intellectual Property */}
-      <div style={s.section}>
-        <h2 style={s.heading}>2. Intellectual Property &amp; Copyright</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>2. Intellectual Property &amp; Copyright</h2>
+        <Paragraph>
           All content on this Site — including but not limited to text,
           graphics, logos, icons, images, video tutorials, audio content, code
           samples, and the underlying source code of the Site — is the exclusive
           property of LocalM™ and is protected by international copyright and
           intellectual property laws.
-        </p>
+        </Paragraph>
         <WarningBox title="Copyright Notice">
           {BRAND.copyright}. Unauthorized reproduction, distribution, or
           modification of any content is strictly prohibited and may result in
           legal action.
         </WarningBox>
-        <ul style={s.list}>
+        <ul style={listStyle}>
           <li>
             You may view, download, and print pages for personal,
             non-commercial, educational use only.
@@ -184,10 +167,11 @@ export default function TermsPage() {
       </div>
 
       {/* 3. Use of the Site */}
-      <div style={s.section}>
-        <h2 style={s.heading}>3. Permitted &amp; Prohibited Use</h2>
-        <h3 style={s.subheading}>3.1 Permitted Use</h3>
-        <ul style={s.list}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>3. Permitted &amp; Prohibited Use</h2>
+
+        <h3 style={subheadingStyle}>3.1 Permitted Use</h3>
+        <ul style={listStyle}>
           <li>Accessing and viewing educational content for personal study.</li>
           <li>Using code examples from tutorials in your own projects.</li>
           <li>
@@ -195,8 +179,9 @@ export default function TermsPage() {
             (with proper attribution).
           </li>
         </ul>
-        <h3 style={s.subheading}>3.2 Prohibited Use</h3>
-        <ul style={s.list}>
+
+        <h3 style={subheadingStyle}>3.2 Prohibited Use</h3>
+        <ul style={listStyle}>
           <li>
             Scraping, crawling, or using automated tools to extract content.
           </li>
@@ -220,45 +205,45 @@ export default function TermsPage() {
       </div>
 
       {/* 4. Disclaimer of Warranties */}
-      <div style={s.section}>
-        <h2 style={s.heading}>4. Disclaimer of Warranties</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>4. Disclaimer of Warranties</h2>
+        <Paragraph>
           The Site and its content are provided &ldquo;as is&rdquo; and
           &ldquo;as available&rdquo; without warranties of any kind, either
           express or implied. We do not warrant that the content is accurate,
           complete, current, or error-free. Tutorial code is provided for
           educational purposes and should not be used in production systems
           without appropriate review and testing.
-        </p>
+        </Paragraph>
       </div>
 
       {/* 5. Limitation of Liability */}
-      <div style={s.section}>
-        <h2 style={s.heading}>5. Limitation of Liability</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>5. Limitation of Liability</h2>
+        <Paragraph>
           To the fullest extent permitted by law, LocalM™ shall not be liable
           for any indirect, incidental, special, consequential, or punitive
           damages arising from your use of or inability to use the Site, even if
           we have been advised of the possibility of such damages.
-        </p>
+        </Paragraph>
       </div>
 
       {/* 6. Third-Party Links */}
-      <div style={s.section}>
-        <h2 style={s.heading}>6. Third-Party Links &amp; Services</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>6. Third-Party Links &amp; Services</h2>
+        <Paragraph>
           The Site may contain links to third-party websites, GitHub
           repositories, or external services. We are not responsible for the
           content, privacy practices, or terms of any third-party sites. Your
           use of third-party services is at your own risk and subject to their
           respective terms.
-        </p>
+        </Paragraph>
       </div>
 
       {/* 7. Analytics */}
-      <div style={s.section}>
-        <h2 style={s.heading}>7. Analytics &amp; Cookies</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>7. Analytics &amp; Cookies</h2>
+        <Paragraph>
           We use Google Analytics to collect anonymized usage data to improve
           the Site. By using the Site, you consent to the processing of data by
           Google Analytics in the manner described in our{" "}
@@ -269,38 +254,38 @@ export default function TermsPage() {
             Privacy Policy
           </a>
           . We do not use advertising cookies.
-        </p>
+        </Paragraph>
       </div>
 
       {/* 8. Modifications */}
-      <div style={s.section}>
-        <h2 style={s.heading}>8. Changes to These Terms</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>8. Changes to These Terms</h2>
+        <Paragraph>
           We reserve the right to modify these Terms at any time. Changes will
           be posted on this page with an updated effective date. Your continued
           use of the Site after changes are posted constitutes acceptance of the
           revised Terms.
-        </p>
+        </Paragraph>
       </div>
 
       {/* 9. Governing Law */}
-      <div style={s.section}>
-        <h2 style={s.heading}>9. Governing Law</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>9. Governing Law</h2>
+        <Paragraph>
           These Terms shall be governed by and construed in accordance with
           applicable laws. Any disputes arising from these Terms shall be
           resolved through appropriate legal channels.
-        </p>
+        </Paragraph>
       </div>
 
       {/* 10. Contact */}
-      <div style={s.section}>
-        <h2 style={s.heading}>10. Contact</h2>
-        <p style={s.legalText}>
+      <div style={sectionStyle}>
+        <h2 style={headingStyle}>10. Contact</h2>
+        <Paragraph>
           For questions about these Terms, please reach out via our social
           channels listed on the Site, or open an issue on our GitHub
           repository.
-        </p>
+        </Paragraph>
       </div>
 
       <NoteBox title="Last Updated">

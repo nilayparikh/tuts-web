@@ -4,25 +4,57 @@ import {
   HeroSection,
   SectionDivider,
   SectionHeading,
-  ShareButtons,
   LessonList,
-  InfoBox,
-  TipBox,
-  SuccessBox,
-  NoteBox,
-  CalloutBox,
+  DescriptionBox,
   Paragraph,
-  MermaidDiagram,
-  StepByStepGuide,
-  PollBlock,
+  StepList,
   ConceptCard,
   ConceptGrid,
-  LabSettings,
-  FollowBar,
+  LessonSocialBar,
+  AccordionList,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import { COURSE } from "@/data/course";
-import { CourseStatsBar } from "./components/CourseStatsBar";
+
+// ─── "In detail, you'll" items ─────────────────────────────────────────────
+
+const DETAIL_ITEMS = [
+  {
+    title: "Understand why A2A exists",
+    description:
+      "Explore the client-server architecture of A2A: what an Agent Card is, how tasks flow through the agent lifecycle (submitted → working → completed), and why standardizing inter-agent communication matters in 2025.",
+  },
+  {
+    title: "Build an insurance QA agent on Vertex AI",
+    description:
+      "Build an insurance policy agent using Claude Haiku 4.5 on Vertex AI, wrap it in an A2A server using the A2A Python SDK, and create an A2A client from scratch to communicate with it.",
+  },
+  {
+    title: "Create a health research agent with Google ADK",
+    description:
+      "Use the Google Agent Development Kit (ADK) and Gemini 3 Pro to build a research agent that performs real-time web search — then expose it via A2A.",
+  },
+  {
+    title: "Chain agents sequentially with ADK",
+    description:
+      "Wire agents together so one agent's output feeds directly into the next as input — a sequential A2A chain where each specialist builds on the previous result.",
+  },
+  {
+    title: "Build a LangGraph agent with MCP tools",
+    description:
+      "Create a healthcare provider agent using LangGraph, connect it to an MCP tool server for structured data access, and call it through Microsoft Agent Framework's A2A client.",
+  },
+  {
+    title: "Orchestrate dynamically with BeeAI Framework",
+    description:
+      "Use IBM's BeeAI Framework to build a Requirement Agent that delegates tasks to specialized agents on the fly — a fully dynamic, hierarchical multi-agent system.",
+  },
+  {
+    title: "Deploy to Agent Stack",
+    description:
+      "Ship your A2A agents to BeeAI's Agent Stack — open-source infrastructure for deploying, discovering, and sharing A2A agents in production.",
+  },
+];
 
 // ─── Metadata ─────────────────────────────────────────────────────────────
 
@@ -48,242 +80,135 @@ export default function CourseOverviewPage() {
     >
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection
-        eyebrow={`Full Course · ${COURSE.parts.length} Lessons · ${COURSE.totalDuration}`}
+        eyebrow={`Short Course · ${COURSE.parts.length} Lessons · ${COURSE.totalDuration}`}
         headline={`**${COURSE.title.split(":")[0]}**: ${COURSE.title.split(":").slice(1).join(":").trim()}`}
-        subheading={COURSE.description}
+        subheading="An open protocol for building multi-agent AI systems — where agents discover, delegate, and collaborate across any framework."
         primaryAction={{
-          label: "Start first lesson →",
+          label: "Start learning →",
           href: `/${COURSE.parts[0].slug}/`,
         }}
         secondaryAction={{
-          label: "Source code",
+          label: "View on GitHub",
           href: COURSE.githubUrl ?? "#",
         }}
         tags={COURSE.tags}
       />
 
-      {/* ── Follow / Subscribe ────────────────────────────────────────────── */}
-      <FollowBar
-        twitterUrl={BRAND.socials.twitter}
-        twitterHandle={BRAND.socials.twitterHandle}
-        linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
-      />
+      {/* ── What You'll Learn ─────────────────────────────────────────────── */}
+      <SectionDivider label="What You'll Learn" />
 
-      {/* ── What You'll Build ─────────────────────────────────────────────── */}
-      <SectionDivider label="What You'll Build" />
-      <Paragraph lead center>
-        By the end of this course you will be able to build production-grade
-        multi-agent systems using the A2A protocol, from architecture to
-        deployment.
+      <StepList>
+        <ConceptCard
+          compact
+          icon="🔌"
+          title="Expose agents as A2A servers"
+          description="Wrap agents built with Google ADK, LangGraph, or BeeAI as fully compliant A2A servers — Agent Card discovery, task handling, and SSE streaming included."
+        />
+        <ConceptCard
+          compact
+          icon="🛠"
+          title="Build A2A clients from scratch"
+          description="Create clients that fetch Agent Cards, send tasks, and handle both synchronous responses and live streaming — or use existing A2A SDK integrations."
+        />
+        <ConceptCard
+          compact
+          icon="🔀"
+          title="Orchestrate multi-agent workflows"
+          description="Wire agents into sequential chains and dynamic hierarchical systems, where a Requirement Agent delegates sub-tasks to specialists in real time."
+        />
+      </StepList>
+
+      {/* ── About This Course ─────────────────────────────────────────────── */}
+      <SectionDivider label="About This Course" />
+
+      <Paragraph>
+        Connecting agents built with different frameworks typically requires
+        extensive custom integration work. A2A solves this with an open protocol
+        that standardizes how agents <strong>discover</strong> each other and{" "}
+        <strong>communicate</strong> — regardless of which model, language, or
+        framework they were built on.
+      </Paragraph>
+      <Paragraph>
+        In this course, you&apos;ll build a complete healthcare multi-agent
+        system: three specialized agents using different frameworks, each
+        wrapped as an A2A server. You&apos;ll build the clients to talk to them
+        and orchestrate them into both sequential and hierarchical workflows.
+        Along the way you&apos;ll see exactly how A2A and MCP complement each
+        other — MCP connects agents to external data; A2A connects agents to
+        each other.
       </Paragraph>
 
-      <ConceptGrid columns={3}>
+      <AccordionList
+        items={DETAIL_ITEMS.map((item) => ({
+          title: item.title,
+          content: item.description,
+        }))}
+        defaultOpenFirst
+      />
+
+      {/* ── Who Should Join? ──────────────────────────────────────────────── */}
+      <SectionDivider label="Who Should Join?" />
+
+      <DescriptionBox
+        title="Prerequisites"
+        subtitle="What you need before starting"
+        tags={["Python", "AI Agents", "Multi-Agent Systems"]}
+      >
+        AI developers building multi-agent systems or working with agentic
+        workflows. Familiarity with Python and a basic understanding of AI
+        agents is recommended.
+      </DescriptionBox>
+
+      <ConceptGrid columns={2}>
         <ConceptCard
-          title="Agent Cards"
-          description="Design self-describing JSON-LD agent metadata that enables discovery and capability negotiation."
-          variant="primary"
+          compact
+          icon="🤖"
+          title="AI / ML Engineers"
+          description="You build AI-powered products and want a standard protocol to connect multiple agents — across frameworks, teams, and organizational boundaries."
         />
         <ConceptCard
-          title="Task Lifecycle"
-          description="Implement the full send → stream → complete lifecycle with proper error handling."
-          variant="accent"
+          compact
+          icon="⚙️"
+          title="Backend & Platform Engineers"
+          description="You design distributed systems and want to add agent-to-agent communication as a first-class capability in your architecture."
         />
         <ConceptCard
-          title="Multi-Agent Orchestration"
-          description="Wire multiple agents together with push notifications and real-time SSE streaming."
-          variant="success"
+          compact
+          icon="💻"
+          title="Full-Stack Developers"
+          description="You are exploring agentic AI and want a structured, code-first introduction to multi-agent orchestration with real, runnable examples."
+        />
+        <ConceptCard
+          compact
+          icon="📋"
+          title="Technical Leaders"
+          description="You evaluate emerging technologies and need to understand A2A's design, ecosystem backing, and what production readiness looks like."
         />
       </ConceptGrid>
 
-      {/* ── Architecture Diagram ──────────────────────────────────────────── */}
-      <SectionDivider label="Architecture Overview" />
-      <MermaidDiagram
-        chart={`graph TB
-    subgraph Client
-      UI[Web UI / CLI]
-    end
-    subgraph A2A_Protocol[A2A Protocol Layer]
-      AC[Agent Card Discovery]
-      TM[Task Manager]
-      SSE[SSE Streaming]
-    end
-    subgraph Agents
-      A1[Research Agent]
-      A2[Code Agent]
-      A3[Review Agent]
-    end
-    subgraph Tools
-      MCP[MCP Tools]
-      API[External APIs]
-      DB[Vector Store]
-    end
-
-    UI -->|JSON-RPC| AC
-    UI -->|sendTask| TM
-    TM -->|delegateTask| A1
-    TM -->|delegateTask| A2
-    TM -->|delegateTask| A3
-    TM -->|events| SSE
-    SSE -->|stream| UI
-    A1 --> MCP
-    A2 --> API
-    A3 --> DB
-
-    style UI fill:#6366f1,stroke:#818cf8,color:#fff
-    style AC fill:#14b8a6,stroke:#5eead4,color:#fff
-    style TM fill:#14b8a6,stroke:#5eead4,color:#fff
-    style SSE fill:#14b8a6,stroke:#5eead4,color:#fff
-    style A1 fill:#1f222a,stroke:#8892a8,color:#e2e6f0
-    style A2 fill:#1f222a,stroke:#8892a8,color:#e2e6f0
-    style A3 fill:#1f222a,stroke:#8892a8,color:#e2e6f0
-    style MCP fill:#f59e0b,stroke:#fbbf24,color:#000
-    style API fill:#f59e0b,stroke:#fbbf24,color:#000
-    style DB fill:#f59e0b,stroke:#fbbf24,color:#000`}
-        caption="Figure 1: Multi-agent A2A architecture with MCP tool integration"
-        alt="Architecture diagram showing A2A protocol connecting client to multiple agents via JSON-RPC"
-      />
-
-      {/* ── Course Curriculum ─────────────────────────────────────────────── */}
-      <SectionDivider label="Course Curriculum" />
+      {/* ── Course Outline ────────────────────────────────────────────────── */}
+      <SectionDivider label="Course Outline" />
 
       <SectionHeading
-        title={`${COURSE.parts.length} lessons, zero fluff`}
-        subtitle="Each lesson is focused and builds on the previous one — from first principles to production-ready multi-agent systems."
+        title={`${COURSE.parts.length} lessons · ${COURSE.totalDuration}`}
+        subtitle="Each lesson builds on the previous one — from first principles to a fully deployed multi-agent healthcare system."
       />
 
       <LessonList parts={COURSE.parts} basePath="" />
 
-      {/* ── Prerequisites ─────────────────────────────────────────────────── */}
-      <SectionDivider label="Prerequisites" />
+      {/* ── Instructor ────────────────────────────────────────────────────── */}
+      <SectionDivider label="Instructor" />
 
-      <LabSettings
-        title="Lab Requirements"
-        description="Make sure you have the following tools installed before starting the course."
-        difficulty="beginner"
-        setupTime="~5 min"
-        requirements={[
-          {
-            name: "Python",
-            version: "3.11+",
-            description: "Core runtime for all exercises",
-            link: "https://python.org/downloads/",
-          },
-          {
-            name: "Google Cloud SDK",
-            description: "For Vertex AI access",
-            link: "https://cloud.google.com/sdk/docs/install",
-          },
-          {
-            name: "Git",
-            version: "2.x",
-            description: "Clone the course repository",
-            link: "https://git-scm.com/downloads",
-          },
-          {
-            name: "VS Code",
-            description: "Recommended editor",
-            link: "https://code.visualstudio.com",
-            optional: true,
-          },
-        ]}
-      />
-
-      {/* ── Getting Started Guide ─────────────────────────────────────────── */}
-      <SectionDivider label="Quick Start" />
-
-      <StepByStepGuide
-        title="Environment Setup"
-        steps={[
-          {
-            title: "Install Python 3.11+",
-            description:
-              "Make sure you have a recent Python version installed. We recommend using pyenv or the official installer.",
-            code: "python --version  # Should output 3.11+",
-            codeLanguage: "bash",
-          },
-          {
-            title: "Clone the course repository",
-            description:
-              "Get all the starter code and lesson materials from our GitHub repository.",
-            code: "git clone https://github.com/nicobailey-localm/a2a-agent2agent-protocol.git\ncd a2a-agent2agent-protocol",
-            codeLanguage: "bash",
-          },
-          {
-            title: "Set up your virtual environment",
-            description:
-              "Create and activate an isolated Python environment for the course.",
-            code: "python -m venv .venv\nsource .venv/bin/activate  # macOS/Linux\n# .venv\\Scripts\\activate    # Windows",
-            codeLanguage: "bash",
-            note: "Always activate the virtual environment before working on course exercises.",
-          },
-          {
-            title: "Install dependencies",
-            description: "Install all required packages at once.",
-            code: "pip install -r requirements.txt",
-            codeLanguage: "bash",
-          },
-        ]}
-      />
-
-      {/* ── Community Poll ────────────────────────────────────────────────── */}
-      <SectionDivider label="Community" />
-      <PollBlock
-        question="What is your primary motivation for learning the A2A protocol?"
-        options={[
-          { id: "multi-agent", text: "Build multi-agent AI systems" },
-          {
-            id: "interop",
-            text: "Agent interoperability across frameworks",
-          },
-          { id: "production", text: "Production-grade agent deployment" },
-          { id: "research", text: "Understand agent communication theory" },
-          { id: "curiosity", text: "Just curious about the protocol" },
-        ]}
-        simulatedVotes={{
-          "multi-agent": 65,
-          interop: 48,
-          production: 37,
-          research: 22,
-          curiosity: 18,
-        }}
-      />
-
-      {/* ── Callout Box Showcase ──────────────────────────────────────────── */}
-      <SectionDivider label="Tips & Notices" />
-
-      <TipBox title="Learning Strategy">
-        Watch each video lesson at 1x speed first, then code along in the second
-        pass. This two-pass method is proven to improve retention by 40%.
-      </TipBox>
-
-      <SuccessBox title="Certification Available">
-        Complete all lessons and pass the final quiz to earn your A2A Protocol
-        Developer certificate.
-      </SuccessBox>
-
-      <NoteBox title="Self-Paced">
-        This course is completely self-paced. Each lesson builds on the previous
-        one, but you can revisit any lesson at any time.
-      </NoteBox>
-
-      {/* ── Course Stats ──────────────────────────────────────────────────── */}
-      <SectionDivider />
-      <CourseStatsBar course={COURSE} />
-
-      {/* ── Share ─────────────────────────────────────────────────────────── */}
-      <SectionDivider variant="gradient" />
-
-      <FollowBar
+      <LessonSocialBar
+        instructorName="Nilay Parikh"
+        instructorImageSrc={BRAND.profileUrl}
         twitterUrl={BRAND.socials.twitter}
         twitterHandle={BRAND.socials.twitterHandle}
         linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
-      />
-
-      <ShareButtons
-        title={`${COURSE.title} — Full Course`}
-        description={COURSE.description}
-        hashtags={["A2A", "AIAgents", "MultiAgent", "python"]}
-        platforms={["twitter", "linkedin", "email"]}
+        youtubeSubscribeUrl={BRAND.socials.youtube}
+        shareTitle={COURSE.title}
+        shareDescription={COURSE.description}
+        shareHashtags={COURSE.tags}
       />
     </TutorialLayout>
   );

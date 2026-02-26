@@ -25,20 +25,24 @@ export const BRAND = {
   socials: {
     twitter: "https://x.com/nilayparikh",
     twitterHandle: "@nilayparikh",
-    linkedin: "https://linkedin.com/in/nilayparikh",
+    linkedin: "https://linkedin.com/in/niparikh",
     linkedinNewsletter:
       "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7404590598986375168",
-    youtube: "https://youtube.com/@localm",
+    youtube: "https://www.youtube.com/@ergosumxlabs",
     github: "https://github.com/nilayparikh",
   },
 } as const;
 
 /* ─── Navigation ───────────────────────────────────────────────────────── */
 
-const NAV_ITEMS: NavItem[] = [{ label: "Course", href: "/" }];
+const NAV_ITEMS: NavItem[] = [
+  { label: "Course", href: "/" },
+  { label: "Examples", href: "/examples/" },
+];
 
 const FOOTER_LINKS: FooterLink[] = [
   { label: "Course Overview", href: "/" },
+  { label: "Examples", href: "/examples/" },
   { label: "Terms", href: "/terms/" },
   { label: "Privacy", href: "/privacy/" },
   { label: "YouTube", href: BRAND.socials.youtube, external: true },
@@ -62,9 +66,8 @@ export const SITE_FOOTER: TutorialFooterProps = {
   githubUrl: BRAND.socials.github,
   youtubeUrl: BRAND.socials.youtube,
   twitterUrl: BRAND.socials.twitter,
-  twitterHandle: BRAND.socials.twitterHandle,
   linkedinUrl: BRAND.socials.linkedin,
-  linkedinNewsletterUrl: BRAND.socials.linkedinNewsletter,
+  hideFollowBar: true,
 };
 
 /** Convenience bundle — pass spread to TutorialLayout */
