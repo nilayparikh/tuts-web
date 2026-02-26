@@ -114,6 +114,39 @@ export default async function LessonPage({
           width: "100%",
         }}
       >
+        {/* ── Breadcrumb ──────────────────────────────────────────── */}
+        <nav aria-label="Breadcrumb">
+          <ol
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.35rem",
+              listStyle: "none",
+              margin: 0,
+              padding: 0,
+              fontSize: "var(--tf-text-sm)",
+              fontFamily: "var(--tf-font-body)",
+              color: "var(--tf-text-muted)",
+            }}
+          >
+            <li>
+              <a href="/" style={{ color: "var(--tf-color-primary)", textDecoration: "none" }}>
+                Home
+              </a>
+            </li>
+            <li aria-hidden="true" style={{ color: "var(--tf-text-muted)" }}>›</li>
+            <li>
+              <a href={`/${courseSlug}/`} style={{ color: "var(--tf-color-primary)", textDecoration: "none" }}>
+                {course.title}
+              </a>
+            </li>
+            <li aria-hidden="true" style={{ color: "var(--tf-text-muted)" }}>›</li>
+            <li aria-current="page" style={{ color: "var(--tf-text-secondary)" }}>
+              {part.title}
+            </li>
+          </ol>
+        </nav>
+
         {/* ── Header + social bar: tight unit ─────────────────────── */}
         <div
           style={{

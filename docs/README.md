@@ -66,12 +66,12 @@ _tuts/                           # ← Your forked repo
 
 ## Route Structure
 
-| Route               | Page                     | Source                          |
-| ------------------- | ------------------------ | ------------------------------- |
-| `/`                 | Topic home (course list) | `SITE_TOPIC` + `ALL_COURSES`    |
-| `/[course]/`        | Course overview           | `findCourse(slug)`             |
-| `/[course]/[part]/` | Lesson page               | `findCoursePart(course, part)` |
-| `/examples/`        | Code examples             | `ALL_COURSES` (aggregated)     |
+| Route               | Page                     | Source                         |
+| ------------------- | ------------------------ | ------------------------------ |
+| `/`                 | Topic home (course list) | `SITE_TOPIC` + `ALL_COURSES`   |
+| `/[course]/`        | Course overview          | `findCourse(slug)`             |
+| `/[course]/[part]/` | Lesson page              | `findCoursePart(course, part)` |
+| `/examples/`        | Code examples            | `ALL_COURSES` (aggregated)     |
 
 ## The `_common` Submodule
 
@@ -187,15 +187,15 @@ Shared interfaces used across all course files:
 
 Central registry and helper functions:
 
-| Export                 | Type                        | Purpose                                        |
-| ---------------------- | --------------------------- | ---------------------------------------------- |
-| `ALL_COURSES`          | `CourseDefinition[]`        | All courses in display order                   |
-| `SITE_TOPIC`           | `SiteTopicConfig`           | Topic-level metadata for the home page         |
-| `ALL_COURSE_SLUGS`     | `string[]`                  | All course slugs (for `generateStaticParams`)  |
-| `findCourse(slug)`     | `CourseDefinition \| undef` | Look up a course by slug                       |
-| `findCoursePart(c, p)` | `CoursePartMeta \| undef`   | Look up a part within a course                 |
-| `getAdjacentParts(c,p)`| `{prev, next}`              | Prev/next parts for navigation                 |
-| `allCoursePartParams()`| `{course, part}[]`          | All course+part combos for static generation   |
+| Export                  | Type                        | Purpose                                       |
+| ----------------------- | --------------------------- | --------------------------------------------- |
+| `ALL_COURSES`           | `CourseDefinition[]`        | All courses in display order                  |
+| `SITE_TOPIC`            | `SiteTopicConfig`           | Topic-level metadata for the home page        |
+| `ALL_COURSE_SLUGS`      | `string[]`                  | All course slugs (for `generateStaticParams`) |
+| `findCourse(slug)`      | `CourseDefinition \| undef` | Look up a course by slug                      |
+| `findCoursePart(c, p)`  | `CoursePartMeta \| undef`   | Look up a part within a course                |
+| `getAdjacentParts(c,p)` | `{prev, next}`              | Prev/next parts for navigation                |
+| `allCoursePartParams()` | `{course, part}[]`          | All course+part combos for static generation  |
 
 ## Part Types
 

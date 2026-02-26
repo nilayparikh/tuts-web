@@ -16,6 +16,7 @@
 export type {
   CourseDefinition,
   CoursePartMeta,
+  CourseOverview,
   PartQA,
   PartQuizQuestion,
   SiteTopicConfig,

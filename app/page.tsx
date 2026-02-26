@@ -52,9 +52,8 @@ export default function TopicHomePage() {
       <Paragraph>{SITE_TOPIC.description}</Paragraph>
 
       {/* ── Courses ───────────────────────────────────────────────────────── */}
-      <div id="courses">
-        <SectionDivider label="Courses" />
-      </div>
+      <span id="courses" style={{ display: "block", height: 0, margin: 0, padding: 0 }} />
+      <SectionDivider label="Courses" />
 
       <ConceptGrid columns={2}>
         {ALL_COURSES.map((course) => (

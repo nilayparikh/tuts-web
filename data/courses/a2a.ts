@@ -462,4 +462,110 @@ export const A2A_COURSE: CourseDefinition = {
       ],
     },
   ],
+
+  // ─── Rich overview content ──────────────────────────────────────────────
+
+  overview: {
+    heroSubheading:
+      "An open protocol for building multi-agent AI systems — where agents discover, delegate, and collaborate across any framework.",
+
+    learnItems: [
+      {
+        icon: "🔮",
+        title: "Expose agents as A2A servers",
+        description:
+          "Wrap agents built with Google ADK, LangGraph, or BeeAI as fully compliant A2A servers — Agent Card discovery, task handling, and SSE streaming included.",
+      },
+      {
+        icon: "🚡",
+        title: "Build A2A clients from scratch",
+        description:
+          "Create clients that fetch Agent Cards, send tasks, and handle both synchronous responses and live streaming — or use existing A2A SDK integrations.",
+      },
+      {
+        icon: "🔀",
+        title: "Orchestrate multi-agent workflows",
+        description:
+          "Wire agents into sequential chains and dynamic hierarchical systems, where a Requirement Agent delegates sub-tasks to specialists in real time.",
+      },
+    ],
+
+    aboutParagraphs: [
+      "Connecting agents built with different frameworks typically requires extensive custom integration work. A2A solves this with an open protocol that standardizes how agents <strong>discover</strong> each other and <strong>communicate</strong> — regardless of which model, language, or framework they were built on.",
+      "In this course, you'll build a complete healthcare multi-agent system: three specialized agents using different frameworks, each wrapped as an A2A server. You'll build the clients to talk to them and orchestrate them into both sequential and hierarchical workflows. Along the way you'll see exactly how A2A and MCP complement each other — MCP connects agents to external data; A2A connects agents to each other.",
+    ],
+
+    detailItems: [
+      {
+        title: "Understand why A2A exists",
+        description:
+          "Explore the client-server architecture of A2A: what an Agent Card is, how tasks flow through the agent lifecycle (submitted → working → completed), and why standardizing inter-agent communication matters in 2025.",
+      },
+      {
+        title: "Build an insurance QA agent on Vertex AI",
+        description:
+          "Build an insurance policy agent using Claude Haiku 4.5 on Vertex AI, wrap it in an A2A server using the A2A Python SDK, and create an A2A client from scratch to communicate with it.",
+      },
+      {
+        title: "Create a health research agent with Google ADK",
+        description:
+          "Use the Google Agent Development Kit (ADK) and Gemini 3 Pro to build a research agent that performs real-time web search — then expose it via A2A.",
+      },
+      {
+        title: "Chain agents sequentially with ADK",
+        description:
+          "Wire agents together so one agent's output feeds directly into the next as input — a sequential A2A chain where each specialist builds on the previous result.",
+      },
+      {
+        title: "Build a LangGraph agent with MCP tools",
+        description:
+          "Create a healthcare provider agent using LangGraph, connect it to an MCP tool server for structured data access, and call it through Microsoft Agent Framework's A2A client.",
+      },
+      {
+        title: "Orchestrate dynamically with BeeAI Framework",
+        description:
+          "Use IBM's BeeAI Framework to build a Requirement Agent that delegates tasks to specialized agents on the fly — a fully dynamic, hierarchical multi-agent system.",
+      },
+      {
+        title: "Deploy to Agent Stack",
+        description:
+          "Ship your A2A agents to BeeAI's Agent Stack — open-source infrastructure for deploying, discovering, and sharing A2A agents in production.",
+      },
+    ],
+
+    prerequisites: {
+      title: "Prerequisites",
+      subtitle: "What you need before starting",
+      tags: ["Python", "AI Agents", "Multi-Agent Systems"],
+      description:
+        "AI developers building multi-agent systems or working with agentic workflows. Familiarity with Python and a basic understanding of AI agents is recommended.",
+    },
+
+    audienceCards: [
+      {
+        icon: "🛛",
+        title: "AI / ML Engineers",
+        description:
+          "You build AI-powered products and want a standard protocol to connect multiple agents — across frameworks, teams, and organizational boundaries.",
+      },
+      {
+        icon: "⚙️",
+        title: "Backend & Platform Engineers",
+        description:
+          "You design distributed systems and want to add agent-to-agent communication as a first-class capability in your architecture.",
+      },
+      {
+        icon: "💻",
+        title: "Full-Stack Developers",
+        description:
+          "You are exploring agentic AI and want a structured, code-first introduction to multi-agent orchestration with real, runnable examples.",
+      },
+      {
+        icon: "📊",
+        title: "Technical Leaders",
+        description:
+          "You evaluate emerging technologies and need to understand A2A's design, ecosystem backing, and what production readiness looks like.",
+      },
+    ],
+  },
 };

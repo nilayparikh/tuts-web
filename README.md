@@ -72,12 +72,12 @@ docs/                        # Site documentation
 
 ## Route Architecture
 
-| Route                | Page                       | Data source                 |
-| -------------------- | -------------------------- | --------------------------- |
-| `/`                  | Topic home (course list)   | `data/courses/index.ts`     |
-| `/[course]/`         | Course overview             | `data/courses/<slug>.ts`   |
-| `/[course]/[part]/`  | Lesson page                | Course `parts[]` array      |
-| `/examples/`         | Code examples               | All courses aggregated      |
+| Route               | Page                     | Data source              |
+| ------------------- | ------------------------ | ------------------------ |
+| `/`                 | Topic home (course list) | `data/courses/index.ts`  |
+| `/[course]/`        | Course overview          | `data/courses/<slug>.ts` |
+| `/[course]/[part]/` | Lesson page              | Course `parts[]` array   |
+| `/examples/`        | Code examples            | All courses aggregated   |
 
 ## The `_common` Submodule
 

@@ -44,6 +44,28 @@ export interface CoursePartMeta extends CoursePart {
   tags?: string[];
 }
 
+// ─── Rich overview content (optional per-course) ──────────────────────────
+
+export interface CourseOverview {
+  /** Custom hero subheading (overrides course.description in hero) */
+  heroSubheading?: string;
+  /** "What You'll Learn" concept cards */
+  learnItems?: Array<{ icon: string; title: string; description: string }>;
+  /** About section paragraphs (may contain basic HTML tags) */
+  aboutParagraphs?: string[];
+  /** Accordion detail items ("In detail, you'll…") */
+  detailItems?: Array<{ title: string; description: string }>;
+  /** Prerequisites DescriptionBox */
+  prerequisites?: {
+    title: string;
+    subtitle: string;
+    tags: string[];
+    description: string;
+  };
+  /** Audience / "Who Should Join?" cards */
+  audienceCards?: Array<{ icon: string; title: string; description: string }>;
+}
+
 // ─── Course definition ────────────────────────────────────────────────────
 
 export interface CourseDefinition {
@@ -63,6 +85,8 @@ export interface CourseDefinition {
   icon?: string;
   /** Ordered parts (lessons) */
   parts: CoursePartMeta[];
+  /** Rich overview content for the course page */
+  overview?: CourseOverview;
 }
 
 // ─── Site-level topic definition ──────────────────────────────────────────

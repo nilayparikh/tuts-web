@@ -60,12 +60,12 @@ _tuts/
 
 ## Route Architecture
 
-| Route                | Page                     | Data Source                    |
-| -------------------- | ------------------------ | ------------------------------ |
-| `/`                  | Topic home (course list) | `SITE_TOPIC` + `ALL_COURSES`   |
-| `/[course]/`         | Course overview           | `findCourse(slug)`            |
-| `/[course]/[part]/`  | Lesson page               | `findCoursePart(course, part)`|
-| `/examples/`         | Code examples             | `ALL_COURSES` (aggregated)    |
+| Route               | Page                     | Data Source                    |
+| ------------------- | ------------------------ | ------------------------------ |
+| `/`                 | Topic home (course list) | `SITE_TOPIC` + `ALL_COURSES`   |
+| `/[course]/`        | Course overview          | `findCourse(slug)`             |
+| `/[course]/[part]/` | Lesson page              | `findCoursePart(course, part)` |
+| `/examples/`        | Code examples            | `ALL_COURSES` (aggregated)     |
 
 ## The `_common` Submodule
 
@@ -214,8 +214,8 @@ Courses are defined in individual files under `data/courses/` and registered in 
 
 ### Registry (`data/courses/index.ts`)
 
-| Export                  | Purpose                                         |
-| ----------------------- | ----------------------------------------------- |
+| Export                  | Purpose                                          |
+| ----------------------- | ------------------------------------------------ |
 | `ALL_COURSES`           | Array of all `CourseDefinition`s (display order) |
 | `SITE_TOPIC`            | Topic-level metadata for the home page           |
 | `ALL_COURSE_SLUGS`      | All course slugs for `generateStaticParams`      |

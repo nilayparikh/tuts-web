@@ -60,17 +60,46 @@ export default async function CourseOverviewPage({
   const course = findCourse(slug);
   if (!course) notFound();
 
+  const ov = course.overview;
+
   return (
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: `/${slug}/` }}
       footer={SITE_CONFIG.footer}
       maxWidth="narrow"
     >
+      {/* ── Breadcrumb ────────────────────────────────────────────────────── */}
+      <nav aria-label="Breadcrumb" style={{ marginBottom: "var(--tf-space-2)" }}>
+        <ol
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.35rem",
+            listStyle: "none",
+            margin: 0,
+            padding: 0,
+            fontSize: "var(--tf-text-sm)",
+            fontFamily: "var(--tf-font-body)",
+            color: "var(--tf-text-muted)",
+          }}
+        >
+          <li>
+            <a href="/" style={{ color: "var(--tf-color-primary)", textDecoration: "none" }}>
+              Home
+            </a>
+          </li>
+          <li aria-hidden="true" style={{ color: "var(--tf-text-muted)" }}>›</li>
+          <li aria-current="page" style={{ color: "var(--tf-text-secondary)" }}>
+            {course.title}
+          </li>
+        </ol>
+      </nav>
+
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection
         eyebrow={`Short Course · ${course.parts.length} Lessons · ${course.totalDuration}`}
         headline={formatHeadline(course.title)}
-        subheading={course.description}
+        subheading={ov?.heroSubheading ?? course.description}
         primaryAction={{
           label: "Start learning →",
           href: `/${slug}/${course.parts[0].slug}/`,
@@ -83,10 +112,87 @@ export default async function CourseOverviewPage({
         tags={course.tags}
       />
 
+      {/* ── What You'll Learn ─────────────────────────────────────────────── */}
+      {ov?.learnItems && ov.learnItems.length > 0 && (
+        <>
+          <SectionDivider label="What You'll Learn" />
+          <StepList>
+            {ov.learnItems.map((item) => (
+              <ConceptCard
+                key={item.title}
+                compact
+                icon={item.icon}
+                title={item.title}
+                description={item.description}
+              />
+            ))}
+          </StepList>
+        </>
+      )}
+
       {/* ── About This Course ─────────────────────────────────────────────── */}
       <SectionDivider label="About This Course" />
 
-      <Paragraph>{course.description}</Paragraph>
+      {ov?.aboutParagraphs && ov.aboutParagraphs.length > 0 ? (
+        ov.aboutParagraphs.map((html, i) => (
+          <p
+            key={i}
+            style={{
+              margin: 0,
+              fontFamily: "var(--tf-font-body)",
+              fontSize: "var(--tf-text-md)",
+              fontWeight: "var(--tf-font-normal)",
+              color: "var(--tf-text-secondary)",
+              lineHeight: "var(--tf-leading-relaxed)",
+              letterSpacing: "var(--tf-tracking-normal)",
+            }}
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        ))
+      ) : (
+        <Paragraph>{course.description}</Paragraph>
+      )}
+
+      {ov?.detailItems && ov.detailItems.length > 0 && (
+        <AccordionList
+          items={ov.detailItems.map((item) => ({
+            title: item.title,
+            content: item.description,
+          }))}
+          defaultOpenFirst
+        />
+      )}
+
+      {/* ── Who Should Join? ──────────────────────────────────────────────── */}
+      {(ov?.prerequisites || (ov?.audienceCards && ov.audienceCards.length > 0)) && (
+        <>
+          <SectionDivider label="Who Should Join?" />
+
+          {ov?.prerequisites && (
+            <DescriptionBox
+              title={ov.prerequisites.title}
+              subtitle={ov.prerequisites.subtitle}
+              tags={ov.prerequisites.tags}
+            >
+              {ov.prerequisites.description}
+            </DescriptionBox>
+          )}
+
+          {ov?.audienceCards && ov.audienceCards.length > 0 && (
+            <ConceptGrid columns={2}>
+              {ov.audienceCards.map((card) => (
+                <ConceptCard
+                  key={card.title}
+                  compact
+                  icon={card.icon}
+                  title={card.title}
+                  description={card.description}
+                />
+              ))}
+            </ConceptGrid>
+          )}
+        </>
+      )}
 
       {/* ── Course Outline ────────────────────────────────────────────────── */}
       <SectionDivider label="Course Outline" />
