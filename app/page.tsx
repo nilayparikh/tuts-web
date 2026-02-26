@@ -10,10 +10,10 @@ import {
   StepList,
   ConceptCard,
   ConceptGrid,
-  LessonSocialBar,
   AccordionList,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
+import { InstructorDetailCard } from "./components/InstructorDetailCard";
 import { COURSE } from "@/data/course";
 
 // ─── "In detail, you'll" items ─────────────────────────────────────────────
@@ -199,16 +199,18 @@ export default function CourseOverviewPage() {
       {/* ── Instructor ────────────────────────────────────────────────────── */}
       <SectionDivider label="Instructor" />
 
-      <LessonSocialBar
-        instructorName="Nilay Parikh"
-        instructorImageSrc={BRAND.profileUrl}
-        twitterUrl={BRAND.socials.twitter}
-        twitterHandle={BRAND.socials.twitterHandle}
-        linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
-        youtubeSubscribeUrl={BRAND.socials.youtube}
-        shareTitle={COURSE.title}
-        shareDescription={COURSE.description}
-        shareHashtags={COURSE.tags}
+      <InstructorDetailCard
+        name="Nilay Parikh"
+        imageSrc="/brand/nilay_parikh.jpeg"
+        role="Founder · LocalM · Ergo Sum"
+        bio="Technologist with 20+ years of engineering experience and an ML/AI practitioner since 2010. Founder of Ergo Sum (quantitative & equity research) and LocalM (AI-assisted SDLC). Currently focused on AI Platform Engineering, Agentic AI, and Context Engineering."
+        socials={{
+          twitter: BRAND.socials.twitter,
+          twitterHandle: BRAND.socials.twitterHandle,
+          linkedin: BRAND.socials.linkedin,
+          youtube: BRAND.socials.youtube,
+          github: BRAND.socials.github,
+        }}
       />
     </TutorialLayout>
   );
