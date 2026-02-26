@@ -7,11 +7,10 @@
  */
 
 /* ── Site-specific token overrides ─────────────────────────────────────── */
-:root {
-  --tf-font-display: "Inter", "Segoe UI", system-ui, sans-serif;
-  --tf-font-body: "Inter", "Segoe UI", system-ui, sans-serif;
-  --tf-font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
-}
+/* Font tokens are inherited from the framework.
+ * Override only when the site uses a different font stack.
+ * :root { --tf-font-display: ...; --tf-font-body: ...; --tf-font-mono: ...; }
+ */
 
 /* ── Smooth anchor scrolling offset (accounts for sticky header) ────────── */
 :target {
@@ -94,8 +93,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 2rem;
+  height: 2rem;
   border-radius: var(--tf-radius-md);
   color: var(--tf-text-secondary);
   text-decoration: none;
@@ -158,16 +157,8 @@
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  /* ConceptGrid and SidebarLayout fall to 1-column on mobile */
-  [style*="grid-template-columns: repeat(3"] {
-    grid-template-columns: 1fr !important;
-  }
-  [style*="grid-template-columns: repeat(2"] {
-    grid-template-columns: 1fr !important;
-  }
-  [style*="grid-template-columns: var(--tf-sidebar-width)"] {
-    grid-template-columns: 1fr !important;
-  }
+  /* Grid responsiveness is handled by the framework (.tf-concept-grid,
+   * .tf-sidebar-layout, .tf-step-card classes in GlobalStyles). */
 
   .lesson-topbar__center {
     display: none;
@@ -179,7 +170,9 @@
 }
 
 @media (max-width: 640px) {
-  /* Header nav collapse */
+  /* Collapse top-nav links on small screens.
+   * TODO: Add a class to TutorialNav so this selector can be scoped
+   *       (e.g. .tf-nav ul) instead of matching every <nav>. */
   nav ul {
     display: none !important;
   }

@@ -9,15 +9,15 @@ They are served via GitHub Pages and must be fast, accessible, and SEO-complete.
 
 ## Tech Stack
 
-| Layer         | Tool / Library                          | Version     |
-|---------------|-----------------------------------------|-------------|
-| Framework     | Next.js                                 | 15.2.x      |
-| React         | React                                   | 19.x        |
-| Language      | TypeScript (strict)                     | 5.x         |
-| Components    | `@localm/tutorial-framework`            | 1.x (local) |
-| Styling       | CSS custom properties (`--tf-*` prefix) | —           |
-| Build output  | Static HTML (`output: 'export'`)        | —           |
-| Hosting       | GitHub Pages                            | —           |
+| Layer        | Tool / Library                          | Version     |
+| ------------ | --------------------------------------- | ----------- |
+| Framework    | Next.js                                 | 15.2.x      |
+| React        | React                                   | 19.x        |
+| Language     | TypeScript (strict)                     | 5.x         |
+| Components   | `@localm/tutorial-framework`            | 1.x (local) |
+| Styling      | CSS custom properties (`--tf-*` prefix) | —           |
+| Build output | Static HTML (`output: 'export'`)        | —           |
+| Hosting      | GitHub Pages                            | —           |
 
 ## File Naming
 
@@ -49,8 +49,28 @@ export default function MyPage() { ... }
 ## Forbidden Patterns
 
 ```tsx
-// ❌ Custom styling
+// ❌ Custom styling — all colours and spacing must come from --tf-* tokens
 <div style={{ background: 'red' }}>
+<div style={{ background: 'rgba(99,102,241,0.12)' }}>
+
+// ❌ Hardcoded hex / rgba in components — use semantic tokens
+color: "#fff"      // → var(--tf-text-inverse)
+color: "#000"      // → var(--tf-bg-base)
+
+// ❌ Bare pixel values for layout/sizing — convert to rem or tokens
+width: 32          // → 2rem
+padding: "2px 8px" // → "0.125rem 0.5rem"
+fontSize: 18       // → var(--tf-text-lg)
+
+// ❌ Hex alpha appended to CSS variables
+`${m.color}44`     // → use explicit borderColor with a *-border token
+
+// ❌ Hardcoded letter-spacing
+letterSpacing: "0.06em"  // → var(--tf-tracking-wide)
+letterSpacing: "0.08em"  // → var(--tf-tracking-widest)
+
+// ❌ Hardcoded transition
+transition: "all 0.15s ease"  // → var(--tf-transition-fast)
 
 // ❌ Raw code block
 <pre><code>{myCode}</code></pre>
@@ -66,6 +86,9 @@ const router = useRouter();   // only safe inside useEffect
 
 // ❌ External icon libraries
 import { Icon } from 'lucide-react';
+
+// ❌ !important overrides for framework responsive classes (.tf-concept-grid, etc.)
+[style*="grid-template-columns:"] { grid-template-columns: 1fr !important; }
 ```
 
 ## SEO Checklist (every page)
