@@ -62,7 +62,14 @@ export default function CourseOverviewPage() {
 
       {/* ── What You'll Build ─────────────────────────────────────────────── */}
       <SectionDivider label="What You'll Build" />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tf-space-8)', alignItems: 'center' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--tf-space-8)",
+          alignItems: "center",
+        }}
+      >
         <Paragraph lead center>
           By the end of this course you will be able to build production-grade
           multi-agent systems using the A2A protocol, from architecture to
@@ -70,21 +77,21 @@ export default function CourseOverviewPage() {
         </Paragraph>
 
         <ConceptGrid columns={3}>
-        <ConceptCard
-          title="Agent Cards"
-          description="Design self-describing JSON-LD agent metadata that enables discovery and capability negotiation."
-          variant="primary"
-        />
-        <ConceptCard
-          title="Task Lifecycle"
-          description="Implement the full send → stream → complete lifecycle with proper error handling."
-          variant="accent"
-        />
-        <ConceptCard
-          title="Multi-Agent Orchestration"
-          description="Wire multiple agents together with push notifications and real-time SSE streaming."
-          variant="success"
-        />
+          <ConceptCard
+            title="Agent Cards"
+            description="Design self-describing JSON-LD agent metadata that enables discovery and capability negotiation."
+            variant="primary"
+          />
+          <ConceptCard
+            title="Task Lifecycle"
+            description="Implement the full send → stream → complete lifecycle with proper error handling."
+            variant="accent"
+          />
+          <ConceptCard
+            title="Multi-Agent Orchestration"
+            description="Wire multiple agents together with push notifications and real-time SSE streaming."
+            variant="success"
+          />
         </ConceptGrid>
       </div>
 
@@ -218,10 +225,17 @@ export default function CourseOverviewPage() {
       {/* ── Callout Box Showcase ──────────────────────────────────────────── */}
       <SectionDivider label="Tips & Notices" />
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--tf-space-4)' }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "var(--tf-space-4)",
+        }}
+      >
         <TipBox title="Learning Strategy">
-          Watch each video lesson at 1x speed first, then code along in the second
-          pass. This two-pass method is proven to improve retention by 40%.
+          Watch each video lesson at 1x speed first, then code along in the
+          second pass. This two-pass method is proven to improve retention by
+          40%.
         </TipBox>
 
         <SuccessBox title="Certification Available">
@@ -230,8 +244,8 @@ export default function CourseOverviewPage() {
         </SuccessBox>
 
         <NoteBox title="Self-Paced">
-          This course is completely self-paced. Each lesson builds on the previous
-          one, but you can revisit any lesson at any time.
+          This course is completely self-paced. Each lesson builds on the
+          previous one, but you can revisit any lesson at any time.
         </NoteBox>
       </div>
 
