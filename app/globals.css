@@ -170,10 +170,8 @@
 }
 
 @media (max-width: 640px) {
-  /* Collapse top-nav links on small screens.
-   * TODO: Add a class to TutorialNav so this selector can be scoped
-   *       (e.g. .tf-nav ul) instead of matching every <nav>. */
-  nav ul {
+  /* Collapse top-nav links on small screens (header nav only). */
+  header nav ul {
     display: none !important;
   }
 

@@ -94,23 +94,25 @@ export default async function LessonPage({
       }}
       sidebarWidth={288}
     >
-      {/* ── Lesson header ──────────────────────────────────────────────── */}
-      <LessonHeader
-        type={part.type}
-        duration={part.duration}
-        title={part.title}
-        description={part.description}
-      />
-
-      {/* ── Main content by type ───────────────────────────────────────── */}
+      {/* ── All lesson content in a single constrained column ──────── */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           gap: "var(--tf-space-8)",
           maxWidth: "var(--tf-narrow-width)",
+          width: "100%",
         }}
       >
+        {/* ── Lesson header ────────────────────────────────────────── */}
+        <LessonHeader
+          type={part.type}
+          duration={part.duration}
+          title={part.title}
+          description={part.description}
+        />
+
+        {/* ── Main content by type ─────────────────────────────────── */}
         <PartContent part={part} />
 
         {/* ── Navigation ─────────────────────────────────────────────── */}

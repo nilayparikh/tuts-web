@@ -1,16 +1,20 @@
 ---
 name: Tutorial Page Agent
-description: >
-  Agent for creating and editing tutorial pages in the _tuts Next.js project.
-  Uses @localm/tutorial-framework exclusively — no custom components allowed.
+description: Agent for creating and editing tutorial pages in the _tuts Next.js project. Uses @localm/tutorial-framework exclusively — no custom components allowed.
 tools:
-  - read_file
-  - create_file
-  - replace_string_in_file
-  - run_in_terminal
-  - get_errors
-  - semantic_search
-  - grep_search
+  [
+    "vscode",
+    "execute",
+    "read",
+    "edit",
+    "search",
+    "web",
+    "memory/*",
+    "playwright/*",
+    "sequentialthinking/*",
+    "agent",
+    "todo",
+  ]
 ---
 
 # Tutorial Page Agent
