@@ -407,14 +407,46 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
           title="Video Transcript"
           defaultCollapsed
           entries={[
-            { time: 0, speaker: "Instructor", text: "Welcome to the A2A Agent-to-Agent Protocol course. In this series, we are going to build production-grade multi-agent AI systems from scratch." },
-            { time: 12, speaker: "Instructor", text: "Agentic AI is one of the most exciting frontiers in artificial intelligence. But here is the problem — most agents today operate in isolation." },
-            { time: 24, speaker: "Instructor", text: "They can call tools, they can access data, but they cannot talk to other agents in a standardised way." },
-            { time: 35, speaker: "Instructor", text: "That is exactly what the A2A protocol solves. It gives agents a common language to discover each other, delegate tasks, and stream results." },
-            { time: 48, speaker: "Instructor", text: "Over the next 16 lessons you will build QA agents, chain agents, orchestrate multi-agent systems, and deploy to production." },
-            { time: 62, speaker: "Instructor", text: "We will use Python, Google ADK, LangGraph, BeeAI, and Microsoft Agent Framework — covering the entire ecosystem." },
-            { time: 78, speaker: "Instructor", text: "By the end, you will have a complete understanding of A2A and hands-on experience building real, production-ready agent systems." },
-            { time: 92, speaker: "Instructor", text: "Let us get started by understanding why we even need agent-to-agent communication in the first place." },
+            {
+              time: 0,
+              speaker: "Instructor",
+              text: "Welcome to the A2A Agent-to-Agent Protocol course. In this series, we are going to build production-grade multi-agent AI systems from scratch.",
+            },
+            {
+              time: 12,
+              speaker: "Instructor",
+              text: "Agentic AI is one of the most exciting frontiers in artificial intelligence. But here is the problem — most agents today operate in isolation.",
+            },
+            {
+              time: 24,
+              speaker: "Instructor",
+              text: "They can call tools, they can access data, but they cannot talk to other agents in a standardised way.",
+            },
+            {
+              time: 35,
+              speaker: "Instructor",
+              text: "That is exactly what the A2A protocol solves. It gives agents a common language to discover each other, delegate tasks, and stream results.",
+            },
+            {
+              time: 48,
+              speaker: "Instructor",
+              text: "Over the next 16 lessons you will build QA agents, chain agents, orchestrate multi-agent systems, and deploy to production.",
+            },
+            {
+              time: 62,
+              speaker: "Instructor",
+              text: "We will use Python, Google ADK, LangGraph, BeeAI, and Microsoft Agent Framework — covering the entire ecosystem.",
+            },
+            {
+              time: 78,
+              speaker: "Instructor",
+              text: "By the end, you will have a complete understanding of A2A and hands-on experience building real, production-ready agent systems.",
+            },
+            {
+              time: 92,
+              speaker: "Instructor",
+              text: "Let us get started by understanding why we even need agent-to-agent communication in the first place.",
+            },
           ]}
         />
       )}
@@ -424,13 +456,41 @@ function VideoContent({ part }: { part: CoursePartMeta }) {
           title="Video Transcript"
           defaultCollapsed
           entries={[
-            { time: 0, speaker: "Instructor", text: "So why do we need A2A? Let us start by looking at the landscape of agent communication." },
-            { time: 10, speaker: "Instructor", text: "Today we have tool calling — where a model invokes functions. And we have MCP, the Model Context Protocol, which connects models to structured data sources." },
-            { time: 22, speaker: "Instructor", text: "But neither of these solves agent-to-agent communication. Tool calling is synchronous and one-directional. MCP is about connecting to data, not to other agents." },
-            { time: 36, speaker: "Instructor", text: "A2A fills this gap. It is an open protocol — created by Google — that lets autonomous agents discover each other and delegate tasks." },
-            { time: 48, speaker: "Instructor", text: "The key concepts are Agent Cards for discovery, Tasks for work delegation, and Server-Sent Events for streaming results back." },
-            { time: 60, speaker: "Instructor", text: "What makes A2A powerful is that it is framework-agnostic. An ADK agent can talk to a LangGraph agent, which can talk to a BeeAI agent. They just need to speak A2A." },
-            { time: 75, speaker: "Instructor", text: "Think of it like HTTP for agents. You do not need to know the implementation — just the contract." },
+            {
+              time: 0,
+              speaker: "Instructor",
+              text: "So why do we need A2A? Let us start by looking at the landscape of agent communication.",
+            },
+            {
+              time: 10,
+              speaker: "Instructor",
+              text: "Today we have tool calling — where a model invokes functions. And we have MCP, the Model Context Protocol, which connects models to structured data sources.",
+            },
+            {
+              time: 22,
+              speaker: "Instructor",
+              text: "But neither of these solves agent-to-agent communication. Tool calling is synchronous and one-directional. MCP is about connecting to data, not to other agents.",
+            },
+            {
+              time: 36,
+              speaker: "Instructor",
+              text: "A2A fills this gap. It is an open protocol — created by Google — that lets autonomous agents discover each other and delegate tasks.",
+            },
+            {
+              time: 48,
+              speaker: "Instructor",
+              text: "The key concepts are Agent Cards for discovery, Tasks for work delegation, and Server-Sent Events for streaming results back.",
+            },
+            {
+              time: 60,
+              speaker: "Instructor",
+              text: "What makes A2A powerful is that it is framework-agnostic. An ADK agent can talk to a LangGraph agent, which can talk to a BeeAI agent. They just need to speak A2A.",
+            },
+            {
+              time: 75,
+              speaker: "Instructor",
+              text: "Think of it like HTTP for agents. You do not need to know the implementation — just the contract.",
+            },
           ]}
         />
       )}
