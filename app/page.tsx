@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
-import {
-  TutorialLayout,
-  HeroSection,
-} from "@localm/tutorial-framework";
+import { TutorialLayout, HeroSection } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
 import { SITE_TOPIC, ALL_COURSES } from "@/data/courses";
 import { CourseGrid } from "./components/CourseGrid";

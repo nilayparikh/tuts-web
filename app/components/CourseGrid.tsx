@@ -146,7 +146,9 @@ export function CourseGrid({ courses, topicName }: CourseGridProps) {
   // Top N tags by frequency for quick filters
   const quickTags = useMemo(() => {
     const freq = new Map<string, number>();
-    courses.forEach((c) => c.tags.forEach((t) => freq.set(t, (freq.get(t) ?? 0) + 1)));
+    courses.forEach((c) =>
+      c.tags.forEach((t) => freq.set(t, (freq.get(t) ?? 0) + 1)),
+    );
     return Array.from(freq.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, QUICK_TAG_COUNT)
@@ -174,7 +176,10 @@ export function CourseGrid({ courses, topicName }: CourseGridProps) {
   // Pagination
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const safePage = Math.min(page, totalPages - 1);
-  const paged = filtered.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE);
+  const paged = filtered.slice(
+    safePage * PAGE_SIZE,
+    (safePage + 1) * PAGE_SIZE,
+  );
   const showPager = filtered.length > PAGE_SIZE;
 
   // Reset to page 0 when filters change
@@ -200,9 +205,7 @@ export function CourseGrid({ courses, topicName }: CourseGridProps) {
   return (
     <div style={s.root}>
       {/* ── Heading + quick tags ── */}
-      {topicName && (
-        <h2 style={s.heading}>{topicName} Tutorials</h2>
-      )}
+      {topicName && <h2 style={s.heading}>{topicName} Tutorials</h2>}
 
       {quickTags.length > 0 && (
         <div style={s.quickTags}>

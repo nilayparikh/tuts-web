@@ -28,6 +28,7 @@ import {
   CodePreview,
   VideoTranscript,
   LessonSocialBar,
+  NotebookEmbed,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import {
@@ -206,8 +207,11 @@ function PartContent({
 }) {
   switch (part.type) {
     case "video":
-    case "video-code":
       return <VideoContent part={part} courseTitle={courseTitle} />;
+    case "video-code":
+      return <VideoCodeContent part={part} courseTitle={courseTitle} />;
+    case "code":
+      return <CodeContent part={part} />;
     case "reading":
       return <ReadingContent part={part} />;
     case "quiz":
@@ -560,6 +564,324 @@ function VideoContent({
           before exposing them to the internet. Unprotected agents can be
           abused.
         </DangerBox>
+      )}
+    </>
+  );
+}
+
+// ─── Video with Code (70/30 split: Notebook + Video/Instructions) ──────────
+
+function VideoCodeContent({
+  part,
+}: {
+  part: CoursePartMeta;
+  courseTitle: string;
+}) {
+  return (
+    <>
+      {/* ── 70/30 split: Colab (left) + Video & instructions (right) ── */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "7fr 3fr",
+          gap: "var(--tf-space-4)",
+          width: "100%",
+          minHeight: "calc(100vh - 14rem)",
+          alignItems: "start",
+        }}
+      >
+        {/* ── Left column: Google Colab ────────────────────────────── */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--tf-space-3)",
+            minHeight: 0,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--tf-space-2)",
+              fontSize: "var(--tf-text-sm)",
+              fontWeight: 600,
+              color: "var(--tf-text-secondary)",
+              fontFamily: "var(--tf-font-mono)",
+            }}
+          >
+            <span style={{ fontSize: "var(--tf-text-base)" }}>📓</span>
+            Interactive Notebook
+          </div>
+          {part.notebookUrl || part.colabUrl ? (
+            <NotebookEmbed
+              notebookUrl={part.notebookUrl || part.colabUrl!}
+              colabUrl={part.colabUrl}
+              title={part.title}
+              height="calc(100vh - 16rem)"
+            />
+          ) : (
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "var(--tf-radius-lg)",
+                border: "1px dashed var(--tf-border-primary)",
+                background: "var(--tf-bg-secondary)",
+                color: "var(--tf-text-tertiary)",
+                fontSize: "var(--tf-text-sm)",
+                padding: "var(--tf-space-8)",
+                textAlign: "center",
+              }}
+            >
+              Colab notebook will be linked here.
+            </div>
+          )}
+        </div>
+
+        {/* ── Right column: Video + instructions (sticky) ─────────── */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--tf-space-4)",
+            position: "sticky",
+            top: "calc(var(--tf-header-height) + var(--tf-space-4))",
+            maxHeight: "calc(100vh - var(--tf-header-height) - 2rem)",
+            overflowY: "auto",
+          }}
+        >
+          {/* Video */}
+          {part.videoId && (
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "var(--tf-space-2)",
+                  fontSize: "var(--tf-text-sm)",
+                  fontWeight: 600,
+                  color: "var(--tf-text-secondary)",
+                  fontFamily: "var(--tf-font-mono)",
+                  marginBottom: "var(--tf-space-3)",
+                }}
+              >
+                <span style={{ fontSize: "var(--tf-text-base)" }}>▶</span>
+                Video Walkthrough
+              </div>
+              <YouTubeEmbed
+                videoId={part.videoId}
+                title={part.title}
+                lazyLoad
+              />
+            </div>
+          )}
+
+          {/* Instructions / objectives */}
+          {part.objectives && part.objectives.length > 0 && (
+            <div
+              style={{
+                padding: "var(--tf-space-4)",
+                borderRadius: "var(--tf-radius-lg)",
+                background: "var(--tf-bg-secondary)",
+                border: "1px solid var(--tf-border-primary)",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "var(--tf-text-sm)",
+                  fontWeight: 700,
+                  color: "var(--tf-text-primary)",
+                  marginBottom: "var(--tf-space-3)",
+                }}
+              >
+                Instructions
+              </div>
+              <ol
+                style={{
+                  margin: 0,
+                  paddingLeft: "var(--tf-space-5)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "var(--tf-space-2)",
+                }}
+              >
+                {part.objectives.map((obj, i) => (
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: "var(--tf-text-sm)",
+                      color: "var(--tf-text-secondary)",
+                      lineHeight: "var(--tf-leading-relaxed)",
+                    }}
+                  >
+                    {obj}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+
+          {/* Description */}
+          {part.description && (
+            <div
+              style={{
+                padding: "var(--tf-space-4)",
+                borderRadius: "var(--tf-radius-lg)",
+                background: "var(--tf-bg-secondary)",
+                border: "1px solid var(--tf-border-primary)",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "var(--tf-text-sm)",
+                  color: "var(--tf-text-secondary)",
+                  margin: 0,
+                  lineHeight: "var(--tf-leading-relaxed)",
+                }}
+              >
+                {part.description}
+              </p>
+            </div>
+          )}
+
+          {/* Source code link */}
+          {part.codeUrl && (
+            <a
+              href={part.codeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--tf-space-2)",
+                padding: "var(--tf-space-3) var(--tf-space-4)",
+                borderRadius: "var(--tf-radius-lg)",
+                background: "var(--tf-bg-tertiary)",
+                border: "1px solid var(--tf-border-primary)",
+                color: "var(--tf-text-primary)",
+                fontSize: "var(--tf-text-sm)",
+                fontWeight: 600,
+                textDecoration: "none",
+                transition: "border-color 0.15s",
+              }}
+            >
+              <span>📂</span>
+              View source on GitHub ↗
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* ── Q&A (below the split) ──────────────────────────────────── */}
+      {part.qa && part.qa.length > 0 && (
+        <section>
+          <SectionDivider label="Q & A" />
+          <QABlock items={part.qa} />
+        </section>
+      )}
+    </>
+  );
+}
+
+// ─── Code (full-width Colab embed) ────────────────────────────────────────
+
+function CodeContent({ part }: { part: CoursePartMeta }) {
+  return (
+    <>
+      {/* Full-width notebook embed */}
+      {part.notebookUrl || part.colabUrl ? (
+        <NotebookEmbed
+          notebookUrl={part.notebookUrl || part.colabUrl!}
+          colabUrl={part.colabUrl}
+          title={part.title}
+          height="calc(100vh - 200px)"
+        />
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: 500,
+            borderRadius: "var(--tf-radius-lg)",
+            border: "1px dashed var(--tf-border-primary)",
+            background: "var(--tf-bg-secondary)",
+            color: "var(--tf-text-tertiary)",
+            fontSize: "var(--tf-text-sm)",
+            padding: "var(--tf-space-8)",
+            textAlign: "center",
+          }}
+        >
+          Colab notebook will be linked here.
+        </div>
+      )}
+
+      {/* Objectives below */}
+      {part.objectives && part.objectives.length > 0 && (
+        <DescriptionBox
+          title={part.title}
+          subtitle={part.description}
+          tags={part.tags}
+          meta={part.duration}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "var(--tf-space-3)",
+            }}
+          >
+            <Paragraph lead>Notebook objectives:</Paragraph>
+            <ul
+              style={{
+                margin: 0,
+                paddingLeft: "var(--tf-space-5)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "var(--tf-space-2)",
+              }}
+            >
+              {part.objectives.map((obj, i) => (
+                <li
+                  key={i}
+                  style={{
+                    fontSize: "var(--tf-text-sm)",
+                    color: "var(--tf-text-secondary)",
+                    lineHeight: "var(--tf-leading-relaxed)",
+                  }}
+                >
+                  {obj}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </DescriptionBox>
+      )}
+
+      {/* Source code link */}
+      {part.codeUrl && (
+        <SuccessBox title="Source Code">
+          The complete source code for this lesson is available on GitHub.{" "}
+          <a
+            href={part.codeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "var(--tf-color-success)", fontWeight: 600 }}
+          >
+            View on GitHub →
+          </a>
+        </SuccessBox>
+      )}
+
+      {/* Q&A */}
+      {part.qa && part.qa.length > 0 && (
+        <section>
+          <SectionDivider label="Q & A" />
+          <QABlock items={part.qa} />
+        </section>
       )}
     </>
   );

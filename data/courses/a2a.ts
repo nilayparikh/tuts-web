@@ -2,6 +2,10 @@
  * Course: A2A — The Agent2Agent Protocol
  *
  * Slug: "a2a"  →  /a2a/, /a2a/introduction/, /a2a/why-a2a/, …
+ *
+ * 17 lessons + quiz. 7 framework integrations. 4 model providers.
+ * Local-first: GitHub Models Phi-4, Azure AI Foundry Kimi-K2/K2-Thinking,
+ * Foundry Local Qwen2.5 Coder.
  */
 
 import type { CourseDefinition } from "./types";
@@ -10,9 +14,18 @@ export const A2A_COURSE: CourseDefinition = {
   slug: "a2a",
   title: "A2A: The Agent2Agent Protocol",
   description:
-    "Learn to build multi-agent AI systems using Google's A2A protocol. Covers QA agents on Vertex AI, sequential chain agents, LangGraph, BeeAI, and deploying on Agent Stack.",
-  totalDuration: "~70 mins",
-  tags: ["A2A", "AI Agents", "Python", "LangGraph", "Google ADK", "BeeAI"],
+    "Build multi-agent AI systems using the A2A protocol. Covers 7 frameworks (Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Agent SDK, GitHub Copilot SDK) with local-first models.",
+  totalDuration: "~135 mins",
+  tags: [
+    "A2A",
+    "AI Agents",
+    "Python",
+    "Microsoft Agent Framework",
+    "Google ADK",
+    "LangGraph",
+    "CrewAI",
+    "MCP",
+  ],
   icon: "🔌",
   difficulty: "beginner",
   instructor: {
@@ -27,16 +40,24 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "introduction",
       title: "Introduction",
       type: "video",
-      duration: "4 mins",
+      duration: "5 mins",
       videoId: "placeholder-intro",
       description:
-        "Get oriented to agentic systems and the need for inter-agent communication protocols.",
+        "Get oriented to agentic AI systems, the N² integration problem, and why A2A exists.",
       objectives: [
-        "Understand what agentic AI systems are",
-        "Learn why agent-to-agent communication matters",
-        "Preview what you will build in this course",
+        "Understand what agentic AI systems are and why they need protocols",
+        "Grasp the N² integration problem that A2A solves",
+        "Preview the seven frameworks and four model providers used in this course",
+        "Differentiate A2A (agent-to-agent) from MCP (agent-to-tool)",
       ],
-      tags: ["introduction", "overview"],
+      qa: [
+        {
+          question: "What is the N² problem in multi-agent systems?",
+          answer:
+            "Without a shared protocol, connecting N agents requires up to N×(N-1)/2 custom integrations. A2A reduces this to one standard interface per agent.",
+        },
+      ],
+      tags: ["introduction", "overview", "a2a"],
     },
 
     // ── 2. Why Agent2Agent? ──────────────────────────────────────────────
@@ -44,14 +65,15 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "why-a2a",
       title: "Why Agent2Agent Protocol?",
       type: "video",
-      duration: "4 mins",
+      duration: "5 mins",
       videoId: "placeholder-why-a2a",
       description:
-        "Explore the motivation behind A2A — how it differs from MCP, tool-calling, and why interoperability matters.",
+        "Explore the motivation behind A2A — how it solves the interoperability problem and complements MCP.",
       objectives: [
-        "Compare A2A to tool-calling and MCP",
-        "Understand the interoperability problem A2A solves",
-        "See real-world use cases",
+        "Quantify the N² integration scale problem",
+        "Compare REST API integration vs. A2A protocol approach",
+        "Understand A2A's five design values",
+        "Map the A2A agent stack layers",
       ],
       qa: [
         {
@@ -65,7 +87,7 @@ export const A2A_COURSE: CourseDefinition = {
             "They can, but without a common protocol you need custom integration for every pair of agents. A2A provides a standard discovery mechanism (Agent Card), task format, and streaming contract so any A2A-compliant agent can talk to any other.",
         },
       ],
-      tags: ["overview", "motivation"],
+      tags: ["overview", "motivation", "interoperability"],
     },
 
     // ── 3. Architecture ──────────────────────────────────────────────────
@@ -73,15 +95,16 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "a2a-architecture",
       title: "A2A Architecture",
       type: "video",
-      duration: "6 mins",
+      duration: "8 mins",
       videoId: "placeholder-architecture",
       description:
-        "Dive into Agent Cards, Tasks, Skills, and the SSE streaming protocol that forms the A2A specification.",
+        "Dive into Agent Cards, Messages, Parts, Task lifecycle, SSE streaming, and the JSON-RPC transport layer.",
       objectives: [
-        "Understand the Agent Card discovery mechanism",
-        "Learn the Task lifecycle (submitted → working → completed)",
-        "Understand Server-Sent Events streaming in A2A",
-        "Map the A2A spec to real HTTP endpoints",
+        "Understand the Agent Card discovery mechanism and its JSON structure",
+        "Learn the Task lifecycle (submitted → working → input-required → completed/failed/canceled)",
+        "Map Messages and Parts to the A2A data model",
+        "Understand Server-Sent Events streaming via tasks/sendSubscribe",
+        "Identify the seven JSON-RPC methods in the A2A specification",
       ],
       qa: [
         {
@@ -90,80 +113,79 @@ export const A2A_COURSE: CourseDefinition = {
             "A JSON document served at /.well-known/agent.json describing the agent's name, URL, capabilities, and skills. It is the discovery document that lets other agents (or clients) understand what the agent can do.",
         },
         {
-          question: "What is a Skill?",
-          answer:
-            "A named capability exposed by an agent. Skills define the ID, name, description, and supported input/output modes (e.g., text/plain, application/json). An agent card can expose multiple skills.",
-        },
-        {
           question: "How does streaming work in A2A?",
           answer:
-            "The agent emits Server-Sent Events (SSE) over the /tasks/sendSubscribe endpoint. Each event carries a status update or partial artifact. The client iterates over the event stream until it receives a terminal status (completed, failed, cancelled).",
+            "The agent emits Server-Sent Events (SSE) over the /tasks/sendSubscribe endpoint. Each event carries a status update or partial artifact. The client iterates over the event stream until it receives a terminal status (completed, failed, canceled).",
         },
       ],
-      tags: ["architecture", "spec", "agent-card", "sse"],
+      tags: ["architecture", "spec", "agent-card", "sse", "json-rpc"],
     },
 
-    // ── 4. Course Repos ──────────────────────────────────────────────────
+    // ── 4. Setup & Resources ─────────────────────────────────────────────
     {
-      slug: "course-repos",
-      title: "Course Repos & Resources",
+      slug: "setup-resources",
+      title: "Setup & Resources",
       type: "reading",
-      duration: "1 min",
+      duration: "5 mins",
       description:
-        "All repositories, notebooks, and reference links for this course.",
+        "Configure your development environment with GitHub Models, Azure AI Foundry, and Foundry Local.",
       readingUrl: "https://github.com/nilayparikh/a2a-agent2agent-protocol",
       objectives: [
-        "Bookmark the course GitHub repository",
-        "Clone the starter code",
-        "Set up your Python virtual environment",
+        "Clone the course repository and set up Python 3.11+",
+        "Configure GitHub Models API for Phi-4 access",
+        "Configure Azure AI Foundry for Kimi-K2 and Kimi-K2-Thinking",
+        "Install and verify Foundry Local for Qwen2.5 Coder",
+        "Run the smoke test script to validate all providers",
       ],
-      tags: ["resources", "setup"],
+      tags: ["setup", "resources", "environment"],
     },
 
-    // ── 5. QA Agent on Vertex AI ─────────────────────────────────────────
+    // ── 5. First A2A Agent ───────────────────────────────────────────────
     {
-      slug: "qa-agent-vertex-ai",
-      title: "Building a QA Agent with Claude on Vertex AI",
+      slug: "first-a2a-agent",
+      title: "Building Your First A2A Agent",
       type: "video-code",
-      duration: "3 mins",
-      videoId: "placeholder-qa-agent",
+      duration: "6 mins",
+      videoId: "placeholder-first-agent",
       description:
-        "Build a Question-Answer agent powered by Claude (via Vertex AI) from scratch using Python.",
+        "Build a QA agent from scratch using GitHub Phi-4 via the OpenAI-compatible API.",
       objectives: [
-        "Set up Claude on Vertex AI",
-        "Build an async QA function",
-        "Structure agent responses correctly",
+        "Create a QAAgent class with async invoke method",
+        "Configure GitHub Models Phi-4 endpoint",
+        "Structure agent responses for A2A compatibility",
+        "Test the agent standalone before wrapping",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/01-qa-agent",
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/05-first-a2a-agent",
       qa: [
         {
-          question: "Why use Vertex AI instead of the Anthropic API directly?",
+          question: "Why use the OpenAI-compatible API for GitHub Models?",
           answer:
-            "Vertex AI provides enterprise-grade features like IAM authentication, audit logging, and usage quotas. It also allows you to switch models (Claude, Gemini, Llama) without changing your code's auth layer.",
+            "GitHub Models exposes an OpenAI-compatible endpoint, so any code that uses the OpenAI Python SDK works with Phi-4 by just changing the base_url and api_key to the GitHub Models values.",
         },
       ],
-      tags: ["claude", "vertex-ai", "python", "qa"],
+      tags: ["phi-4", "github-models", "python", "qa-agent"],
     },
 
-    // ── 6. Wrapping as A2A Server ────────────────────────────────────────
+    // ── 6. A2A Server ────────────────────────────────────────────────────
     {
-      slug: "wrapping-qa-a2a-server",
-      title: "Wrapping the QA Agent into an A2A Server",
+      slug: "a2a-server",
+      title: "Wrapping an Agent as an A2A Server",
       type: "video-code",
-      duration: "4 mins",
-      videoId: "placeholder-wrapping",
+      duration: "7 mins",
+      videoId: "placeholder-a2a-server",
       description:
-        "Take the QA function and expose it as a fully compliant A2A server with an Agent Card and task handler.",
+        "Take the QA agent and expose it as a fully compliant A2A server with Agent Card, AgentExecutor, and EventQueue.",
       objectives: [
-        "Define an Agent Card for the QA agent",
-        "Implement the A2A task handler",
-        "Start the FastAPI-based A2A server",
-        "Test with a simple HTTP client",
+        "Implement the AgentExecutor interface",
+        "Use EventQueue for async result streaming",
+        "Define an Agent Card with skills and capabilities",
+        "Configure A2AStarletteApplication with uvicorn",
+        "Follow the port convention scheme (port 10001)",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/02-a2a-server",
-      tags: ["a2a-server", "fastapi", "python"],
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/06-a2a-server",
+      tags: ["a2a-server", "starlette", "uvicorn", "agent-card"],
     },
 
     // ── 7. A2A Client ────────────────────────────────────────────────────
@@ -171,83 +193,105 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "a2a-client",
       title: "Calling an A2A Agent using an A2A Client",
       type: "video-code",
-      duration: "3 mins",
-      videoId: "placeholder-client",
+      duration: "6 mins",
+      videoId: "placeholder-a2a-client",
       description:
-        "Write a Python A2A client that discovers the QA agent's card and sends tasks.",
+        "Write a Python A2A client that discovers the QA agent's card and sends tasks using both blocking and streaming modes.",
       objectives: [
-        "Fetch and parse an Agent Card",
-        "Send a task using the A2A client SDK",
-        "Handle both sync and streaming responses",
+        "Use A2ACardResolver to fetch and parse Agent Cards",
+        "Send tasks using blocking (send_task) mode",
+        "Send tasks using streaming (send_task_streaming) mode",
+        "Parse task responses and handle errors gracefully",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/03-a2a-client",
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/07-a2a-client",
       qa: [
         {
           question: "Can I use the TypeScript A2A SDK instead?",
           answer:
-            "Yes. The TypeScript SDK (@google/a2a-sdk) provides the same getAgentCard() and sendTask() / streamTask() APIs. The protocol contract is language-agnostic.",
+            "Yes. The TypeScript SDK (@anthropic-ai/a2a-sdk or equivalent) provides the same getAgentCard() and sendTask() / streamTask() APIs. The protocol contract is language-agnostic.",
         },
       ],
-      tags: ["client", "python", "sdk"],
+      tags: ["client", "python", "sdk", "streaming"],
     },
 
-    // ── 8. Health Research Agent (ADK) ───────────────────────────────────
+    // ── 8. Microsoft Agent Framework ─────────────────────────────────────
     {
-      slug: "health-research-agent-adk",
-      title: "Creating an A2A Health Research Agent using Google ADK",
+      slug: "microsoft-agent-framework",
+      title: "A2A with Microsoft Agent Framework",
       type: "video-code",
-      duration: "2 mins",
-      videoId: "placeholder-health-adk",
+      duration: "8 mins",
+      videoId: "placeholder-msft-af",
       description:
-        "Use the Google Agent Development Kit (ADK) to build a health research agent and expose it via A2A.",
+        "Build an OrchestratorAgent using Microsoft Agent Framework with Kimi-K2-Thinking that routes tasks to specialist A2A agents.",
       objectives: [
-        "Set up Google ADK",
-        "Create a research agent with tool use",
-        "Wrap the ADK agent as an A2A server",
+        "Build an A2AAgent proxy class in Microsoft Agent Framework",
+        "Create an OrchestratorAgent with intent-based routing",
+        "Configure Kimi-K2-Thinking via Azure AI Foundry",
+        "Demonstrate cross-framework interoperability",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/04-health-research-adk",
-      tags: ["google-adk", "research-agent", "tools"],
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/08-microsoft-agent-framework",
+      qa: [
+        {
+          question: "Why use Microsoft Agent Framework for orchestration?",
+          answer:
+            "Microsoft Agent Framework provides built-in orchestration patterns, agent routing, and enterprise-grade tooling. Combined with Kimi-K2-Thinking's reasoning capabilities, it excels at intent classification and task delegation.",
+        },
+      ],
+      tags: [
+        "microsoft",
+        "agent-framework",
+        "orchestration",
+        "kimi-k2-thinking",
+      ],
     },
 
-    // ── 9. Sequential Chain (ADK) ────────────────────────────────────────
+    // ── 9. Google ADK ────────────────────────────────────────────────────
     {
-      slug: "sequential-chain-adk",
-      title: "Creating an A2A Sequential Chain Agent with ADK",
+      slug: "google-adk",
+      title: "A2A with Google ADK",
       type: "video-code",
-      duration: "2 mins",
-      videoId: "placeholder-sequential",
+      duration: "7 mins",
+      videoId: "placeholder-google-adk",
       description:
-        "Build a sequential chain of agents using ADK — one agent's output becomes the next agent's input.",
+        "Use the Google Agent Development Kit to build a ResearchAgent with Kimi-K2 and expose it via A2A with a single method call.",
       objectives: [
-        "Design a sequential agent chain",
-        "Pass context between A2A calls",
-        "Handle partial failures in a chain",
+        "Build an LlmAgent with tool use in Google ADK",
+        "Use to_a2a() to auto-generate an A2A server",
+        "Connect remote A2A agents using RemoteA2aAgent",
+        "Compose agents with SequentialAgent, ParallelAgent, and LoopAgent",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/05-sequential-chain",
-      tags: ["sequential", "chain", "adk"],
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/09-google-adk",
+      qa: [
+        {
+          question: "What does to_a2a() do?",
+          answer:
+            "The to_a2a() method on an ADK agent auto-generates a complete A2A server — Agent Card, task handler, and HTTP endpoints — from the agent's existing configuration. One line converts any ADK agent into an A2A server.",
+        },
+      ],
+      tags: ["google-adk", "research-agent", "kimi-k2", "tools"],
     },
 
-    // ── 10. Healthcare LangGraph + MCP ──────────────────────────────────
+    // ── 10. LangGraph + MCP ──────────────────────────────────────────────
     {
-      slug: "healthcare-langgraph-mcp",
-      title:
-        "Creating an A2A Healthcare Provider Agent using LangGraph and MCP",
+      slug: "langgraph",
+      title: "A2A with LangGraph & MCP",
       type: "video-code",
-      duration: "6 mins",
+      duration: "10 mins",
       videoId: "placeholder-langgraph",
       description:
-        "Combine LangGraph's stateful graph execution, MCP tool servers, and A2A to build a healthcare provider agent.",
+        "Combine LangGraph's stateful graph execution, MCP tool servers, and A2A to build a CodeAgent powered by Foundry Local Qwen2.5 Coder.",
       objectives: [
-        "Build a LangGraph agent graph",
-        "Connect MCP tool servers to the graph",
-        "Expose the LangGraph agent via A2A",
-        "Stream intermediate graph steps to the A2A client",
+        "Build a FastMCP server with @mcp.tool() decorators",
+        "Connect MCP tools to a LangGraph agent via MultiServerMCPClient",
+        "Use create_react_agent for tool-calling with Qwen2.5 Coder",
+        "Bridge LangGraph to A2A with langgraph-a2a-server",
+        "Run fully local inference with Foundry Local",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/06-healthcare-langgraph",
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/10-langgraph",
       qa: [
         {
           question: "Why combine LangGraph with A2A?",
@@ -257,129 +301,182 @@ export const A2A_COURSE: CourseDefinition = {
         {
           question: "What does MCP add here?",
           answer:
-            "MCP tool servers provide structured, type-safe access to data sources (EHR systems, drug databases). The LangGraph agent calls MCP tools natively while A2A handles the external communication layer.",
+            "MCP tool servers provide structured, type-safe access to external tools. The LangGraph agent calls MCP tools natively while A2A handles the external agent-to-agent communication layer.",
         },
       ],
-      tags: ["langgraph", "mcp", "healthcare", "advanced"],
+      tags: ["langgraph", "mcp", "qwen", "foundry-local", "code-agent"],
     },
 
-    // ── 11. Microsoft Agent Framework ───────────────────────────────────
+    // ── 11. CrewAI ───────────────────────────────────────────────────────
     {
-      slug: "microsoft-agent-framework",
-      title: "Creating an A2A Client using Microsoft Agent Framework",
+      slug: "crewai",
+      title: "A2A with CrewAI",
       type: "video-code",
-      duration: "1 min",
-      videoId: "placeholder-msft-af",
+      duration: "8 mins",
+      videoId: "placeholder-crewai",
       description:
-        "Use Microsoft's Agent Framework to build an A2A client that delegates tasks to A2A servers.",
+        "Build a PlannerAgent using CrewAI's role-based agent model with Kimi-K2-Thinking and expose it over A2A.",
       objectives: [
-        "Install and configure Microsoft Agent Framework",
-        "Build an A2A client in the Agent Framework",
-        "Connect to existing A2A agents",
+        "Define CrewAI agents with roles, goals, and backstories",
+        "Create tasks with expected output specifications",
+        "Compose a Crew with sequential process execution",
+        "Build a CrewAIExecutor to wrap Crew as an A2A server",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/07-msft-agent-framework",
-      tags: ["microsoft", "agent-framework", "interop"],
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/11-crewai",
+      tags: ["crewai", "planner-agent", "kimi-k2-thinking", "roles"],
     },
 
-    // ── 12. BeeAI Multi-Agent ────────────────────────────────────────────
+    // ── 12. OpenAI Agents SDK ────────────────────────────────────────────
     {
-      slug: "beeai-multi-agent",
-      title: "Creating a Multi-Agent System using A2A with BeeAI Framework",
+      slug: "openai-agents-sdk",
+      title: "A2A with OpenAI Agents SDK",
       type: "video-code",
-      duration: "14 mins",
-      videoId: "placeholder-beeai",
+      duration: "7 mins",
+      videoId: "placeholder-openai-agents",
       description:
-        "Build a full multi-agent system using IBM's BeeAI Framework — multiple specialized A2A agents coordinated by an orchestrator.",
+        "Build a TaskAgent using OpenAI's Agents SDK with tool use and handoff capabilities, configured for GitHub Phi-4.",
       objectives: [
-        "Set up BeeAI Framework",
-        "Build specialized A2A agents (researcher, writer, reviewer)",
-        "Create an orchestrator agent that delegates via A2A",
-        "Handle parallel task execution across agents",
+        "Define tools with @tool decorator in the Agents SDK",
+        "Create an Agent with tools and instructions",
+        "Execute tasks with Runner.run()",
+        "Configure the SDK for GitHub Phi-4 via OpenAI-compatible API",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/08-beeai-multiagent",
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/12-openai-agents-sdk",
+      tags: ["openai", "agents-sdk", "phi-4", "task-agent"],
+    },
+
+    // ── 13. Claude Agent SDK ─────────────────────────────────────────────
+    {
+      slug: "claude-agent-sdk",
+      title: "A2A with Claude Agent SDK",
+      type: "video-code",
+      duration: "7 mins",
+      videoId: "placeholder-claude-agent",
+      description:
+        "Build an AssistantAgent using the Claude Agent SDK's structured tool use and conversation memory, routed through Kimi-K2 via Foundry.",
+      objectives: [
+        "Define structured tools with JSON schemas",
+        "Manage conversation memory across interactions",
+        "Handle per-task state in the Claude Agent SDK",
+        "Route inference through Kimi-K2 via Azure AI Foundry",
+      ],
+      codeUrl:
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/13-claude-agent-sdk",
+      tags: ["claude-sdk", "assistant-agent", "kimi-k2", "memory"],
+    },
+
+    // ── 14. GitHub Copilot SDK ───────────────────────────────────────────
+    {
+      slug: "github-copilot-sdk",
+      title: "A2A with GitHub Copilot SDK",
+      type: "video-code",
+      duration: "8 mins",
+      videoId: "placeholder-copilot-sdk",
+      description:
+        "Build a CopilotAgent that analyzes pull requests and repository structure using the GitHub Copilot SDK with a dual-use GITHUB_TOKEN.",
+      objectives: [
+        "Build a code-analysis agent with the GitHub Copilot SDK",
+        "Integrate GitHub API for PR and repo analysis",
+        "Leverage GITHUB_TOKEN for both API and model access",
+        "Wrap as an A2A server on port 10007",
+      ],
+      codeUrl:
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/14-github-copilot-sdk",
+      tags: ["github", "copilot-sdk", "phi-4", "code-review"],
+    },
+
+    // ── 15. Multi-Agent Deep Dive (Capstone) ─────────────────────────────
+    {
+      slug: "multi-agent-deep-dive",
+      title: "Multi-Agent System Deep Dive",
+      type: "video-code",
+      duration: "15 mins",
+      videoId: "placeholder-capstone",
+      description:
+        "Capstone: wire all seven framework agents into a unified multi-agent system with a MasterOrchestrator, chain/parallel execution, and error recovery.",
+      objectives: [
+        "Build a MasterOrchestrator with dynamic agent discovery",
+        "Implement chain and parallel execution strategies",
+        "Add error recovery with fallback agent selection",
+        "Configure the startup script for all 8 agents (ports 10001–10008)",
+        "Run the complete multi-agent system end-to-end",
+      ],
+      codeUrl:
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/15-multi-agent-system",
       qa: [
         {
-          question: "What makes BeeAI different from LangGraph or ADK?",
+          question:
+            "How does the MasterOrchestrator discover available agents?",
           answer:
-            "BeeAI (from IBM Research) focuses on transparent, auditable agent reasoning. It uses a ReAct-style loop with built-in memory and tool management, making it easier to trace why an agent made a decision.",
+            "It uses A2ACardResolver to fetch Agent Cards from each port (10001–10008). Each card describes the agent's skills and capabilities, so the orchestrator can route tasks based on intent matching against those skills.",
         },
         {
-          question: "How does the orchestrator delegate to specialist agents?",
+          question: "What happens if one of the 8 agents is down?",
           answer:
-            "The orchestrator is itself an A2A server and client. It receives a high-level task, decomposes it, then sends sub-tasks to specialist A2A agents. Results are aggregated and streamed back to the original caller.",
+            "The error recovery system detects failures via timeouts or error responses and falls back to the next-best agent based on skill overlap. The system degrades gracefully rather than failing entirely.",
         },
       ],
-      tags: ["beeai", "multi-agent", "orchestration", "ibm"],
+      tags: ["capstone", "orchestration", "multi-agent", "production"],
     },
 
-    // ── 13. Agent Stack ──────────────────────────────────────────────────
-    {
-      slug: "agent-stack",
-      title: "Running A2A Agents on Agent Stack",
-      type: "video",
-      duration: "15 mins",
-      videoId: "placeholder-agent-stack",
-      description:
-        "Deploy A2A agents to production using Agent Stack — a managed runtime for hosting, scaling, and monitoring A2A agents.",
-      objectives: [
-        "Understand Agent Stack architecture",
-        "Deploy an A2A agent to Agent Stack",
-        "Configure scaling and health checks",
-        "Monitor agent activity via the dashboard",
-      ],
-      tags: ["deployment", "agent-stack", "production"],
-    },
-
-    // ── 14. Advanced Concepts ────────────────────────────────────────────
+    // ── 16. Advanced Concepts ────────────────────────────────────────────
     {
       slug: "advanced-concepts",
-      title: "Advanced A2A Concepts — Extensions and Security",
+      title: "Advanced A2A Concepts — Extensions, Security & Observability",
       type: "video",
-      duration: "4 mins",
+      duration: "8 mins",
       videoId: "placeholder-advanced",
       description:
-        "Explore A2A extensions, OAuth 2.0 security schemes, and multi-modal task support.",
+        "Explore production-ready A2A patterns: protocol extensions, security hardening (TLS, OAuth 2.0, mTLS), and observability with OpenTelemetry.",
       objectives: [
-        "Add OAuth 2.0 securitySchemes to your Agent Card",
-        "Use A2A extensions for custom capabilities",
-        "Support image and file inputs/outputs",
+        "Understand four types of A2A protocol extensions",
+        "Apply security patterns: TLS, OAuth 2.0, mTLS",
+        "Instrument A2A systems with OpenTelemetry distributed tracing",
+        "Evaluate GDPR/HIPAA compliance requirements for agent systems",
       ],
       qa: [
         {
           question: "How do you add authentication to an A2A agent?",
           answer:
-            "Add a securitySchemes block to your Agent Card (OpenAPI-style). Clients read this and attach credentials — Bearer tokens, API keys, or OAuth — to task requests. The server validates them before processing.",
+            "Add a securitySchemes block to your Agent Card (OpenAPI-style). Clients read this and attach credentials — Bearer tokens, API keys, or OAuth flows — to task requests. The server validates them before processing.",
         },
       ],
-      tags: ["security", "oauth", "extensions", "advanced"],
+      tags: [
+        "security",
+        "oauth",
+        "extensions",
+        "observability",
+        "opentelemetry",
+      ],
     },
 
-    // ── 15. Conclusion ───────────────────────────────────────────────────
+    // ── 17. Conclusion ───────────────────────────────────────────────────
     {
       slug: "conclusion",
-      title: "Conclusion",
+      title: "Conclusion & Next Steps",
       type: "video",
-      duration: "1 min",
+      duration: "5 mins",
       videoId: "placeholder-conclusion",
-      description: "Wrap-up of what you've built and where to go next.",
+      description:
+        "Recap the complete A2A journey: protocols, seven frameworks, multi-agent orchestration, and paths forward.",
       objectives: [
-        "Recap the full A2A stack you've built",
-        "Understand the A2A ecosystem roadmap",
-        "Get directions for continued learning",
+        "Recall the full A2A technology stack and capabilities built",
+        "Identify 12 key patterns practiced across the course",
+        "Plan next steps for production deployment and community engagement",
       ],
-      tags: ["conclusion"],
+      tags: ["conclusion", "recap", "next-steps"],
     },
 
-    // ── 16. Quiz ─────────────────────────────────────────────────────────
+    // ── 18. Quiz ─────────────────────────────────────────────────────────
     {
       slug: "quiz",
       title: "Quiz",
       type: "quiz",
       duration: "10 mins",
       description:
-        "Test your understanding of the A2A protocol and multi-agent systems.",
+        "Test your understanding of A2A protocol fundamentals, framework integrations, and multi-agent orchestration.",
       quizQuestions: [
         {
           id: "q1",
@@ -413,7 +510,7 @@ export const A2A_COURSE: CourseDefinition = {
           ],
           correctOptionId: "c",
           explanation:
-            "A2A uses Server-Sent Events (SSE) over the /tasks/sendSubscribe endpoint for streaming partial results. SSE is unidirectional (server → client), lightweight, and works over standard HTTP.",
+            "A2A uses Server-Sent Events (SSE) over the tasks/sendSubscribe endpoint for streaming partial results. SSE is unidirectional (server → client), lightweight, and works over standard HTTP.",
         },
         {
           id: "q3",
@@ -429,21 +526,21 @@ export const A2A_COURSE: CourseDefinition = {
           ],
           correctOptionId: "b",
           explanation:
-            "MCP (Model Context Protocol) is designed to connect a single AI model to tools and data sources. A2A is designed for agent-to-agent communication, letting autonomous agents (possibly built on different frameworks or models) discover each other and delegate tasks.",
+            "MCP is designed to connect a single AI model to tools and data sources. A2A is designed for agent-to-agent communication, letting autonomous agents (possibly built on different frameworks or models) discover each other and delegate tasks.",
         },
         {
           id: "q4",
           question:
-            "Which framework was used to build the Healthcare Provider Agent in this course?",
+            "Which Google ADK method auto-generates a complete A2A server from an agent?",
           options: [
-            { id: "a", text: "Google ADK only" },
-            { id: "b", text: "BeeAI Framework" },
-            { id: "c", text: "LangGraph combined with MCP" },
-            { id: "d", text: "Microsoft Agent Framework" },
+            { id: "a", text: "agent.serve()" },
+            { id: "b", text: "agent.to_a2a()" },
+            { id: "c", text: "agent.export_a2a()" },
+            { id: "d", text: "agent.start_server()" },
           ],
-          correctOptionId: "c",
+          correctOptionId: "b",
           explanation:
-            "The Healthcare Provider Agent was built using LangGraph for stateful graph execution combined with MCP tool servers for structured data access. The whole system was then exposed via A2A.",
+            "The to_a2a() method on an ADK agent auto-generates a complete A2A server — Agent Card, task handler, and HTTP endpoints — from the agent's existing configuration.",
         },
         {
           id: "q5",
@@ -459,11 +556,76 @@ export const A2A_COURSE: CourseDefinition = {
               text: "The agent is actively processing and may emit partial artifacts",
             },
             { id: "c", text: "The task completed successfully" },
-            { id: "d", text: "The task failed and requires retry" },
+            { id: "d", text: "The task requires additional user input" },
           ],
           correctOptionId: "b",
           explanation:
             "A 'working' status means the agent has started processing the task and may emit streaming updates (partial artifacts). This is an intermediate state between 'submitted' and terminal states like 'completed' or 'failed'.",
+        },
+        {
+          id: "q6",
+          question: "What is the role of AgentExecutor in the A2A Python SDK?",
+          options: [
+            {
+              id: "a",
+              text: "It defines the Agent Card JSON structure",
+            },
+            {
+              id: "b",
+              text: "It is the interface that wraps any agent's logic for the A2A server to call",
+            },
+            {
+              id: "c",
+              text: "It manages the HTTP routing for the server",
+            },
+            {
+              id: "d",
+              text: "It handles OAuth authentication",
+            },
+          ],
+          correctOptionId: "b",
+          explanation:
+            "AgentExecutor is the interface between the A2A server infrastructure and your agent's business logic. You implement its execute() method, which receives a RequestContext and uses EventQueue to yield status updates and artifacts.",
+        },
+        {
+          id: "q7",
+          question:
+            "Which model provider in this course runs entirely locally without an API key?",
+          options: [
+            { id: "a", text: "GitHub Models" },
+            { id: "b", text: "Azure AI Foundry" },
+            { id: "c", text: "Foundry Local" },
+            { id: "d", text: "OpenAI API" },
+          ],
+          correctOptionId: "c",
+          explanation:
+            "Foundry Local runs Qwen2.5 Coder entirely on your local machine. No API key, no cloud dependency, no cost — ideal for development and offline use.",
+        },
+        {
+          id: "q8",
+          question:
+            "How does the MasterOrchestrator in the capstone lesson discover available agents?",
+          options: [
+            {
+              id: "a",
+              text: "It reads a hardcoded configuration file",
+            },
+            {
+              id: "b",
+              text: "It uses A2ACardResolver to fetch Agent Cards from each port",
+            },
+            {
+              id: "c",
+              text: "Agents register themselves via a central registry",
+            },
+            {
+              id: "d",
+              text: "It scans the local network for open ports",
+            },
+          ],
+          correctOptionId: "b",
+          explanation:
+            "The MasterOrchestrator uses A2ACardResolver to fetch Agent Cards from ports 10001–10008. Each card describes the agent's skills, letting the orchestrator route tasks based on intent matching.",
         },
       ],
     },
@@ -473,83 +635,89 @@ export const A2A_COURSE: CourseDefinition = {
 
   overview: {
     heroSubheading:
-      "An open protocol for building multi-agent AI systems — where agents discover, delegate, and collaborate across any framework.",
+      "An open protocol for building multi-agent AI systems — where agents discover, delegate, and collaborate across seven frameworks and four model providers.",
 
     learnItems: [
       {
         icon: "🔮",
         title: "Expose agents as A2A servers",
         description:
-          "Wrap agents built with Google ADK, LangGraph, or BeeAI as fully compliant A2A servers — Agent Card discovery, task handling, and SSE streaming included.",
+          "Wrap agents built with Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Agent SDK, and GitHub Copilot SDK as fully compliant A2A servers.",
       },
       {
         icon: "🚡",
         title: "Build A2A clients from scratch",
         description:
-          "Create clients that fetch Agent Cards, send tasks, and handle both synchronous responses and live streaming — or use existing A2A SDK integrations.",
+          "Create clients that fetch Agent Cards, send tasks, and handle both synchronous responses and live SSE streaming — using the A2A Python SDK.",
       },
       {
         icon: "🔀",
         title: "Orchestrate multi-agent workflows",
         description:
-          "Wire agents into sequential chains and dynamic hierarchical systems, where a Requirement Agent delegates sub-tasks to specialists in real time.",
+          "Wire eight agents into a unified system with chain and parallel execution, dynamic routing via a MasterOrchestrator, and graceful error recovery.",
+      },
+      {
+        icon: "🏠",
+        title: "Local-first model providers",
+        description:
+          "Use GitHub Models Phi-4, Azure AI Foundry Kimi-K2/K2-Thinking, and Foundry Local Qwen2.5 Coder — no expensive cloud APIs required.",
       },
     ],
 
     aboutParagraphs: [
       "Connecting agents built with different frameworks typically requires extensive custom integration work. A2A solves this with an open protocol that standardizes how agents <strong>discover</strong> each other and <strong>communicate</strong> — regardless of which model, language, or framework they were built on.",
-      "In this course, you'll build a complete healthcare multi-agent system: three specialized agents using different frameworks, each wrapped as an A2A server. You'll build the clients to talk to them and orchestrate them into both sequential and hierarchical workflows. Along the way you'll see exactly how A2A and MCP complement each other — MCP connects agents to external data; A2A connects agents to each other.",
+      "In this course, you'll build a complete multi-agent system: seven specialized agents using seven different frameworks, each wrapped as an A2A server. You'll use four different model providers — from free GitHub Models to fully local inference with Foundry Local. The capstone lesson wires everything into an 8-agent orchestrated system with chain execution, parallel processing, and error recovery.",
     ],
 
     detailItems: [
       {
         title: "Understand why A2A exists",
         description:
-          "Explore the client-server architecture of A2A: what an Agent Card is, how tasks flow through the agent lifecycle (submitted → working → completed), and why standardizing inter-agent communication matters in 2025.",
+          "Explore the client-server architecture of A2A: what an Agent Card is, how tasks flow through the lifecycle (submitted → working → completed), and why standardizing inter-agent communication matters.",
       },
       {
-        title: "Build an insurance QA agent on Vertex AI",
+        title: "Build a QA agent with GitHub Phi-4",
         description:
-          "Build an insurance policy agent using Claude Haiku 4.5 on Vertex AI, wrap it in an A2A server using the A2A Python SDK, and create an A2A client from scratch to communicate with it.",
+          "Build a QA agent using GitHub Models Phi-4 via the OpenAI-compatible API, wrap it in an A2A server using the A2A Python SDK, and create an A2A client from scratch to communicate with it.",
       },
       {
-        title: "Create a health research agent with Google ADK",
+        title: "Integrate seven agentic frameworks",
         description:
-          "Use the Google Agent Development Kit (ADK) and Gemini 3 Pro to build a research agent that performs real-time web search — then expose it via A2A.",
+          "Build agents with Microsoft Agent Framework, Google ADK, LangGraph + MCP, CrewAI, OpenAI Agents SDK, Claude Agent SDK, and GitHub Copilot SDK — each wrapped as an A2A server.",
       },
       {
-        title: "Chain agents sequentially with ADK",
+        title: "Combine LangGraph with MCP tools",
         description:
-          "Wire agents together so one agent's output feeds directly into the next as input — a sequential A2A chain where each specialist builds on the previous result.",
+          "Create a CodeAgent using LangGraph, connect it to FastMCP tool servers for structured tool access, and run it entirely locally with Foundry Local Qwen2.5 Coder.",
       },
       {
-        title: "Build a LangGraph agent with MCP tools",
+        title: "Orchestrate with Microsoft Agent Framework",
         description:
-          "Create a healthcare provider agent using LangGraph, connect it to an MCP tool server for structured data access, and call it through Microsoft Agent Framework's A2A client.",
+          "Build an OrchestratorAgent using Microsoft Agent Framework with Kimi-K2-Thinking that routes tasks to specialist A2A agents based on intent classification.",
       },
       {
-        title: "Orchestrate dynamically with BeeAI Framework",
+        title: "Build the capstone multi-agent system",
         description:
-          "Use IBM's BeeAI Framework to build a Requirement Agent that delegates tasks to specialized agents on the fly — a fully dynamic, hierarchical multi-agent system.",
+          "Wire all seven framework agents plus a QA agent into a unified 8-agent system with a MasterOrchestrator, chain and parallel execution, error recovery, and a full startup script.",
       },
       {
-        title: "Deploy to Agent Stack",
+        title: "Production patterns",
         description:
-          "Ship your A2A agents to BeeAI's Agent Stack — open-source infrastructure for deploying, discovering, and sharing A2A agents in production.",
+          "Explore A2A extensions, TLS/OAuth 2.0/mTLS security hardening, OpenTelemetry distributed tracing, and GDPR/HIPAA compliance considerations for enterprise deployment.",
       },
     ],
 
     prerequisites: {
       title: "Prerequisites",
       subtitle: "What you need before starting",
-      tags: ["Python", "AI Agents", "Multi-Agent Systems"],
+      tags: ["Python", "AI Agents", "Multi-Agent Systems", "Git"],
       description:
-        "AI developers building multi-agent systems or working with agentic workflows. Familiarity with Python and a basic understanding of AI agents is recommended.",
+        "AI developers building multi-agent systems or working with agentic workflows. Familiarity with Python 3.11+ and a basic understanding of AI agents is recommended. No cloud accounts required — all model providers offer free tiers or local inference.",
     },
 
     audienceCards: [
       {
-        icon: "🛛",
+        icon: "🛠",
         title: "AI / ML Engineers",
         description:
           "You build AI-powered products and want a standard protocol to connect multiple agents — across frameworks, teams, and organizational boundaries.",

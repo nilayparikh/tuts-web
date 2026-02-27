@@ -40,6 +40,10 @@ export interface CoursePartMeta extends CoursePart {
   codeUrl?: string;
   /** Reading / resource URL */
   readingUrl?: string;
+  /** Google Colab notebook URL (type "video-code" | "code") */
+  colabUrl?: string;
+  /** GitHub notebook URL for static preview (e.g. https://github.com/owner/repo/blob/main/path.ipynb) */
+  notebookUrl?: string;
   /** Tags for SEO */
   tags?: string[];
 }

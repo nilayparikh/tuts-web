@@ -88,7 +88,7 @@ export default async function CourseOverviewPage({
         headline={formatHeadline(course.title)}
         subheading={ov?.heroSubheading ?? course.description}
         primaryAction={{
-          label: "Start learning →",
+          label: "Start learning",
           href: `/${slug}/${course.parts[0].slug}/`,
         }}
         secondaryAction={

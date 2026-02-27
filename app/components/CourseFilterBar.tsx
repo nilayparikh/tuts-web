@@ -189,7 +189,7 @@ export function CourseFilterBar({
   );
 
   const activeDiffLabel = activeDifficulty
-    ? DIFFICULTY_META[activeDifficulty]?.label ?? activeDifficulty
+    ? (DIFFICULTY_META[activeDifficulty]?.label ?? activeDifficulty)
     : null;
 
   return (
@@ -265,9 +265,7 @@ export function CourseFilterBar({
               ...(activeTags.length > 0 ? s.triggerActive : {}),
             }}
           >
-            {activeTags.length > 0
-              ? `Topics (${activeTags.length})`
-              : "Topics"}
+            {activeTags.length > 0 ? `Topics (${activeTags.length})` : "Topics"}
             <span
               style={{
                 ...s.chevron,
