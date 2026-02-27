@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import {
   TutorialLayout,
   HeroSection,
-  SectionDivider,
-  Paragraph,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG } from "@/config/site";
 import { SITE_TOPIC, ALL_COURSES } from "@/data/courses";
@@ -37,26 +35,10 @@ export default function TopicHomePage() {
         eyebrow={`${ALL_COURSES.length} Course${ALL_COURSES.length > 1 ? "s" : ""} · ${totalLessons} Lessons`}
         headline={`**${SITE_TOPIC.topicName}** Tutorials`}
         subheading={SITE_TOPIC.tagline}
-        primaryAction={{
-          label: "Browse courses",
-          href: "#courses",
-        }}
-        tags={SITE_TOPIC.tags}
       />
-
-      {/* ── About ─────────────────────────────────────────────────────────── */}
-      <SectionDivider label="About" />
-
-      <Paragraph>{SITE_TOPIC.description}</Paragraph>
 
       {/* ── Courses (filterable) ──────────────────────────────────────────── */}
-      <span
-        id="courses"
-        style={{ display: "block", height: 0, margin: 0, padding: 0 }}
-      />
-      <SectionDivider label="Courses" />
-
-      <CourseGrid courses={ALL_COURSES} />
+      <CourseGrid courses={ALL_COURSES} topicName={SITE_TOPIC.topicName} />
     </TutorialLayout>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -32,54 +32,93 @@ const DIFFICULTY_META: Record<string, { label: string; color: string }> = {
 const s: Record<string, React.CSSProperties> = {
   root: {
     display: "flex",
-    flexDirection: "column" as const,
-    gap: "var(--tf-space-4)",
-  },
-  row: {
-    display: "flex",
     alignItems: "center",
-    gap: "var(--tf-space-2)",
+    gap: "var(--tf-space-3)",
     flexWrap: "wrap" as const,
   },
-  label: {
-    fontSize: "var(--tf-text-xs)",
-    fontFamily: "var(--tf-font-mono)",
-    fontWeight: 600,
-    color: "var(--tf-text-muted)",
-    textTransform: "uppercase" as const,
-    letterSpacing: "var(--tf-tracking-wide)",
-    marginRight: "var(--tf-space-1)",
-    whiteSpace: "nowrap" as const,
-    userSelect: "none" as const,
-  },
-  chip: {
+  trigger: {
     display: "inline-flex",
     alignItems: "center",
-    gap: "0.25rem",
-    padding: "0.25rem 0.625rem",
-    borderRadius: "var(--tf-radius-full)",
+    gap: "0.375rem",
+    padding: "0.375rem 0.75rem",
+    borderRadius: "var(--tf-radius-md)",
     border: "1px solid var(--tf-border-default)",
-    background: "transparent",
+    background: "var(--tf-bg-surface)",
     color: "var(--tf-text-secondary)",
-    fontSize: "var(--tf-text-xs)",
+    fontSize: "var(--tf-text-sm)",
     fontFamily: "var(--tf-font-body)",
     fontWeight: 500,
     cursor: "pointer",
-    transition: "all 150ms cubic-bezier(0.2, 0, 0, 1)",
+    transition: "all 150ms ease",
     userSelect: "none" as const,
     whiteSpace: "nowrap" as const,
+    position: "relative" as const,
   },
-  chipActive: {
-    background: "var(--tf-color-primary-container)",
+  triggerActive: {
     borderColor: "var(--tf-color-primary-border)",
     color: "var(--tf-color-primary)",
+    background: "var(--tf-color-primary-container)",
+  },
+  chevron: {
+    fontSize: "0.6rem",
+    opacity: 0.6,
+    transition: "transform 150ms ease",
+  },
+  chevronOpen: {
+    transform: "rotate(180deg)",
+  },
+  dropdown: {
+    position: "absolute" as const,
+    top: "calc(100% + 0.375rem)",
+    left: 0,
+    zIndex: 50,
+    minWidth: "10rem",
+    padding: "0.375rem",
+    borderRadius: "var(--tf-radius-md)",
+    border: "1px solid var(--tf-border-default)",
+    background: "var(--tf-bg-elevated)",
+    boxShadow: "var(--tf-shadow-level2)",
+  },
+  option: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.5rem",
+    width: "100%",
+    padding: "0.375rem 0.5rem",
+    borderRadius: "var(--tf-radius-sm)",
+    border: "none",
+    background: "transparent",
+    color: "var(--tf-text-secondary)",
+    fontSize: "var(--tf-text-sm)",
+    fontFamily: "var(--tf-font-body)",
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "background 100ms ease, color 100ms ease",
+    textAlign: "left" as const,
+    whiteSpace: "nowrap" as const,
+  },
+  optionActive: {
+    color: "var(--tf-color-primary)",
+    background: "var(--tf-color-primary-container)",
     fontWeight: 600,
+  },
+  dot: {
+    width: "0.5rem",
+    height: "0.5rem",
+    borderRadius: "var(--tf-radius-full)",
+    flexShrink: 0,
+  },
+  check: {
+    fontSize: "0.75rem",
+    width: "1rem",
+    textAlign: "center" as const,
+    flexShrink: 0,
   },
   clearBtn: {
     display: "inline-flex",
     alignItems: "center",
-    padding: "0.25rem 0.5rem",
-    borderRadius: "var(--tf-radius-full)",
+    padding: "0.375rem 0.5rem",
+    borderRadius: "var(--tf-radius-md)",
     border: "1px solid transparent",
     background: "transparent",
     color: "var(--tf-text-muted)",
@@ -91,6 +130,26 @@ const s: Record<string, React.CSSProperties> = {
   },
 };
 
+// ─── Dropdown hook ─────────────────────────────────────────────────────────
+
+function useDropdown() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [open]);
+
+  return { open, setOpen, ref };
+}
+
 // ─── Component ─────────────────────────────────────────────────────────────
 
 export function CourseFilterBar({
@@ -101,6 +160,9 @@ export function CourseFilterBar({
   onTagsChange,
   onDifficultyChange,
 }: CourseFilterBarProps) {
+  const levelDd = useDropdown();
+  const topicDd = useDropdown();
+
   const hasFilters = activeTags.length > 0 || activeDifficulty !== null;
 
   const clearAll = () => {
@@ -118,82 +180,152 @@ export function CourseFilterBar({
 
   const toggleDifficulty = (d: string) => {
     onDifficultyChange(activeDifficulty === d ? null : d);
+    levelDd.setOpen(false);
   };
 
-  // Sort tags by label length for a cleaner visual layout
   const sortedTags = useMemo(
-    () => [...allTags].sort((a, b) => a.length - b.length),
+    () => [...allTags].sort((a, b) => a.localeCompare(b)),
     [allTags],
   );
 
+  const activeDiffLabel = activeDifficulty
+    ? DIFFICULTY_META[activeDifficulty]?.label ?? activeDifficulty
+    : null;
+
   return (
     <div style={s.root}>
-      {/* Difficulty row */}
-      <div style={s.row}>
-        <span style={s.label}>Level</span>
-        {allDifficulties.map((d) => {
-          const meta = DIFFICULTY_META[d];
-          const active = activeDifficulty === d;
-          return (
-            <button
-              key={d}
-              type="button"
-              onClick={() => toggleDifficulty(d)}
-              style={{
-                ...s.chip,
-                ...(active
-                  ? {
-                      background: `color-mix(in srgb, ${meta?.color ?? "var(--tf-color-primary)"} 15%, transparent)`,
-                      borderColor:
-                        meta?.color ?? "var(--tf-color-primary-border)",
-                      color: meta?.color ?? "var(--tf-color-primary)",
-                      fontWeight: 600,
-                    }
-                  : {}),
-              }}
-            >
-              {meta?.label ?? d}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Tags row */}
-      <div style={s.row}>
-        <span style={s.label}>Topics</span>
-        {sortedTags.map((tag) => {
-          const active = activeTags.includes(tag);
-          return (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => toggleTag(tag)}
-              style={{
-                ...s.chip,
-                ...(active ? s.chipActive : {}),
-              }}
-            >
-              {tag}
-            </button>
-          );
-        })}
-
-        {hasFilters && (
+      {/* ── Level dropdown ── */}
+      {allDifficulties.length > 0 && (
+        <div ref={levelDd.ref} style={{ position: "relative" }}>
           <button
             type="button"
-            onClick={clearAll}
-            style={s.clearBtn}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = "var(--tf-color-primary)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "var(--tf-text-muted)";
+            onClick={() => levelDd.setOpen(!levelDd.open)}
+            style={{
+              ...s.trigger,
+              ...(activeDifficulty ? s.triggerActive : {}),
             }}
           >
-            ✕ Clear
+            {activeDiffLabel ?? "Level"}
+            <span
+              style={{
+                ...s.chevron,
+                ...(levelDd.open ? s.chevronOpen : {}),
+              }}
+            >
+              ▾
+            </span>
           </button>
-        )}
-      </div>
+          {levelDd.open && (
+            <div style={s.dropdown}>
+              {allDifficulties.map((d) => {
+                const meta = DIFFICULTY_META[d];
+                const active = activeDifficulty === d;
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    onClick={() => toggleDifficulty(d)}
+                    style={{
+                      ...s.option,
+                      ...(active ? s.optionActive : {}),
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!active)
+                        e.currentTarget.style.background =
+                          "var(--tf-bg-highest)";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active)
+                        e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    <span
+                      style={{
+                        ...s.dot,
+                        background: meta?.color ?? "var(--tf-text-muted)",
+                      }}
+                    />
+                    {meta?.label ?? d}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Topics dropdown ── */}
+      {sortedTags.length > 0 && (
+        <div ref={topicDd.ref} style={{ position: "relative" }}>
+          <button
+            type="button"
+            onClick={() => topicDd.setOpen(!topicDd.open)}
+            style={{
+              ...s.trigger,
+              ...(activeTags.length > 0 ? s.triggerActive : {}),
+            }}
+          >
+            {activeTags.length > 0
+              ? `Topics (${activeTags.length})`
+              : "Topics"}
+            <span
+              style={{
+                ...s.chevron,
+                ...(topicDd.open ? s.chevronOpen : {}),
+              }}
+            >
+              ▾
+            </span>
+          </button>
+          {topicDd.open && (
+            <div style={s.dropdown}>
+              {sortedTags.map((tag) => {
+                const active = activeTags.includes(tag);
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => toggleTag(tag)}
+                    style={{
+                      ...s.option,
+                      ...(active ? s.optionActive : {}),
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!active)
+                        e.currentTarget.style.background =
+                          "var(--tf-bg-highest)";
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!active)
+                        e.currentTarget.style.background = "transparent";
+                    }}
+                  >
+                    <span style={s.check}>{active ? "✓" : ""}</span>
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── Clear ── */}
+      {hasFilters && (
+        <button
+          type="button"
+          onClick={clearAll}
+          style={s.clearBtn}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "var(--tf-color-primary)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "var(--tf-text-muted)";
+          }}
+        >
+          ✕ Clear
+        </button>
+      )}
     </div>
   );
 }

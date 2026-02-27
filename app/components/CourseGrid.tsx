@@ -9,11 +9,15 @@ import { CourseCard } from "./CourseCard";
 
 /** Courses per page (2 columns × 10 rows) */
 const PAGE_SIZE = 20;
+/** Max quick-filter tags shown below heading */
+const QUICK_TAG_COUNT = 5;
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
 export interface CourseGridProps {
   courses: CourseDefinition[];
+  /** Topic name for the heading, e.g. "Agentic AI" */
+  topicName?: string;
 }
 
 // ─── Styles ────────────────────────────────────────────────────────────────
@@ -23,6 +27,49 @@ const s: Record<string, React.CSSProperties> = {
     display: "flex",
     flexDirection: "column" as const,
     gap: "var(--tf-space-6)",
+  },
+  heading: {
+    margin: 0,
+    fontSize: "var(--tf-text-3xl)",
+    fontFamily: "var(--tf-font-display)",
+    fontWeight: 700,
+    color: "var(--tf-text-primary)",
+    lineHeight: "var(--tf-leading-tight)",
+  },
+  quickTags: {
+    display: "flex",
+    alignItems: "center",
+    gap: "var(--tf-space-2)",
+    flexWrap: "wrap" as const,
+  },
+  quickTag: {
+    display: "inline-flex",
+    alignItems: "center",
+    padding: "0.25rem 0.625rem",
+    borderRadius: "var(--tf-radius-full)",
+    border: "1px solid var(--tf-border-default)",
+    background: "transparent",
+    color: "var(--tf-text-secondary)",
+    fontSize: "var(--tf-text-xs)",
+    fontFamily: "var(--tf-font-body)",
+    fontWeight: 500,
+    cursor: "pointer",
+    transition: "all 150ms ease",
+    userSelect: "none" as const,
+    whiteSpace: "nowrap" as const,
+  },
+  quickTagActive: {
+    background: "var(--tf-color-primary-container)",
+    borderColor: "var(--tf-color-primary-border)",
+    color: "var(--tf-color-primary)",
+    fontWeight: 600,
+  },
+  filterRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "var(--tf-space-4)",
+    flexWrap: "wrap" as const,
   },
   grid: {
     display: "grid",
@@ -42,6 +89,7 @@ const s: Record<string, React.CSSProperties> = {
     fontFamily: "var(--tf-font-mono)",
     color: "var(--tf-text-muted)",
     letterSpacing: "var(--tf-tracking-wide)",
+    whiteSpace: "nowrap" as const,
   },
   pager: {
     display: "flex",
@@ -83,7 +131,7 @@ const s: Record<string, React.CSSProperties> = {
 
 // ─── Component ─────────────────────────────────────────────────────────────
 
-export function CourseGrid({ courses }: CourseGridProps) {
+export function CourseGrid({ courses, topicName }: CourseGridProps) {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [activeDifficulty, setActiveDifficulty] = useState<string | null>(null);
   const [page, setPage] = useState(0);
@@ -93,6 +141,16 @@ export function CourseGrid({ courses }: CourseGridProps) {
     const tagSet = new Set<string>();
     courses.forEach((c) => c.tags.forEach((t) => tagSet.add(t)));
     return Array.from(tagSet);
+  }, [courses]);
+
+  // Top N tags by frequency for quick filters
+  const quickTags = useMemo(() => {
+    const freq = new Map<string, number>();
+    courses.forEach((c) => c.tags.forEach((t) => freq.set(t, (freq.get(t) ?? 0) + 1)));
+    return Array.from(freq.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, QUICK_TAG_COUNT)
+      .map(([tag]) => tag);
   }, [courses]);
 
   const allDifficulties = useMemo(() => {
@@ -129,11 +187,46 @@ export function CourseGrid({ courses }: CourseGridProps) {
     setPage(0);
   };
 
-  const showFilters = courses.length > 1 || allTags.length > 0;
+  const toggleQuickTag = (tag: string) => {
+    if (activeTags.includes(tag)) {
+      handleTagsChange(activeTags.filter((t) => t !== tag));
+    } else {
+      handleTagsChange([...activeTags, tag]);
+    }
+  };
+
+  const hasFilters = activeTags.length > 0 || activeDifficulty !== null;
 
   return (
     <div style={s.root}>
-      {showFilters && (
+      {/* ── Heading + quick tags ── */}
+      {topicName && (
+        <h2 style={s.heading}>{topicName} Tutorials</h2>
+      )}
+
+      {quickTags.length > 0 && (
+        <div style={s.quickTags}>
+          {quickTags.map((tag) => {
+            const active = activeTags.includes(tag);
+            return (
+              <button
+                key={tag}
+                type="button"
+                onClick={() => toggleQuickTag(tag)}
+                style={{
+                  ...s.quickTag,
+                  ...(active ? s.quickTagActive : {}),
+                }}
+              >
+                {tag}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ── Filter bar (dropdowns) + result count ── */}
+      <div style={s.filterRow}>
         <CourseFilterBar
           allTags={allTags}
           allDifficulties={allDifficulties}
@@ -142,16 +235,15 @@ export function CourseGrid({ courses }: CourseGridProps) {
           onTagsChange={handleTagsChange}
           onDifficultyChange={handleDifficultyChange}
         />
-      )}
+        {hasFilters && (
+          <span style={s.count}>
+            {filtered.length} of {courses.length} course
+            {courses.length !== 1 ? "s" : ""}
+          </span>
+        )}
+      </div>
 
-      {/* Result count when filtering */}
-      {(activeTags.length > 0 || activeDifficulty) && (
-        <span style={s.count}>
-          {filtered.length} of {courses.length} course
-          {courses.length !== 1 ? "s" : ""}
-        </span>
-      )}
-
+      {/* ── Grid ── */}
       <div style={s.grid} className="course-grid">
         {paged.length > 0 ? (
           paged.map((course) => (
@@ -175,7 +267,7 @@ export function CourseGrid({ courses }: CourseGridProps) {
         )}
       </div>
 
-      {/* Pagination */}
+      {/* ── Pagination ── */}
       {showPager && (
         <div style={s.pager}>
           <button
