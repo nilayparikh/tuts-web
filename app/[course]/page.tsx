@@ -259,8 +259,16 @@ const DIFFICULTY_META: Record<
   Difficulty,
   { color: string; bg: string; label: string }
 > = {
-  beginner: { color: "#66bb6a", bg: "rgba(102,187,106,0.12)", label: "Beginner" },
-  moderate: { color: "#ffa726", bg: "rgba(255,167,38,0.12)", label: "Moderate" },
+  beginner: {
+    color: "#66bb6a",
+    bg: "rgba(102,187,106,0.12)",
+    label: "Beginner",
+  },
+  moderate: {
+    color: "#ffa726",
+    bg: "rgba(255,167,38,0.12)",
+    label: "Moderate",
+  },
   expert: { color: "#ef5350", bg: "rgba(239,83,80,0.12)", label: "Expert" },
 };
 
