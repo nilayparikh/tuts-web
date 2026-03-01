@@ -3,7 +3,7 @@
  *
  * Slug: "a2a"  →  /a2a/, /a2a/introduction/, /a2a/why-a2a/, …
  *
- * 17 lessons + quiz. 7 framework integrations. 4 model providers.
+ * 16 lessons + quiz. 6 framework integrations. 4 model providers.
  * Local-first: GitHub Models Phi-4, Azure AI Foundry Kimi-K2/K2-Thinking,
  * Foundry Local Qwen2.5 Coder.
  */
@@ -14,8 +14,8 @@ export const A2A_COURSE: CourseDefinition = {
   slug: "a2a",
   title: "A2A: The Agent2Agent Protocol",
   description:
-    "Build multi-agent AI systems using the A2A protocol. Covers 7 frameworks (Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Agent SDK, GitHub Copilot SDK) with local-first models.",
-  totalDuration: "~135 mins",
+    "Build multi-agent AI systems using the A2A protocol. Covers 6 frameworks (Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Agent SDK) with local-first models.",
+  totalDuration: "~130 mins",
   tags: [
     "A2A",
     "AI Agents",
@@ -47,7 +47,7 @@ export const A2A_COURSE: CourseDefinition = {
       objectives: [
         "Understand what agentic AI systems are and why they need protocols",
         "Grasp the N² integration problem that A2A solves",
-        "Preview the seven frameworks and four model providers used in this course",
+        "Preview the six frameworks and four model providers used in this course",
         "Differentiate A2A (agent-to-agent) from MCP (agent-to-tool)",
       ],
       qa: [
@@ -104,7 +104,7 @@ export const A2A_COURSE: CourseDefinition = {
         "Learn the Task lifecycle (submitted → working → input-required → completed/failed/canceled)",
         "Map Messages and Parts to the A2A data model",
         "Understand Server-Sent Events streaming via tasks/sendSubscribe",
-        "Identify the seven JSON-RPC methods in the A2A specification",
+        "Identify the ten JSON-RPC methods in the A2A specification",
       ],
       qa: [
         {
@@ -367,61 +367,54 @@ export const A2A_COURSE: CourseDefinition = {
       tags: ["claude-sdk", "assistant-agent", "kimi-k2", "memory"],
     },
 
-    // ── 14. GitHub Copilot SDK ───────────────────────────────────────────
-    {
-      slug: "github-copilot-sdk",
-      title: "A2A with GitHub Copilot SDK",
-      type: "video-code",
-      duration: "8 mins",
-      videoId: "placeholder-copilot-sdk",
-      description:
-        "Build a CopilotAgent that analyzes pull requests and repository structure using the GitHub Copilot SDK with a dual-use GITHUB_TOKEN.",
-      objectives: [
-        "Build a code-analysis agent with the GitHub Copilot SDK",
-        "Integrate GitHub API for PR and repo analysis",
-        "Leverage GITHUB_TOKEN for both API and model access",
-        "Wrap as an A2A server on port 10007",
-      ],
-      codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/14-github-copilot-sdk",
-      tags: ["github", "copilot-sdk", "phi-4", "code-review"],
-    },
-
-    // ── 15. Multi-Agent Deep Dive (Capstone) ─────────────────────────────
+    // ── 14. Multi-Agent Deep Dive (Capstone) ─────────────────────────────
     {
       slug: "multi-agent-deep-dive",
-      title: "Multi-Agent System Deep Dive",
+      title: "Multi-Agent System Deep Dive — Loan Approval",
       type: "video-code",
-      duration: "15 mins",
+      duration: "20 mins",
       videoId: "placeholder-capstone",
       description:
-        "Capstone: wire all seven framework agents into a unified multi-agent system with a MasterOrchestrator, chain/parallel execution, and error recovery.",
+        "Capstone: build a production-grade multi-agent loan approval system with AI-driven decisioning (80%), human-in-the-loop escalation (20%), a React dashboard for approvals, and OpenTelemetry observability.",
       objectives: [
-        "Build a MasterOrchestrator with dynamic agent discovery",
-        "Implement chain and parallel execution strategies",
-        "Add error recovery with fallback agent selection",
-        "Configure the startup script for all 8 agents (ports 10001–10008)",
-        "Run the complete multi-agent system end-to-end",
+        "Architect a multi-agent loan approval pipeline with specialized agents",
+        "Implement human-in-the-loop escalation for edge-case applications",
+        "Build a React frontend for reviewing and approving escalated loans",
+        "Instrument the entire pipeline with OpenTelemetry distributed tracing",
+        "Create a real-time React dashboard showing agent telemetry and decision flow",
+        "Run the complete system end-to-end with 80% auto-approve / 20% human review",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/15-multi-agent-system",
+        "https://github.com/nilayparikh/a2a-agent2agent-protocol/tree/main/14-multi-agent-deep-dive",
       qa: [
         {
-          question:
-            "How does the MasterOrchestrator discover available agents?",
+          question: "How does the system decide which loans need human review?",
           answer:
-            "It uses A2ACardResolver to fetch Agent Cards from each port (10001–10008). Each card describes the agent's skills and capabilities, so the orchestrator can route tasks based on intent matching against those skills.",
+            "The RiskClassifierAgent scores each application on a 0–100 risk scale. Applications scoring ≤ 40 are auto-approved, ≥ 80 are auto-declined, and the 40–80 range (≈20% of cases) is routed to the human-in-the-loop queue via the EscalationAgent.",
         },
         {
-          question: "What happens if one of the 8 agents is down?",
+          question: "What telemetry is captured?",
           answer:
-            "The error recovery system detects failures via timeouts or error responses and falls back to the next-best agent based on skill overlap. The system degrades gracefully rather than failing entirely.",
+            "OpenTelemetry traces span the full pipeline — from intake through risk scoring, compliance checks, and final decision. Each agent creates child spans with attributes like agent_name, decision, confidence_score. Traces are exported to a Jaeger-compatible OTLP endpoint and visualized in the React dashboard.",
+        },
+        {
+          question: "How does the React frontend handle approvals?",
+          answer:
+            "The React app polls a REST API for pending escalations, displays the full application context plus agent reasoning, and lets reviewers approve/decline/request-more-info. The decision is pushed back through the A2A pipeline to complete the task.",
         },
       ],
-      tags: ["capstone", "orchestration", "multi-agent", "production"],
+      tags: [
+        "capstone",
+        "orchestration",
+        "multi-agent",
+        "human-in-the-loop",
+        "react",
+        "opentelemetry",
+        "loan-approval",
+      ],
     },
 
-    // ── 16. Advanced Concepts ────────────────────────────────────────────
+    // ── 15. Advanced Concepts ────────────────────────────────────────────
     {
       slug: "advanced-concepts",
       title: "Advanced A2A Concepts — Extensions, Security & Observability",
@@ -442,6 +435,21 @@ export const A2A_COURSE: CourseDefinition = {
           answer:
             "Add a securitySchemes block to your Agent Card (OpenAPI-style). Clients read this and attach credentials — Bearer tokens, API keys, or OAuth flows — to task requests. The server validates them before processing.",
         },
+        {
+          question: "What are the four types of A2A extensions?",
+          answer:
+            "Data-only extensions add metadata to messages (e.g., priority). Profile extensions define standard capability bundles (e.g., healthcare compliance). Method extensions add new JSON-RPC methods (e.g., tasks/batch). State-machine extensions add new task states (e.g., reviewing, approved).",
+        },
+        {
+          question: "How does trace propagation work across A2A agents?",
+          answer:
+            "The traceparent HTTP header carries trace context (trace ID + span ID) with every A2A request. Downstream agents extract this header, create child spans linked to the parent, and export them to a shared OTLP collector — producing a single end-to-end trace across all agents.",
+        },
+        {
+          question: "What compliance regulations affect multi-agent systems?",
+          answer:
+            "GDPR requires data minimization and right-to-erasure (implement task TTLs and PII redaction). HIPAA requires PHI protection and audit trails (encryption at rest + access logging). SOC 2 requires security controls and availability. CCPA requires consumer data rights (data inventory + opt-out).",
+        },
       ],
       tags: [
         "security",
@@ -452,7 +460,7 @@ export const A2A_COURSE: CourseDefinition = {
       ],
     },
 
-    // ── 17. Conclusion ───────────────────────────────────────────────────
+    // ── 16. Conclusion ───────────────────────────────────────────────────
     {
       slug: "conclusion",
       title: "Conclusion & Next Steps",
@@ -460,16 +468,44 @@ export const A2A_COURSE: CourseDefinition = {
       duration: "5 mins",
       videoId: "placeholder-conclusion",
       description:
-        "Recap the complete A2A journey: protocols, seven frameworks, multi-agent orchestration, and paths forward.",
+        "Recap the complete A2A journey: protocols, six frameworks, multi-agent orchestration, and paths forward.",
       objectives: [
         "Recall the full A2A technology stack and capabilities built",
         "Identify 12 key patterns practiced across the course",
         "Plan next steps for production deployment and community engagement",
       ],
+      qa: [
+        {
+          question:
+            "What is the key architectural insight from the A2A protocol?",
+          answer:
+            "A2A is a communication contract, not a framework. It defines how agents talk (discovery, task lifecycle, streaming) without constraining what they do internally. This is why agents built with six different frameworks can interoperate seamlessly through a single protocol.",
+        },
+        {
+          question: "How do A2A and MCP complement each other?",
+          answer:
+            "MCP handles vertical integration — connecting an agent to its tools and data sources. A2A handles horizontal integration — connecting agents to each other. Together they form a complete agent communication stack.",
+        },
+        {
+          question: "Why is 'model choice is local' important?",
+          answer:
+            "Each agent independently selects its model — the orchestrator doesn't know or care what models downstream agents use. This opaque execution means teams can optimize model selection per-agent without affecting the rest of the system.",
+        },
+        {
+          question: "What are the 12 patterns practiced in this course?",
+          answer:
+            "Agent Card discovery, AgentExecutor wrapping, to_a2a() shortcut, bridge packages, intent routing, chain execution, parallel execution, error recovery/fallback, MCP + A2A combination, multi-turn conversations, role-based delegation, and the extension mechanism.",
+        },
+        {
+          question: "What should I do first for production deployment?",
+          answer:
+            "Start with the enterprise readiness checklist from Lesson 15: TLS on all endpoints, OAuth 2.0 or mTLS authentication, OpenTelemetry tracing, and PII redaction. These four items cover the most critical security and observability gaps.",
+        },
+      ],
       tags: ["conclusion", "recap", "next-steps"],
     },
 
-    // ── 18. Quiz ─────────────────────────────────────────────────────────
+    // ── 17. Quiz ─────────────────────────────────────────────────────────
     {
       slug: "quiz",
       title: "Quiz",
@@ -612,7 +648,7 @@ export const A2A_COURSE: CourseDefinition = {
             },
             {
               id: "b",
-              text: "It uses A2ACardResolver to fetch Agent Cards from each port",
+              text: "It uses A2ACardResolver to fetch Agent Cards from each agent's port",
             },
             {
               id: "c",
@@ -625,7 +661,7 @@ export const A2A_COURSE: CourseDefinition = {
           ],
           correctOptionId: "b",
           explanation:
-            "The MasterOrchestrator uses A2ACardResolver to fetch Agent Cards from ports 10001–10008. Each card describes the agent's skills, letting the orchestrator route tasks based on intent matching.",
+            "The MasterOrchestrator uses A2ACardResolver to fetch Agent Cards from each agent's port. Each card describes the agent's skills, letting the orchestrator route tasks based on intent matching.",
         },
       ],
     },
@@ -635,14 +671,14 @@ export const A2A_COURSE: CourseDefinition = {
 
   overview: {
     heroSubheading:
-      "An open protocol for building multi-agent AI systems — where agents discover, delegate, and collaborate across seven frameworks and four model providers.",
+      "An open protocol for building multi-agent AI systems — where agents discover, delegate, and collaborate across six frameworks and four model providers.",
 
     learnItems: [
       {
         icon: "🔮",
         title: "Expose agents as A2A servers",
         description:
-          "Wrap agents built with Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Agent SDK, and GitHub Copilot SDK as fully compliant A2A servers.",
+          "Wrap agents built with Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, and Claude Agent SDK as fully compliant A2A servers.",
       },
       {
         icon: "🚡",
@@ -654,7 +690,7 @@ export const A2A_COURSE: CourseDefinition = {
         icon: "🔀",
         title: "Orchestrate multi-agent workflows",
         description:
-          "Wire eight agents into a unified system with chain and parallel execution, dynamic routing via a MasterOrchestrator, and graceful error recovery.",
+          "Build a production-grade loan approval pipeline with multi-agent AI decisioning, human-in-the-loop escalation, a React approval dashboard, and OpenTelemetry observability.",
       },
       {
         icon: "🏠",
@@ -666,7 +702,7 @@ export const A2A_COURSE: CourseDefinition = {
 
     aboutParagraphs: [
       "Connecting agents built with different frameworks typically requires extensive custom integration work. A2A solves this with an open protocol that standardizes how agents <strong>discover</strong> each other and <strong>communicate</strong> — regardless of which model, language, or framework they were built on.",
-      "In this course, you'll build a complete multi-agent system: seven specialized agents using seven different frameworks, each wrapped as an A2A server. You'll use four different model providers — from free GitHub Models to fully local inference with Foundry Local. The capstone lesson wires everything into an 8-agent orchestrated system with chain execution, parallel processing, and error recovery.",
+      "In this course, you'll build a complete multi-agent system: six specialized agents using six different frameworks, each wrapped as an A2A server. You'll use four different model providers — from free GitHub Models to fully local inference with Foundry Local. The capstone lesson wires everything into a 6-agent orchestrated system with chain execution, parallel processing, and error recovery.",
     ],
 
     detailItems: [
@@ -681,9 +717,9 @@ export const A2A_COURSE: CourseDefinition = {
           "Build a QA agent using GitHub Models Phi-4 via the OpenAI-compatible API, wrap it in an A2A server using the A2A Python SDK, and create an A2A client from scratch to communicate with it.",
       },
       {
-        title: "Integrate seven agentic frameworks",
+        title: "Integrate six agentic frameworks",
         description:
-          "Build agents with Microsoft Agent Framework, Google ADK, LangGraph + MCP, CrewAI, OpenAI Agents SDK, Claude Agent SDK, and GitHub Copilot SDK — each wrapped as an A2A server.",
+          "Build agents with Microsoft Agent Framework, Google ADK, LangGraph + MCP, CrewAI, OpenAI Agents SDK, and Claude Agent SDK — each wrapped as an A2A server.",
       },
       {
         title: "Combine LangGraph with MCP tools",
@@ -698,7 +734,7 @@ export const A2A_COURSE: CourseDefinition = {
       {
         title: "Build the capstone multi-agent system",
         description:
-          "Wire all seven framework agents plus a QA agent into a unified 8-agent system with a MasterOrchestrator, chain and parallel execution, error recovery, and a full startup script.",
+          "Build a capstone loan approval system with specialized agents, 80% AI auto-decisioning, 20% human-in-the-loop escalation, a React dashboard, and full OpenTelemetry observability.",
       },
       {
         title: "Production patterns",
