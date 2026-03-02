@@ -4,7 +4,8 @@
   "description": "LocalM Tutorial static websites — powered by @localm/tutorial-framework",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
@@ -16,7 +17,8 @@
     "@localm/tutorial-framework": "file:./_common/frontend/tutorial-framework",
     "next": "^15.5.10",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "spectacle": "^10.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

@@ -25,6 +25,59 @@ export interface PartQuizQuestion {
   explanation?: string;
 }
 
+// ─── Data-driven lesson content ────────────────────────────────────────────
+
+export interface PartMermaidDiagram {
+  /** Mermaid chart definition string */
+  chart: string;
+  /** Caption text below diagram */
+  caption?: string;
+  /** Alt text for accessibility */
+  alt?: string;
+  /** Optional min-height for readability (e.g. "20rem", "400px") */
+  minHeight?: string;
+}
+
+export interface PartPollBlock {
+  question: string;
+  options: Array<{ id: string; text: string }>;
+  simulatedVotes?: Record<string, number>;
+}
+
+export interface PartCodePreviewSegment {
+  code: string;
+  language: string;
+  filename?: string;
+  explanation?: string;
+}
+
+export interface PartTranscriptEntry {
+  time: number;
+  speaker: string;
+  text: string;
+}
+
+export interface PartInfoBox {
+  title: string;
+  content: string;
+}
+
+export interface PartNoteBox {
+  title: string;
+  content: string;
+}
+
+export interface PartStepGuide {
+  title: string;
+  steps: Array<{
+    title: string;
+    description?: string;
+    code?: string;
+    codeLanguage?: string;
+    note?: string;
+  }>;
+}
+
 export interface CoursePartMeta extends CoursePart {
   /** YouTube video ID (type "video" | "video-code") */
   videoId?: string;
@@ -46,6 +99,27 @@ export interface CoursePartMeta extends CoursePart {
   notebookUrl?: string;
   /** Tags for SEO */
   tags?: string[];
+
+  // ─── Data-driven content (rendered by page.tsx without slug gates) ─────
+
+  /** InfoBox callouts (rendered in order before main content) */
+  infoBoxes?: PartInfoBox[];
+  /** NoteBox callouts */
+  noteBoxes?: PartNoteBox[];
+  /** Mermaid diagrams (rendered in order) */
+  diagrams?: PartMermaidDiagram[];
+  /** Interactive poll */
+  poll?: PartPollBlock;
+  /** Code preview segments (code walkthrough) */
+  codePreview?: {
+    title?: string;
+    description?: string;
+    segments: PartCodePreviewSegment[];
+  };
+  /** Video transcript entries */
+  transcript?: PartTranscriptEntry[];
+  /** Step-by-step guides (beyond auto-generated clone/install) */
+  stepGuides?: PartStepGuide[];
 }
 
 // ─── Rich overview content (optional per-course) ──────────────────────────

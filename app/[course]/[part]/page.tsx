@@ -9,17 +9,12 @@ import {
   PodcastEmbed,
   SlideshowEmbed,
   YouTubeEmbed,
-  KeyPoint,
   SectionDivider,
-  CodeBlock,
   TutorialNav,
   CalloutBox,
   InfoBox,
   NoteBox,
-  TipBox,
   SuccessBox,
-  WarningBox,
-  DangerBox,
   DescriptionBox,
   StepByStepGuide,
   MermaidDiagram,
@@ -227,35 +222,37 @@ function PartContent({
   }
 }
 
-// ─── Video / video-code ───────────────────────────────────────────────────
+// ─── Shared data-driven content blocks ────────────────────────────────────
+//
+// Standard component order:
+//   1. InfoBoxes (prerequisites, setup notes)
+//   2. NoteBoxes
+//   3. Step-by-step guides
+//   4. Mermaid diagrams
+//   5. Polls
+//   6. Code Preview
+//   7. Source Code link (SuccessBox)
+//   8. Q&A Block
+//   9. Video Transcript (collapsed)
+//
 
-function VideoContent({
+function DataDrivenContent({
   part,
-  courseTitle,
+  showObjectives = false,
 }: {
   part: CoursePartMeta;
-  courseTitle: string;
+  showObjectives?: boolean;
 }) {
   return (
     <>
-      {/* Video embed */}
-      {part.videoId && (
-        <YouTubeEmbed
-          videoId={part.videoId}
+      {/* ── Objectives (for non-video types or when requested) ──── */}
+      {showObjectives && part.objectives && part.objectives.length > 0 && (
+        <DescriptionBox
           title={part.title}
-          lazyLoad
-          caption={`${part.title} · ${part.duration}`}
-        />
-      )}
-
-      {/* ── Description Box (below video) ──────────────────────────────── */}
-      <DescriptionBox
-        title={part.title}
-        subtitle={part.description}
-        tags={part.tags}
-        meta={part.duration}
-      >
-        {part.objectives && part.objectives.length > 0 && (
+          subtitle={part.description}
+          tags={part.tags}
+          meta={part.duration}
+        >
           <div
             style={{
               display: "flex",
@@ -290,24 +287,37 @@ function VideoContent({
               ))}
             </ul>
           </div>
-        )}
-      </DescriptionBox>
-
-      {/* ── Callout Boxes ──────────────────────────────────────────────── */}
-      <InfoBox title="Prerequisites">
-        Make sure you have Python 3.11+ installed and a Google Cloud account
-        with Vertex AI enabled before starting this lesson.
-      </InfoBox>
-
-      {part.type === "video-code" && (
-        <NoteBox title="Follow along">
-          This lesson includes code examples. Open your terminal and follow each
-          step as shown in the video.
-        </NoteBox>
+        </DescriptionBox>
       )}
 
-      {/* ── Step-by-step guide ─────────────────────────────────────────── */}
-      {part.codeUrl && (
+      {/* ── 1. InfoBoxes ────────────────────────────────────────── */}
+      {part.infoBoxes?.map((box, i) => (
+        <InfoBox key={`info-${i}`} title={box.title}>
+          {box.content}
+        </InfoBox>
+      ))}
+
+      {/* ── 2. NoteBoxes ────────────────────────────────────────── */}
+      {part.noteBoxes?.map((box, i) => (
+        <NoteBox key={`note-${i}`} title={box.title}>
+          {box.content}
+        </NoteBox>
+      ))}
+
+      {/* ── 3. Step-by-step guides ──────────────────────────────── */}
+      {part.stepGuides?.map((guide, i) => (
+        <StepByStepGuide
+          key={`guide-${i}`}
+          title={guide.title}
+          steps={guide.steps.map((s) => ({
+            ...s,
+            description: s.description ?? "",
+          }))}
+        />
+      ))}
+
+      {/* ── Auto-generated clone/install (from codeUrl) ─────────── */}
+      {part.codeUrl && !part.stepGuides?.length && (
         <StepByStepGuide
           title="Setup Instructions"
           steps={[
@@ -331,61 +341,50 @@ function VideoContent({
                 "Install all required packages from the requirements file.",
               code: "pip install -r requirements.txt",
               codeLanguage: "bash",
-              note: "This may take a few minutes depending on your internet connection.",
-            },
-            {
-              title: "Run the agent",
-              description:
-                "Start the A2A server and verify it is responding to requests.",
-              code: "python main.py",
-              codeLanguage: "bash",
             },
           ]}
         />
       )}
 
-      {/* ── Diagram example ────────────────────────────────────────────── */}
-      {part.slug === "a2a-architecture" && (
-        <MermaidDiagram
-          chart={`graph LR
-    A[Client] -->|sendTask| B[A2A Server]
-    B -->|Agent Card| A
-    B -->|SSE Stream| A
-    B --> C[Agent Logic]
-    C --> D[Tools / MCP]
-    C --> E[LLM Provider]
-    style A fill:#6366f1,stroke:#818cf8,color:#fff
-    style B fill:#14b8a6,stroke:#5eead4,color:#fff
-    style C fill:#1f222a,stroke:#8892a8,color:#e2e6f0
-    style D fill:#f59e0b,stroke:#fbbf24,color:#000
-    style E fill:#f59e0b,stroke:#fbbf24,color:#000`}
-          caption="Figure: A2A Protocol communication flow — Client ↔ Server ↔ Agent Logic"
-          alt="A2A Protocol architecture diagram showing client, server, agent logic, tools, and LLM provider"
-        />
-      )}
+      {/* ── 4. Mermaid Diagrams ─────────────────────────────────── */}
+      {part.diagrams?.map((diagram, i) => (
+        <div
+          key={`diagram-${i}`}
+          style={{ minHeight: diagram.minHeight ?? "12rem" }}
+        >
+          <MermaidDiagram
+            chart={diagram.chart}
+            caption={diagram.caption}
+            alt={diagram.alt}
+          />
+        </div>
+      ))}
 
-      {/* ── Poll ────────────────────────────────────────────────────────── */}
-      {part.slug === "why-a2a" && (
+      {/* ── 5. Poll ─────────────────────────────────────────────── */}
+      {part.poll && (
         <PollBlock
-          question="Which agent framework are you most interested in using with A2A?"
-          options={[
-            { id: "adk", text: "Google ADK" },
-            { id: "langgraph", text: "LangGraph" },
-            { id: "beeai", text: "BeeAI Framework" },
-            { id: "msft", text: "Microsoft Agent Framework" },
-            { id: "custom", text: "Custom implementation" },
-          ]}
-          simulatedVotes={{
-            adk: 42,
-            langgraph: 38,
-            beeai: 15,
-            msft: 22,
-            custom: 8,
-          }}
+          question={part.poll.question}
+          options={part.poll.options}
+          simulatedVotes={part.poll.simulatedVotes}
         />
       )}
 
-      {/* ── Success callout for code lessons ───────────────────────────── */}
+      {/* ── 6. Code Preview ─────────────────────────────────────── */}
+      {part.codePreview && (
+        <CodePreview
+          title={part.codePreview.title ?? "Code Walkthrough"}
+          description={
+            part.codePreview.description ??
+            "Key code from this lesson, explained step by step."
+          }
+          segments={part.codePreview.segments.map((s) => ({
+            ...s,
+            explanation: s.explanation ?? "",
+          }))}
+        />
+      )}
+
+      {/* ── 7. Source Code (SuccessBox) ─────────────────────────── */}
       {part.codeUrl && (
         <SuccessBox title="Source Code">
           The complete source code for this lesson is available on GitHub.{" "}
@@ -400,7 +399,7 @@ function VideoContent({
         </SuccessBox>
       )}
 
-      {/* ── Q&A ─────────────────────────────────────────────────────────── */}
+      {/* ── 8. Q&A ─────────────────────────────────────────────── */}
       {part.qa && part.qa.length > 0 && (
         <section>
           <SectionDivider label="Q & A" />
@@ -408,163 +407,41 @@ function VideoContent({
         </section>
       )}
 
-      {/* ── Code Preview (for code-along lessons) ──────────────────── */}
-      {part.type === "video-code" && part.slug === "qa-agent-vertex-ai" && (
-        <CodePreview
-          title="Code Walkthrough"
-          description="Key code from this lesson, explained step by step."
-          segments={[
-            {
-              code: `import anthropic\nfrom google.auth import default\n\ncredentials, project = default()\nclient = anthropic.AnthropicVertex(\n    region="us-east5",\n    project_id=project,\n)`,
-              language: "python",
-              filename: "qa_agent.py",
-              explanation:
-                "First we import the Anthropic SDK and use Google Cloud default credentials to authenticate with Vertex AI. This avoids hardcoding any API keys.",
-            },
-            {
-              code: `async def ask(question: str) -> str:\n    message = client.messages.create(\n        model="claude-sonnet-4-20250514",\n        max_tokens=1024,\n        messages=[{"role": "user", "content": question}],\n    )\n    return message.content[0].text`,
-              language: "python",
-              filename: "qa_agent.py",
-              explanation:
-                "The core QA function sends a user question to Claude via the Vertex AI endpoint and returns the text response. We use async for non-blocking I/O.",
-            },
-          ]}
-        />
-      )}
-
-      {part.type === "video-code" && part.slug === "wrapping-qa-a2a-server" && (
-        <CodePreview
-          title="A2A Server Setup"
-          description="Key excerpts from wrapping the QA agent as an A2A server."
-          segments={[
-            {
-              code: `AGENT_CARD = {\n    "name": "QA Agent",\n    "url": "http://localhost:8000",\n    "version": "1.0.0",\n    "skills": [{\n        "id": "qa",\n        "name": "Question Answering",\n        "description": "Answer general knowledge questions",\n    }],\n}`,
-              language: "python",
-              filename: "server.py",
-              explanation:
-                "The Agent Card is the discovery document that tells other agents what this agent can do. It is served at /.well-known/agent.json.",
-            },
-            {
-              code: `@app.post("/tasks/send")\nasync def send_task(request: TaskRequest):\n    answer = await ask(request.message)\n    return TaskResponse(\n        status="completed",\n        artifacts=[{"text": answer}],\n    )`,
-              language: "python",
-              filename: "server.py",
-              explanation:
-                "The /tasks/send endpoint receives a task, invokes our QA function, and returns the result as a completed task with an artifact.",
-            },
-          ]}
-        />
-      )}
-
-      {/* ── Video Transcript ───────────────────────────────────────────── */}
-      {part.slug === "introduction" && (
+      {/* ── 9. Video Transcript (collapsed) ─────────────────────── */}
+      {part.transcript && part.transcript.length > 0 && (
         <VideoTranscript
           title="Video Transcript"
           defaultCollapsed
-          entries={[
-            {
-              time: 0,
-              speaker: "Instructor",
-              text: "Welcome to the A2A Agent-to-Agent Protocol course. In this series, we are going to build production-grade multi-agent AI systems from scratch.",
-            },
-            {
-              time: 12,
-              speaker: "Instructor",
-              text: "Agentic AI is one of the most exciting frontiers in artificial intelligence. But here is the problem — most agents today operate in isolation.",
-            },
-            {
-              time: 24,
-              speaker: "Instructor",
-              text: "They can call tools, they can access data, but they cannot talk to other agents in a standardised way.",
-            },
-            {
-              time: 35,
-              speaker: "Instructor",
-              text: "That is exactly what the A2A protocol solves. It gives agents a common language to discover each other, delegate tasks, and stream results.",
-            },
-            {
-              time: 48,
-              speaker: "Instructor",
-              text: "Over the next 16 lessons you will build QA agents, chain agents, orchestrate multi-agent systems, and deploy to production.",
-            },
-            {
-              time: 62,
-              speaker: "Instructor",
-              text: "We will use Python, Google ADK, LangGraph, BeeAI, and Microsoft Agent Framework — covering the entire ecosystem.",
-            },
-            {
-              time: 78,
-              speaker: "Instructor",
-              text: "By the end, you will have a complete understanding of A2A and hands-on experience building real, production-ready agent systems.",
-            },
-            {
-              time: 92,
-              speaker: "Instructor",
-              text: "Let us get started by understanding why we even need agent-to-agent communication in the first place.",
-            },
-          ]}
+          entries={part.transcript}
+        />
+      )}
+    </>
+  );
+}
+
+// ─── Video ────────────────────────────────────────────────────────────────
+
+function VideoContent({
+  part,
+  courseTitle,
+}: {
+  part: CoursePartMeta;
+  courseTitle: string;
+}) {
+  return (
+    <>
+      {/* Video embed */}
+      {part.videoId && (
+        <YouTubeEmbed
+          videoId={part.videoId}
+          title={part.title}
+          lazyLoad
+          caption={`${part.title} · ${part.duration}`}
         />
       )}
 
-      {part.slug === "why-a2a" && (
-        <VideoTranscript
-          title="Video Transcript"
-          defaultCollapsed
-          entries={[
-            {
-              time: 0,
-              speaker: "Instructor",
-              text: "So why do we need A2A? Let us start by looking at the landscape of agent communication.",
-            },
-            {
-              time: 10,
-              speaker: "Instructor",
-              text: "Today we have tool calling — where a model invokes functions. And we have MCP, the Model Context Protocol, which connects models to structured data sources.",
-            },
-            {
-              time: 22,
-              speaker: "Instructor",
-              text: "But neither of these solves agent-to-agent communication. Tool calling is synchronous and one-directional. MCP is about connecting to data, not to other agents.",
-            },
-            {
-              time: 36,
-              speaker: "Instructor",
-              text: "A2A fills this gap. It is an open protocol — created by Google — that lets autonomous agents discover each other and delegate tasks.",
-            },
-            {
-              time: 48,
-              speaker: "Instructor",
-              text: "The key concepts are Agent Cards for discovery, Tasks for work delegation, and Server-Sent Events for streaming results back.",
-            },
-            {
-              time: 60,
-              speaker: "Instructor",
-              text: "What makes A2A powerful is that it is framework-agnostic. An ADK agent can talk to a LangGraph agent, which can talk to a BeeAI agent. They just need to speak A2A.",
-            },
-            {
-              time: 75,
-              speaker: "Instructor",
-              text: "Think of it like HTTP for agents. You do not need to know the implementation — just the contract.",
-            },
-          ]}
-        />
-      )}
-
-      {/* ── Warning callout example ────────────────────────────────────── */}
-      {part.slug === "advanced-concepts" && (
-        <WarningBox title="Security Notice">
-          When adding OAuth 2.0 to your Agent Card, never commit client secrets
-          to your repository. Use environment variables or a secret manager.
-        </WarningBox>
-      )}
-
-      {/* ── Danger callout example ─────────────────────────────────────── */}
-      {part.slug === "agent-stack" && (
-        <DangerBox title="Production Deployment">
-          Ensure your A2A agents are behind a reverse proxy with rate limiting
-          before exposing them to the internet. Unprotected agents can be
-          abused.
-        </DangerBox>
-      )}
+      {/* Description box with objectives */}
+      <DataDrivenContent part={part} showObjectives />
     </>
   );
 }
@@ -573,6 +450,7 @@ function VideoContent({
 
 function VideoCodeContent({
   part,
+  courseTitle,
 }: {
   part: CoursePartMeta;
   courseTitle: string;
@@ -775,13 +653,8 @@ function VideoCodeContent({
         </div>
       </div>
 
-      {/* ── Q&A (below the split) ──────────────────────────────────── */}
-      {part.qa && part.qa.length > 0 && (
-        <section>
-          <SectionDivider label="Q & A" />
-          <QABlock items={part.qa} />
-        </section>
-      )}
+      {/* ── Data-driven content (below the split) ──────────────── */}
+      <DataDrivenContent part={part} />
     </>
   );
 }
@@ -819,70 +692,7 @@ function CodeContent({ part }: { part: CoursePartMeta }) {
         </div>
       )}
 
-      {/* Objectives below */}
-      {part.objectives && part.objectives.length > 0 && (
-        <DescriptionBox
-          title={part.title}
-          subtitle={part.description}
-          tags={part.tags}
-          meta={part.duration}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--tf-space-3)",
-            }}
-          >
-            <Paragraph lead>Notebook objectives:</Paragraph>
-            <ul
-              style={{
-                margin: 0,
-                paddingLeft: "var(--tf-space-5)",
-                display: "flex",
-                flexDirection: "column",
-                gap: "var(--tf-space-2)",
-              }}
-            >
-              {part.objectives.map((obj, i) => (
-                <li
-                  key={i}
-                  style={{
-                    fontSize: "var(--tf-text-sm)",
-                    color: "var(--tf-text-secondary)",
-                    lineHeight: "var(--tf-leading-relaxed)",
-                  }}
-                >
-                  {obj}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </DescriptionBox>
-      )}
-
-      {/* Source code link */}
-      {part.codeUrl && (
-        <SuccessBox title="Source Code">
-          The complete source code for this lesson is available on GitHub.{" "}
-          <a
-            href={part.codeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "var(--tf-color-success)", fontWeight: 600 }}
-          >
-            View on GitHub →
-          </a>
-        </SuccessBox>
-      )}
-
-      {/* Q&A */}
-      {part.qa && part.qa.length > 0 && (
-        <section>
-          <SectionDivider label="Q & A" />
-          <QABlock items={part.qa} />
-        </section>
-      )}
+      <DataDrivenContent part={part} showObjectives />
     </>
   );
 }
@@ -892,6 +702,13 @@ function CodeContent({ part }: { part: CoursePartMeta }) {
 function ReadingContent({ part }: { part: CoursePartMeta }) {
   return (
     <>
+      {/* ── InfoBoxes (before objectives for reading context) ──── */}
+      {part.infoBoxes?.map((box, i) => (
+        <InfoBox key={`info-${i}`} title={box.title}>
+          {box.content}
+        </InfoBox>
+      ))}
+
       {part.objectives && part.objectives.length > 0 && (
         <section>
           <SectionDivider label="In this reading" />
@@ -923,7 +740,20 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
         </InfoBox>
       )}
 
-      {part.codeUrl && (
+      {/* ── Step-by-step guides ─────────────────────────────────── */}
+      {part.stepGuides?.map((guide, i) => (
+        <StepByStepGuide
+          key={`guide-${i}`}
+          title={guide.title}
+          steps={guide.steps.map((s) => ({
+            ...s,
+            description: s.description ?? "",
+          }))}
+        />
+      ))}
+
+      {/* ── Auto clone/install from codeUrl ─────────────────────── */}
+      {part.codeUrl && !part.stepGuides?.length && (
         <StepByStepGuide
           title="Getting Started"
           steps={[
@@ -947,6 +777,55 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
             },
           ]}
         />
+      )}
+
+      {/* ── Mermaid Diagrams ────────────────────────────────────── */}
+      {part.diagrams?.map((diagram, i) => (
+        <div
+          key={`diagram-${i}`}
+          style={{ minHeight: diagram.minHeight ?? "12rem" }}
+        >
+          <MermaidDiagram
+            chart={diagram.chart}
+            caption={diagram.caption}
+            alt={diagram.alt}
+          />
+        </div>
+      ))}
+
+      {/* ── Code Preview ────────────────────────────────────────── */}
+      {part.codePreview && (
+        <CodePreview
+          title={part.codePreview.title ?? "Code Walkthrough"}
+          description={part.codePreview.description}
+          segments={part.codePreview.segments.map((s) => ({
+            ...s,
+            explanation: s.explanation ?? "",
+          }))}
+        />
+      )}
+
+      {/* ── Source Code ─────────────────────────────────────────── */}
+      {part.codeUrl && (
+        <SuccessBox title="Source Code">
+          The complete source code for this lesson is available on GitHub.{" "}
+          <a
+            href={part.codeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "var(--tf-color-success)", fontWeight: 600 }}
+          >
+            View on GitHub →
+          </a>
+        </SuccessBox>
+      )}
+
+      {/* ── Q&A ─────────────────────────────────────────────────── */}
+      {part.qa && part.qa.length > 0 && (
+        <section>
+          <SectionDivider label="Q & A" />
+          <QABlock items={part.qa} />
+        </section>
       )}
     </>
   );
@@ -1026,10 +905,7 @@ function ArticleContent({ part }: { part: CoursePartMeta }) {
         )}
       </ArticleBlock>
 
-      <TipBox title="Pro Tip">
-        Bookmark this article for reference — you will need these concepts in
-        later lessons.
-      </TipBox>
+      <DataDrivenContent part={part} />
     </>
   );
 }
@@ -1063,12 +939,7 @@ function PodcastContent({
         </section>
       )}
 
-      {part.qa && part.qa.length > 0 && (
-        <section>
-          <SectionDivider label="Q & A" />
-          <QABlock items={part.qa} />
-        </section>
-      )}
+      <DataDrivenContent part={part} />
     </>
   );
 }
