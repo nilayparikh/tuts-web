@@ -87,7 +87,8 @@ All imports from `@localm/tutorial-framework`. Full prop API in `_common/docs/tu
 | Layout   | `TutorialLayout`, `TutorialHeader`, `TutorialFooter`, `SidebarLayout`, `ThemeSelector`                                                        |
 | Course   | `CoursePlayerLayout`, `CourseSidebar`, `LessonHeader`, `LessonList`, `QuizBlock`, `QABlock`, `ArticleBlock`, `PodcastEmbed`, `SlideshowEmbed` |
 | Content  | `HeroSection`, `SectionHeading`, `SectionDivider`, `ConceptCard`, `ConceptGrid`, `StepCard`, `StepList`                                       |
-| Content  | `CodeBlock`, `CodePreview`, `KeyPoint`, `TutorialNav`, `Paragraph`, `DescriptionBox`, `StepByStepGuide`, `VideoTranscript`, `LabSettings`     |
+| Content  | `CodeBlock`, `CodePreview`, `KeyPoint`, `TutorialNav`, `Paragraph`, `DescriptionBox`, `StepByStepGuide`, `VideoTranscript`, `LabSettings` |
+| Lesson   | `LessonObjectives` (objectives card, Server), `GitHubRepoCard` (GitHub/external link card, Client) |
 | Callouts | `CalloutBox`, `InfoBox`, `NoteBox`, `TipBox`, `SuccessBox`, `WarningBox`, `DangerBox` (typed aliases of `CalloutBox`)                         |
 | Diagrams | `MermaidDiagram`                                                                                                                              |
 | Polls    | `PollBlock`                                                                                                                                   |
@@ -259,6 +260,9 @@ Courses are defined in individual files under `data/courses/` and registered in 
 13. **`generateStaticParams`** — required for `[course]` and `[course]/[part]` pages; must return all valid combos.
 14. **Unique course slugs** — every course must have a unique `slug` in `data/courses/index.ts`.
 15. **All internal links must include course prefix** — e.g. `/${courseSlug}/${partSlug}/`, not `/${partSlug}/`.
+16. **Use `LessonObjectives` for objectives** — never render objectives as inline numbered lists; use `<LessonObjectives objectives={part.objectives} />`. For `video-code` sidebars use `title="Instructions"`.
+17. **Use `GitHubRepoCard` for external/source links** — replace `InfoBox` "External Resource" boxes and `SuccessBox` "Source Code" boxes with `<GitHubRepoCard url={...} description="...">`. It is a `"use client"` component and can be imported anywhere.
+18. **`"use client"` components** — never add `onMouseEnter`/`onMouseLeave`/`onClick` event handlers to a component that does not declare `"use client"` as its first line. This causes a Next.js RSC runtime error.
 
 ## KeyPoint Variant Guide
 

@@ -30,6 +30,8 @@ For dynamic routes (`[course]`, `[course]/[part]`), also export `generateStaticP
 - **Code samples**: always `<CodeBlock>` — never raw `<pre>`, `<code>`, or template literals in JSX.
 - **Callouts**: always `<KeyPoint variant="…">` or typed aliases (`InfoBox`, `WarningBox`, etc.) — never custom `<div>`.
 - **Concept lists**: `<ConceptGrid>` + `<ConceptCard>` or `<StepList>` + `<StepCard>`.
+- **Lesson objectives**: always `<LessonObjectives objectives={part.objectives} />` — never inline numbered-circle lists.
+- **External/source code links**: always `<GitHubRepoCard url={...} description="..." />` — never the old `InfoBox` "External Resource" or `SuccessBox` "Source Code" patterns.
 
 ## Forbidden Patterns
 
@@ -62,6 +64,10 @@ export async function getServerSideProps() { ... }
 
 // ❌ Client-only hooks at page level (breaks static export)
 const router = useRouter();   // only safe inside useEffect
+
+// ❌ JS event handlers on Server Components (RSC runtime error in Next.js App Router)
+onMouseEnter={...} onMouseLeave={...} onClick={...}
+// → either use CSS :hover via a class, or mark the component file "use client"
 
 // ❌ External icon libraries
 import { Icon } from 'lucide-react';

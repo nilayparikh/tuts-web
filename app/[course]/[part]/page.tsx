@@ -24,6 +24,8 @@ import {
   VideoTranscript,
   LessonSocialBar,
   NotebookEmbed,
+  LessonObjectives,
+  GitHubRepoCard,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import {
@@ -247,47 +249,7 @@ function DataDrivenContent({
     <>
       {/* ── Objectives (for non-video types or when requested) ──── */}
       {showObjectives && part.objectives && part.objectives.length > 0 && (
-        <DescriptionBox
-          title={part.title}
-          subtitle={part.description}
-          tags={part.tags}
-          meta={part.duration}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "var(--tf-space-3)",
-            }}
-          >
-            <Paragraph lead>
-              In this lesson you will learn the following concepts and gain
-              hands-on experience building real components.
-            </Paragraph>
-            <ul
-              style={{
-                margin: 0,
-                paddingLeft: "var(--tf-space-5)",
-                display: "flex",
-                flexDirection: "column",
-                gap: "var(--tf-space-2)",
-              }}
-            >
-              {part.objectives.map((obj, i) => (
-                <li
-                  key={i}
-                  style={{
-                    fontSize: "var(--tf-text-sm)",
-                    color: "var(--tf-text-secondary)",
-                    lineHeight: "var(--tf-leading-relaxed)",
-                  }}
-                >
-                  {obj}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </DescriptionBox>
+        <LessonObjectives objectives={part.objectives} />
       )}
 
       {/* ── 1. InfoBoxes ────────────────────────────────────────── */}
@@ -384,19 +346,12 @@ function DataDrivenContent({
         />
       )}
 
-      {/* ── 7. Source Code (SuccessBox) ─────────────────────────── */}
+      {/* ── 7. Source Code (GitHubRepoCard) ─────────────────────── */}
       {part.codeUrl && (
-        <SuccessBox title="Source Code">
-          The complete source code for this lesson is available on GitHub.{" "}
-          <a
-            href={part.codeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "var(--tf-color-success)", fontWeight: 600 }}
-          >
-            View on GitHub →
-          </a>
-        </SuccessBox>
+        <GitHubRepoCard
+          url={part.codeUrl}
+          description="Complete source code for this lesson."
+        />
       )}
 
       {/* ── 8. Q&A ─────────────────────────────────────────────── */}
@@ -559,47 +514,10 @@ function VideoCodeContent({
 
           {/* Instructions / objectives */}
           {part.objectives && part.objectives.length > 0 && (
-            <div
-              style={{
-                padding: "var(--tf-space-4)",
-                borderRadius: "var(--tf-radius-lg)",
-                background: "var(--tf-bg-secondary)",
-                border: "1px solid var(--tf-border-primary)",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "var(--tf-text-sm)",
-                  fontWeight: 700,
-                  color: "var(--tf-text-primary)",
-                  marginBottom: "var(--tf-space-3)",
-                }}
-              >
-                Instructions
-              </div>
-              <ol
-                style={{
-                  margin: 0,
-                  paddingLeft: "var(--tf-space-5)",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "var(--tf-space-2)",
-                }}
-              >
-                {part.objectives.map((obj, i) => (
-                  <li
-                    key={i}
-                    style={{
-                      fontSize: "var(--tf-text-sm)",
-                      color: "var(--tf-text-secondary)",
-                      lineHeight: "var(--tf-leading-relaxed)",
-                    }}
-                  >
-                    {obj}
-                  </li>
-                ))}
-              </ol>
-            </div>
+            <LessonObjectives
+              objectives={part.objectives}
+              title="Instructions"
+            />
           )}
 
           {/* Description */}
@@ -710,34 +628,14 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
       ))}
 
       {part.objectives && part.objectives.length > 0 && (
-        <section>
-          <SectionDivider label="In this reading" />
-          <Paragraph>
-            Here&apos;s what you will cover in this reading:
-          </Paragraph>
-          <StepByStepGuide
-            title="Objectives"
-            interactive={false}
-            steps={part.objectives.map((obj) => ({
-              title: obj,
-              description: "",
-            }))}
-          />
-        </section>
+        <LessonObjectives objectives={part.objectives} />
       )}
 
       {part.readingUrl && (
-        <InfoBox title="External resource">
-          This lesson links to an external resource.{" "}
-          <a
-            href={part.readingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "var(--tf-color-primary-light)", fontWeight: 600 }}
-          >
-            Open resource →
-          </a>
-        </InfoBox>
+        <GitHubRepoCard
+          url={part.readingUrl}
+          description="This lesson links to an external resource."
+        />
       )}
 
       {/* ── Step-by-step guides ─────────────────────────────────── */}
@@ -807,17 +705,10 @@ function ReadingContent({ part }: { part: CoursePartMeta }) {
 
       {/* ── Source Code ─────────────────────────────────────────── */}
       {part.codeUrl && (
-        <SuccessBox title="Source Code">
-          The complete source code for this lesson is available on GitHub.{" "}
-          <a
-            href={part.codeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "var(--tf-color-success)", fontWeight: 600 }}
-          >
-            View on GitHub →
-          </a>
-        </SuccessBox>
+        <GitHubRepoCard
+          url={part.codeUrl}
+          description="Complete source code for this lesson."
+        />
       )}
 
       {/* ── Q&A ─────────────────────────────────────────────────── */}

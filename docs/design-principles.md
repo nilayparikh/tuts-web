@@ -36,16 +36,38 @@ All UI is composed from `@localm/tutorial-framework` exports. **No custom compon
 
 ### Forbidden Patterns
 
-| Pattern                                   | Why                   | Alternative                                   |
-| ----------------------------------------- | --------------------- | --------------------------------------------- |
-| `<pre><code>` for code                    | Inconsistent styling  | `<CodeBlock>`                                 |
-| `<div style={{ background: 'red' }}>`     | Violates token system | Use `--tf-*` CSS variables                    |
-| Hardcoded hex/rgba colors                 | Theme-breaking        | `var(--tf-text-primary)`, `var(--tf-color-*)` |
-| Bare pixel values for layout              | Not scalable          | `rem` or `var(--tf-space-*)` tokens           |
-| `letterSpacing: "0.06em"`                 | Inconsistent          | `var(--tf-tracking-wide)`                     |
-| `transition: "all 0.15s ease"`            | Inconsistent          | `var(--tf-transition-fast)`                   |
-| External icon libraries (lucide, etc.)    | Bundle bloat          | Material Symbols or inline SVG                |
-| `!important` overrides on `.tf-*` classes | Specificity war       | Override via CSS variables                    |
+| Pattern                                              | Why                   | Alternative                                   |
+| ---------------------------------------------------- | --------------------- | --------------------------------------------- |
+| `<pre><code>` for code                               | Inconsistent styling  | `<CodeBlock>`                                 |
+| `<div style={{ background: 'red' }}>`                | Violates token system | Use `--tf-*` CSS variables                    |
+| Hardcoded hex/rgba colors                            | Theme-breaking        | `var(--tf-text-primary)`, `var(--tf-color-*)` |
+| Bare pixel values for layout                         | Not scalable          | `rem` or `var(--tf-space-*)` tokens           |
+| `letterSpacing: "0.06em"`                            | Inconsistent          | `var(--tf-tracking-wide)`                     |
+| `transition: "all 0.15s ease"`                       | Inconsistent          | `var(--tf-transition-fast)`                   |
+| `onMouseEnter` / `onMouseLeave` in Server Components | Next.js RSC error     | Mark component `"use client"` (see below)     |
+| External icon libraries (lucide, etc.)               | Bundle bloat          | Material Symbols or inline SVG                |
+| `!important` overrides on `.tf-*` classes            | Specificity war       | Override via CSS variables                    |
+
+### Client Components ("use client")
+
+Next.js App Router renders all components on the server by default. Any component
+that uses browser APIs or JS event handlers (`onClick`, `onMouseEnter`, etc.) **must**
+have `"use client"` as its first line.
+
+Current `"use client"` components in `@localm/tutorial-framework`:
+
+| Component        | Why                                                |
+| ---------------- | -------------------------------------------------- |
+| `GitHubRepoCard` | `onMouseEnter`/`onMouseLeave` hover lift animation |
+| `MermaidDiagram` | Loads mermaid.js from CDN in a `useEffect`         |
+| `PollBlock`      | Vote state with `useState`                         |
+| `QuizBlock`      | Quiz state with `useState`                         |
+| `QABlock`        | Accordion expand state                             |
+| `CodePreview`    | Tab selection with `useState`                      |
+
+**Rule:** Never add hover/click state via inline JS handlers on a component that
+does not already have `"use client"`. Either use pure CSS (`:hover` via a class) or
+add `"use client"` to the component file.
 
 ### Token System (`--tf-*` prefix)
 

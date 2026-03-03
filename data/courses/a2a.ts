@@ -468,23 +468,15 @@ export const A2A_COURSE: CourseDefinition = {
       type: "reading",
       duration: "10 mins",
       description:
-        "Configure your development environment with GitHub Models, Azure AI Foundry, and Foundry Local.",
+        "Set up your local development environment — the course repository, Python virtual environment, and all three model providers used across the lessons.",
       readingUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
-      codeUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
       objectives: [
-        "Clone the course repository and set up Python 3.11+",
-        "Install the A2A Python SDK (a2a-sdk) with HTTP server extras",
-        "Configure GitHub Models API for Phi-4 access via a Personal Access Token",
-        "Configure Azure AI Foundry for Kimi-K2 and Kimi-K2-Thinking",
-        "Install Foundry Local and verify Qwen2.5 Coder runs locally",
-        "Run the smoke test script to validate all providers",
-      ],
-      infoBoxes: [
-        {
-          title: "All Models Are Free or Local",
-          content:
-            "GitHub Models provides free Phi-4 access with any GitHub account. Azure AI Foundry offers a free tier for Kimi-K2 and Kimi-K2-Thinking. Foundry Local runs Qwen2.5 Coder entirely on your machine — no API key, no cloud account, no cost.",
-        },
+        "Clone the examples repository and create a Python 3.11+ virtual environment",
+        "Install the A2A Python SDK with HTTP server support",
+        "Get free Phi-4 access via a GitHub Personal Access Token",
+        "Activate Kimi-K2 and Kimi-K2-Thinking on Azure AI Foundry",
+        "Install Foundry Local and run Qwen2.5 Coder on your machine",
+        "Verify all three providers with the included smoke test script",
       ],
       stepGuides: [
         {
@@ -622,13 +614,6 @@ export const A2A_COURSE: CourseDefinition = {
           caption:
             "The QA Agent pattern: user question + domain knowledge → LLM → answer",
           alt: "Diagram showing the QA Agent receiving a user question and knowledge base, calling GitHub Phi-4, and returning an answer",
-        },
-        {
-          chart:
-            'graph LR\n    L5["Lesson 5<br/>Agent Core"] --> L6["Lesson 6<br/>A2A Server"]\n    L6 --> L7["Lesson 7<br/>A2A Client"]\n    style L5 fill:#4a9eff,color:#fff',
-          caption:
-            "Lessons 5–7 build the complete agent → server → client pipeline",
-          alt: "Diagram showing Lesson 5 Agent Core flowing to Lesson 6 A2A Server then to Lesson 7 A2A Client",
         },
       ],
       codePreview: {
@@ -1325,9 +1310,10 @@ export const A2A_COURSE: CourseDefinition = {
             "The lookup_policy_notes tool catches the connection error and falls back to a local policy memo dictionary. All three applicants can be validated without starting the Lesson 06 server.",
         },
         {
-          question: "Why is Carol Martinez NEEDS_REVIEW instead of APPROVED?",
+          question:
+            "What causes an application to receive NEEDS_REVIEW instead of APPROVED?",
           answer:
-            "Three conditions must be physically confirmed: the Letter of Explanation must reference a career change, the medical collection discharge letter must be on file, and the DPA programme must be on HUD's approved list.",
+            "NEEDS_REVIEW is emitted when all hard-rule checks pass but one or more soft-rule conditions cannot be automatically confirmed — typically requiring a human underwriter to verify physical documents or external programme approvals.",
         },
         {
           question: "How is cross-framework interoperability achieved?",
@@ -1820,10 +1806,10 @@ export const A2A_COURSE: CourseDefinition = {
         },
         {
           chart:
-            'graph TB\n    subgraph Lesson11["Lesson 11: CrewAI"]\n        LV["LoanValidatorCrewAI<br/>CrewAI + Kimi-K2-Thinking<br/>:10004"]\n        A1["Compliance Analyst"]\n        A2["Senior Underwriter"]\n        LV --> A1\n        LV --> A2\n    end\n    Orch["LoanValidatorOrchestrator :10008"] -->|A2A| LV\n    QA["QAAgent :10001"] -.-> Orch\n    ADK["LoanValidatorADK :10002"] -.-> Orch',
+            'graph TB\n    Client["A2A Client"] -->|A2A protocol| LV["LoanValidatorCrewAI<br/>CrewAI + Kimi-K2-Thinking<br/>:10004"]\n    subgraph Crew["Sequential Crew"]\n        A1["Compliance Analyst<br/>(HardCheckTool + SoftCheckTool)"]\n        A2["Senior Underwriter<br/>(PolicyLookupTool)"]\n        A1 -->|checks done| A2\n    end\n    LV --> A1\n    A2 --> Verdict["Final Verdict"]',
           caption:
-            "LoanValidatorCrewAI on port 10004 — external clients see one endpoint, but internally it is a two-agent crew",
-          alt: "Architecture diagram showing CrewAI with two internal agents, connected to orchestrator via A2A",
+            "LoanValidatorCrewAI on port 10004 — an A2A endpoint that hides a sequential two-agent crew internally",
+          alt: "Architecture diagram showing an A2A client calling the CrewAI server, which routes through Compliance Analyst then Senior Underwriter",
         },
       ],
       codePreview: {
@@ -2024,13 +2010,6 @@ export const A2A_COURSE: CourseDefinition = {
           caption:
             "OpenAI Agents SDK architecture — Agent holds tools, Runner executes the loop, set_default_openai_client redirects to Azure",
           alt: "Diagram showing AsyncAzureOpenAI client feeding into Agent with three function_tool decorators, executed by Runner.run",
-        },
-        {
-          chart:
-            'graph LR\n    subgraph OpenAI["OpenAI Agents SDK"]\n        O1["@function_tool"] --> O2["Agent()"] --> O3["Runner.run()"]\n    end\n    subgraph CrewAI["CrewAI"]\n        C1["BaseTool"] --> C2["CrewAgent"] --> C3["Crew"] --> C4[".kickoff()"]\n    end\n    subgraph ADK["Google ADK"]\n        A1["FunctionTool"] --> A2["LlmAgent"] --> A3["to_a2a()"]\n    end',
-          caption:
-            "Three-step comparison — OpenAI SDK has the shortest path from tool to execution",
-          alt: "Side-by-side flow showing OpenAI SDK (3 steps), CrewAI (4 steps), and ADK (3 steps)",
         },
       ],
       codePreview: {
@@ -3372,35 +3351,35 @@ export const A2A_COURSE: CourseDefinition = {
 
     learnItems: [
       {
-        icon: "🔮",
-        title: "Expose agents as A2A servers",
+        icon: "",
+        title: "The A2A protocol, end to end",
         description:
-          "Wrap agents built with Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, and Claude Agent SDK as fully compliant A2A servers.",
+          "How agents advertise themselves via Agent Cards, the seven-state Task lifecycle, JSON-RPC 2.0 transport, Server-Sent Events for streaming, and the authentication model — the full spec, explained through working code.",
       },
       {
-        icon: "🚡",
-        title: "Build A2A clients from scratch",
+        icon: "",
+        title: "Six frameworks, one protocol",
         description:
-          "Create clients that fetch Agent Cards, send tasks, and handle both synchronous responses and live SSE streaming — using the A2A Python SDK.",
+          "Build the same loan validation problem six ways: Microsoft Agent Framework, Google ADK, LangGraph with MCP, CrewAI, OpenAI Agents SDK, and a bare-metal agent loop. Each produces a standards-compliant A2A server — interchangeable at the protocol layer.",
       },
       {
-        icon: "🔀",
-        title: "Orchestrate multi-agent workflows",
+        icon: "",
+        title: "A production-grade capstone",
         description:
-          "Build a production-grade loan approval pipeline with six orchestrated agents, human-in-the-loop escalation, a React approval dashboard, and OpenTelemetry observability.",
+          "A multi-agent loan approval pipeline with six orchestrated agents, AI-driven decisioning, human-in-the-loop escalation, a React approval dashboard, and OpenTelemetry distributed tracing across the full pipeline.",
       },
       {
-        icon: "🏠",
-        title: "Local-first model providers",
+        icon: "",
+        title: "Local-first throughout",
         description:
-          "Use GitHub Models Phi-4, Azure AI Foundry Kimi-K2/K2-Thinking, and Foundry Local Qwen2.5 Coder — no expensive cloud APIs required.",
+          "GitHub Models Phi-4 (free with a GitHub account), Azure AI Foundry Kimi-K2 and Kimi-K2-Thinking (free tier), and Foundry Local Qwen2.5 Coder (runs on-device). Every lesson runs without surprise API costs.",
       },
     ],
 
     aboutParagraphs: [
-      "The N\u00b2 integration problem is real: connecting N agents without a shared protocol needs custom code for every pair. A2A solves this with one open standard that every agent implements once — so agents built with any framework, model, or language can <strong>discover</strong> each other via Agent Cards and <strong>communicate</strong> through a defined task lifecycle.",
-      "The protocol standardizes every layer of agent interaction: <strong>Agent Cards</strong> at a well-known URL for service discovery, a typed Message\u00a0+\u00a0Part data model, a seven-state Task lifecycle (including <code>INPUT_REQUIRED</code> and <code>AUTH_REQUIRED</code>), Server-Sent Events for real-time streaming, OAuth\u00a02.0\u00a0/\u00a0mTLS\u00a0/\u00a0API-key authentication declared in the Agent Card, and a forward-compatible extension mechanism — all over JSON-RPC\u00a02.0.",
-      "In this course, you'll build a complete multi-agent system: six specialized agents using six different frameworks (Microsoft Agent Framework, Google ADK, LangGraph\u00a0+\u00a0MCP, CrewAI, OpenAI Agents SDK, and Claude Agent SDK), each wrapped as an A2A server and backed by free or local model providers. The capstone builds a production-grade loan approval pipeline with six orchestrated agents, human-in-the-loop escalation, a React approval dashboard, and OpenTelemetry distributed tracing.",
+      "Most agents today work in isolation. They call tools through MCP, fetch data, execute tasks. But give three agents — built with different frameworks by different teams — a shared problem, and you are back to writing custom glue for every pair. The integration count grows with N. A2A removes that ceiling: each agent implements the protocol once, and any two agents that speak A2A can discover and work with each other without any bespoke adapter code.",
+      "The protocol is precise about what it standardises. An <strong>Agent Card</strong> at <code>/.well-known/agent.json</code> declares the agent's name, capabilities, skills, and authentication scheme. Tasks move through seven defined states — submitted, working, input-required, auth-required, completed, cancelled, failed. Messages carry typed Parts (text, data, files). Streaming responses arrive over <strong>Server-Sent Events</strong>. Authentication (OAuth 2.0, mTLS, or API key) is declared in the card, not negotiated per-call. Everything runs over JSON-RPC 2.0.",
+      "In this course you build the full picture. A QA agent from scratch using the A2A Python SDK. Then the same loan validation problem solved six ways — Microsoft Agent Framework, Google ADK, LangGraph backed by MCP tool servers, CrewAI, the OpenAI Agents SDK, and a bare-metal loop that shows what every framework automates. Each runs as a separate process on a fixed port. The capstone connects all six: a loan pipeline where AI handles 80% of decisions automatically, humans review the rest through a React dashboard, and every step is traced with OpenTelemetry.",
     ],
 
     detailItems: [
@@ -3410,9 +3389,9 @@ export const A2A_COURSE: CourseDefinition = {
           "Explore the client-server architecture of A2A: what an Agent Card is, how tasks flow through the lifecycle (submitted → working → completed), and why standardizing inter-agent communication matters.",
       },
       {
-        title: "Build a QA agent with GitHub Phi-4",
+        title: "Build and expose your first A2A agent",
         description:
-          "Build a QA agent using GitHub Models Phi-4 via the OpenAI-compatible API, wrap it in an A2A server using the A2A Python SDK, and create an A2A client from scratch to communicate with it.",
+          "Build a QA agent, wrap it in an A2A server using the Python SDK, and create an A2A client from scratch — covering Agent Cards, task lifecycle (submitted → working → completed), and Server-Sent Events streaming.",
       },
       {
         title: "Integrate six agentic frameworks",
