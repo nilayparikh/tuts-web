@@ -3,9 +3,9 @@
  *
  * Slug: "a2a"  →  /a2a/, /a2a/introduction/, /a2a/why-a2a/, …
  *
- * 16 lessons + quiz. 6 framework integrations. 4 model providers.
- * Local-first: GitHub Models Phi-4, Azure AI Foundry Kimi-K2/K2-Thinking,
- * Foundry Local Qwen2.5 Coder.
+ * 16 lessons + quiz. 6 framework integrations. 3 model providers.
+ * GitHub Models Phi-4 (L05-07), Azure AI Foundry Kimi-K2-Thinking (L08-13),
+ * GitHub Models gpt-4o-mini (L14).
  */
 
 import type { CourseDefinition } from "./types";
@@ -15,7 +15,7 @@ export const A2A_COURSE: CourseDefinition = {
   title: "A2A: The Agent2Agent Protocol",
   description:
     "Build multi-agent AI systems using the A2A protocol. Covers 6 frameworks (Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Agent SDK) with local-first models.",
-  totalDuration: "~135 mins",
+  totalDuration: "~130 mins",
   tags: [
     "A2A",
     "Agent2Agent",
@@ -304,7 +304,7 @@ export const A2A_COURSE: CourseDefinition = {
       objectives: [
         "Describe A2A's three-layer architecture (Data Model, Operations, Protocol Bindings)",
         "Interpret the Agent Card structure and discovery mechanism",
-        "Trace a Task through its full state machine (seven states including INPUT_REQUIRED and AUTH_REQUIRED)",
+        "Trace a Task through its full state machine (eight states including INPUT_REQUIRED, AUTH_REQUIRED, and REJECTED)",
         "Explain how SSE streaming delivers real-time task updates",
       ],
       infoBoxes: [
@@ -317,10 +317,10 @@ export const A2A_COURSE: CourseDefinition = {
       diagrams: [
         {
           chart:
-            "stateDiagram-v2\n    [*] --> SUBMITTED : SendMessage\n    SUBMITTED --> WORKING : Agent starts processing\n    WORKING --> COMPLETED : Final result produced\n    WORKING --> FAILED : Unrecoverable error\n    WORKING --> CANCELED : CancelTask\n    WORKING --> INPUT_REQUIRED : Agent needs user input\n    WORKING --> AUTH_REQUIRED : Client auth needed\n    INPUT_REQUIRED --> WORKING : Client sends input\n    AUTH_REQUIRED --> WORKING : Client authenticates\n    COMPLETED --> [*]\n    FAILED --> [*]\n    CANCELED --> [*]",
+            "stateDiagram-v2\n    [*] --> SUBMITTED : SendMessage\n    SUBMITTED --> WORKING : Agent starts processing\n    SUBMITTED --> REJECTED : Agent declines task\n    WORKING --> COMPLETED : Final result produced\n    WORKING --> FAILED : Unrecoverable error\n    WORKING --> CANCELED : CancelTask\n    WORKING --> INPUT_REQUIRED : Agent needs user input\n    WORKING --> AUTH_REQUIRED : Client auth needed\n    INPUT_REQUIRED --> WORKING : Client sends input\n    AUTH_REQUIRED --> WORKING : Client authenticates\n    COMPLETED --> [*]\n    FAILED --> [*]\n    CANCELED --> [*]\n    REJECTED --> [*]",
           caption:
-            "A2A Task State Machine (RC v1.0) — seven states govern every task's lifecycle",
-          alt: "State diagram: SUBMITTED → WORKING, which branches to COMPLETED, FAILED, CANCELED, INPUT_REQUIRED, or AUTH_REQUIRED. INPUT_REQUIRED and AUTH_REQUIRED loop back to WORKING.",
+            "A2A Task State Machine (RC v1.0) — eight states govern every task's lifecycle",
+          alt: "State diagram: SUBMITTED → WORKING or REJECTED. WORKING branches to COMPLETED, FAILED, CANCELED, INPUT_REQUIRED, or AUTH_REQUIRED. INPUT_REQUIRED and AUTH_REQUIRED loop back to WORKING. Terminal states: COMPLETED, FAILED, CANCELED, REJECTED.",
         },
       ],
       qa: [
@@ -466,7 +466,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "setup-resources",
       title: "Setup & Resources",
       type: "reading",
-      duration: "10 mins",
+      duration: "5 mins",
       description:
         "Set up your local development environment — the course repository, Python virtual environment, and all three model providers used across the lessons.",
       readingUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
@@ -498,7 +498,7 @@ export const A2A_COURSE: CourseDefinition = {
             {
               title: "Install base dependencies",
               description: "Install the A2A SDK and all lesson requirements.",
-              code: 'pip install -r requirements.txt\n# Or install the A2A SDK directly:\npip install "a2a-sdk[http-server]"',
+              code: 'pip install -r requirements.txt\n# Or install the A2A SDK directly:\npip install "a2a-sdk[http-server]==0.3.24"',
               codeLanguage: "bash",
             },
           ],
@@ -583,7 +583,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "first-a2a-agent",
       title: "Building Your First A2A Agent",
       type: "video-code",
-      duration: "8 mins",
+      duration: "6 mins",
       videoId: "placeholder-first-agent",
       description:
         "Build a standalone QA agent powered by GitHub Phi-4 using an async class pattern with domain knowledge injection.",
@@ -744,7 +744,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "a2a-server",
       title: "Wrapping Agents as A2A Servers",
       type: "video-code",
-      duration: "8 mins",
+      duration: "7 mins",
       videoId: "placeholder-a2a-server",
       description:
         "Transform the standalone QAAgent into a fully A2A-compliant server using AgentExecutor, Agent Card, and A2AStarletteApplication.",
@@ -765,20 +765,20 @@ export const A2A_COURSE: CourseDefinition = {
         {
           title: "Install the A2A Python SDK",
           content:
-            'This lesson requires the A2A Python SDK with the HTTP server extra:\n\npip install "a2a-sdk[http-server]"\n\nThis installs the core SDK plus Starlette and uvicorn for serving.',
+            'This lesson requires the A2A Python SDK with the HTTP server extra:\n\npip install "a2a-sdk[http-server]==0.3.24"\n\nThis installs the core SDK plus Starlette and uvicorn for serving.',
         },
       ],
       diagrams: [
         {
           chart:
-            'graph TB\n    subgraph Server["A2A Server (localhost:10001)"]\n        Card["Agent Card<br/>/.well-known/agent.json"]\n        Handler["DefaultRequestHandler"]\n        Exec["QAAgentExecutor<br/>(wraps QAAgent)"]\n        Store["InMemoryTaskStore"]\n        App["A2AStarletteApplication"]\n    end\n\n    Client["A2A Client"] -->|"GET /.well-known/agent.json"| Card\n    Client -->|"POST /"| App\n    App --> Handler\n    Handler --> Exec\n    Handler --> Store\n    Exec --> QA["QAAgent<br/>(GitHub Phi-4)"]',
+            'graph TB\n    subgraph Server["A2A Server (localhost:10001)"]\n        Card["Agent Card<br/>/.well-known/agent-card.json"]\n        Handler["DefaultRequestHandler"]\n        Exec["QAAgentExecutor<br/>(wraps QAAgent)"]\n        Store["InMemoryTaskStore"]\n        App["A2AStarletteApplication"]\n    end\n\n    Client["A2A Client"] -->|"GET /.well-known/agent-card.json"| Card\n    Client -->|"POST /"| App\n    App --> Handler\n    Handler --> Exec\n    Handler --> Store\n    Exec --> QA["QAAgent<br/>(GitHub Phi-4)"]',
           caption:
             "A2A Server architecture — the client discovers via Agent Card and sends tasks via JSON-RPC",
           alt: "Diagram showing A2A Server components: Agent Card, DefaultRequestHandler, QAAgentExecutor wrapping QAAgent, InMemoryTaskStore",
         },
         {
           chart:
-            "sequenceDiagram\n    participant Client\n    participant App as A2AStarletteApplication\n    participant Exec as QAAgentExecutor\n    participant Agent as QAAgent\n    participant Queue as EventQueue\n\n    Client->>App: POST / (tasks/send)\n    App->>Exec: execute(context, event_queue)\n    Exec->>Exec: context.get_user_input()\n    Exec->>Agent: query(question)\n    Agent->>Agent: call GitHub Phi-4\n    Agent-->>Exec: answer text\n    Exec->>Queue: enqueue_event(new_agent_text_message)\n    Queue-->>App: event\n    App-->>Client: JSON-RPC response (Task)",
+            "sequenceDiagram\n    participant Client\n    participant App as A2AStarletteApplication\n    participant Exec as QAAgentExecutor\n    participant Agent as QAAgent\n    participant Queue as EventQueue\n\n    Client->>App: POST / (SendMessage)\n    App->>Exec: execute(context, event_queue)\n    Exec->>Exec: context.get_user_input()\n    Exec->>Agent: query(question)\n    Agent->>Agent: call GitHub Phi-4\n    Agent-->>Exec: answer text\n    Exec->>Queue: enqueue_event(new_agent_text_message)\n    Queue-->>App: event\n    App-->>Client: JSON-RPC response (Task)",
           caption:
             "Request flow — from client POST through executor to agent and back via EventQueue",
           alt: "Sequence diagram showing the full request lifecycle through A2A server components",
@@ -800,7 +800,7 @@ export const A2A_COURSE: CourseDefinition = {
             language: "python",
             filename: "agent_card.py",
             explanation:
-              "The Agent Card is the JSON document served at /.well-known/agent.json. It tells clients what the agent can do.",
+              "The Agent Card is the JSON document served at /.well-known/agent-card.json. It tells clients what the agent can do.",
           },
           {
             code: 'from a2a.server.apps import A2AStarletteApplication\nfrom a2a.server.request_handlers import DefaultRequestHandler\nfrom a2a.server.tasks import InMemoryTaskStore\nimport uvicorn\n\nrequest_handler = DefaultRequestHandler(\n    agent_executor=QAAgentExecutor(),\n    task_store=InMemoryTaskStore(),\n)\n\nserver = A2AStarletteApplication(\n    agent_card=agent_card,\n    http_handler=request_handler,\n)\n\nif __name__ == "__main__":\n    uvicorn.run(server.build(), host="0.0.0.0", port=10001)',
@@ -941,7 +941,7 @@ export const A2A_COURSE: CourseDefinition = {
       diagrams: [
         {
           chart:
-            "sequenceDiagram\n    participant Client\n    participant Server\n\n    Note over Client,Server: 1. Discovery\n    Client->>Server: GET /.well-known/agent.json\n    Server-->>Client: AgentCard (skills, capabilities)\n\n    Note over Client,Server: 2. Blocking Request\n    Client->>Server: POST / (message/send)\n    Server-->>Client: Task (status: completed, artifacts)\n\n    Note over Client,Server: 3. Streaming Request\n    Client->>Server: POST / (message/stream)\n    Server-->>Client: SSE: status update (working)\n    Server-->>Client: SSE: artifact (text chunk)\n    Server-->>Client: SSE: status update (completed)",
+            "sequenceDiagram\n    participant Client\n    participant Server\n\n    Note over Client,Server: 1. Discovery\n    Client->>Server: GET /.well-known/agent-card.json\n    Server-->>Client: AgentCard (skills, capabilities)\n\n    Note over Client,Server: 2. Blocking Request\n    Client->>Server: POST / (SendMessage)\n    Server-->>Client: Task (status: completed, artifacts)\n\n    Note over Client,Server: 3. Streaming Request\n    Client->>Server: POST / (SendStreamingMessage)\n    Server-->>Client: SSE: status update (working)\n    Server-->>Client: SSE: artifact (text chunk)\n    Server-->>Client: SSE: status update (completed)",
           caption:
             "A2A client workflow — discover the agent, then send blocking or streaming requests",
           alt: "Sequence diagram showing three phases: discovery via Agent Card, blocking request-response, and streaming with SSE events",
@@ -949,10 +949,10 @@ export const A2A_COURSE: CourseDefinition = {
         },
         {
           chart:
-            "stateDiagram-v2\n    [*] --> Submitted: Client sends message\n    Submitted --> Working: Agent starts processing\n    Working --> Completed: Agent finished\n    Working --> InputRequired: Agent needs more info\n    Working --> Failed: Error occurred\n    InputRequired --> Working: Client sends follow-up\n    Submitted --> Rejected: Server refuses task\n    Working --> Canceled: Client cancels",
+            "stateDiagram-v2\n    [*] --> Submitted: Client sends message\n    Submitted --> Working: Agent starts processing\n    Submitted --> Rejected: Server refuses task\n    Working --> Completed: Agent finished\n    Working --> InputRequired: Agent needs more info\n    Working --> AuthRequired: Client auth needed\n    Working --> Failed: Error occurred\n    Working --> Canceled: Client cancels\n    InputRequired --> Working: Client sends follow-up\n    AuthRequired --> Working: Client authenticates",
           caption:
-            "Task state machine — from submission through processing to terminal state",
-          alt: "State diagram showing task states: Submitted, Working, Completed, InputRequired, Failed, Rejected, Canceled",
+            "Task state machine — eight states from submission through processing to terminal state",
+          alt: "State diagram showing all eight task states: Submitted, Working, Completed, InputRequired, AuthRequired, Failed, Rejected, Canceled",
         },
       ],
       codePreview: {
@@ -963,7 +963,7 @@ export const A2A_COURSE: CourseDefinition = {
             language: "python",
             filename: "discovery.py",
             explanation:
-              "A2ACardResolver fetches /.well-known/agent.json and parses it into a typed AgentCard. Use the card to inspect agent capabilities before sending requests.",
+              "A2ACardResolver fetches /.well-known/agent-card.json and parses it into a typed AgentCard. Use the card to inspect agent capabilities before sending requests.",
           },
           {
             code: 'from uuid import uuid4\nfrom a2a.client import A2AClient\nfrom a2a.types import MessageSendParams, SendMessageRequest\n\nclient = A2AClient(\n    httpx_client=httpx_client,\n    agent_card=agent_card,\n)\n\npayload = {\n    "message": {\n        "role": "user",\n        "parts": [{"kind": "text", "text": "What is the deductible?"}],\n        "messageId": uuid4().hex,\n    }\n}\n\nrequest = SendMessageRequest(\n    id=str(uuid4()),\n    params=MessageSendParams(**payload),\n)\n\nresponse = await client.send_message(request)\nprint(response.model_dump(mode="json", exclude_none=True))',
@@ -1055,7 +1055,7 @@ export const A2A_COURSE: CourseDefinition = {
           question:
             "What is the difference between blocking and streaming modes?",
           answer:
-            "Blocking (message/send) waits for the complete response before returning. Streaming (message/stream) returns an async iterator of SSE events — you get status updates and artifact chunks in real time.",
+            "Blocking (SendMessage) waits for the complete response before returning. Streaming (SendStreamingMessage) returns an async iterator of SSE events — you get status updates and artifact chunks in real time.",
         },
         {
           question:
@@ -1121,7 +1121,7 @@ export const A2A_COURSE: CourseDefinition = {
         },
         {
           chart:
-            'graph LR\n    subgraph MSF["Microsoft Agent Framework (port 10008)"]\n        Orch["OrchestratorAgent<br/>Kimi-K2-Thinking"]\n        Srv["A2A Server<br/>LoanValidatorExecutor"]\n    end\n    subgraph SDK["A2A SDK (port 10001)"]\n        QA["QAAgent<br/>GitHub Phi-4"]\n    end\n    Client["Any A2A Client"] -->|"tasks/send"| Srv\n    Srv --> Orch\n    Orch -->|"lookup_policy_notes<br/>(A2A client call)"| QA\n    QA -->|"policy answer"| Orch\n    Orch --> Report["ValidationReport"]',
+            'graph LR\n    subgraph MSF["Microsoft Agent Framework (port 10008)"]\n        Orch["OrchestratorAgent<br/>Kimi-K2-Thinking"]\n        Srv["A2A Server<br/>LoanValidatorExecutor"]\n    end\n    subgraph SDK["A2A SDK (port 10001)"]\n        QA["QAAgent<br/>GitHub Phi-4"]\n    end\n    Client["Any A2A Client"] -->|"SendMessage"| Srv\n    Srv --> Orch\n    Orch -->|"lookup_policy_notes<br/>(A2A client call)"| QA\n    QA -->|"policy answer"| Orch\n    Orch --> Report["ValidationReport"]',
           caption:
             "Cross-framework interoperability — the OrchestratorAgent exposes itself as an A2A server and can call the QAAgent via the standard protocol",
           alt: "Diagram showing Microsoft Agent Framework server on port 10008 calling QAAgent on port 10001 via A2A protocol",
@@ -1366,7 +1366,7 @@ export const A2A_COURSE: CourseDefinition = {
       diagrams: [
         {
           chart:
-            'graph TB\n    Common["_common/src/<br/>loan_data + validation_rules"] --> T1["run_hard_checks()<br/>FunctionTool"]\n    Common --> T2["run_soft_checks()<br/>FunctionTool"]\n    T1 --> Agent["LoanValidatorADK<br/>LlmAgent + LiteLlm<br/>(Azure Kimi-K2)"]\n    T2 --> Agent\n    Agent -->|"to_a2a()"| Server["A2A Server<br/>port 10002"]\n    Server --> Card["Agent Card<br/>/.well-known/agent.json"]\n    Server --> RPC["JSON-RPC<br/>POST /"]\n    Client["A2A Client"] -->|"discover"| Card\n    Client -->|"message/send"| RPC',
+            'graph TB\n    Common["_common/src/<br/>loan_data + validation_rules"] --> T1["run_hard_checks()<br/>FunctionTool"]\n    Common --> T2["run_soft_checks()<br/>FunctionTool"]\n    T1 --> Agent["LoanValidatorADK<br/>LlmAgent + LiteLlm<br/>(Azure Kimi-K2)"]\n    T2 --> Agent\n    Agent -->|"to_a2a()"| Server["A2A Server<br/>port 10002"]\n    Server --> Card["Agent Card<br/>/.well-known/agent-card.json"]\n    Server --> RPC["JSON-RPC<br/>POST /"]\n    Client["A2A Client"] -->|"discover"| Card\n    Client -->|"SendMessage"| RPC',
           caption:
             "LoanValidator ADK architecture — FunctionTool wrappers run validation, to_a2a() exposes the full A2A server",
           alt: "Diagram showing shared validation data feeding tools into LlmAgent, exposed via to_a2a()",
@@ -1557,7 +1557,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "langgraph",
       title: "A2A with LangGraph",
       type: "video",
-      duration: "8 mins",
+      duration: "10 mins",
       videoId: "placeholder-langgraph",
       description:
         "Build a loan-validation agent with LangGraph's create_react_agent and AzureChatOpenAI, then expose it as an A2A server using manual AgentExecutor wiring. Demonstrates the ReAct loop for automatic multi-step tool calling with Kimi-K2 via Azure AI Foundry.",
@@ -2655,7 +2655,7 @@ export const A2A_COURSE: CourseDefinition = {
         },
         {
           chart:
-            "sequenceDiagram\n  participant Client as A2A Client\n  participant Auth as OAuth Server\n  participant Agent as A2A Server\n  Client->>Auth: Request access token (client_credentials)\n  Auth-->>Client: Access token (JWT)\n  Client->>Agent: tasks/send + Bearer token\n  Agent->>Auth: Validate token\n  Auth-->>Agent: Token valid, scopes: [agent:call]\n  Agent-->>Client: Task result",
+            "sequenceDiagram\n  participant Client as A2A Client\n  participant Auth as OAuth Server\n  participant Agent as A2A Server\n  Client->>Auth: Request access token (client_credentials)\n  Auth-->>Client: Access token (JWT)\n  Client->>Agent: SendMessage + Bearer token\n  Agent->>Auth: Validate token\n  Auth-->>Agent: Token valid, scopes: [agent:call]\n  Agent-->>Client: Task result",
           caption:
             "OAuth 2.0 client-credentials flow for machine-to-machine A2A authentication",
           alt: "Sequence diagram showing an A2A client obtaining an OAuth token and authenticating a task request.",
@@ -2861,7 +2861,7 @@ export const A2A_COURSE: CourseDefinition = {
         {
           title: "A2A Is Still Evolving",
           content:
-            "A2A is at RC v1.0 stage. Key areas of active development include dynamic agent registries, push notifications for async completion, batch operations for bulk task submission, expanded multi-modal support, and enterprise compliance profiles. The patterns you learned here will transfer directly as the spec evolves — the core primitives (Agent Card, tasks/send, SSE streaming) are stable.",
+            "A2A is at RC v1.0 stage. Key areas of active development include dynamic agent registries, push notifications for async completion, batch operations for bulk task submission, expanded multi-modal support, and enterprise compliance profiles. The patterns you learned here will transfer directly as the spec evolves — the core primitives (Agent Card, SendMessage, SSE streaming) are stable.",
         },
       ],
       transcript: [
@@ -2992,7 +2992,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "quiz",
       title: "Quiz & Assessment",
       type: "quiz",
-      duration: "15 mins",
+      duration: "10 mins",
       description:
         "Test your A2A knowledge with 18 quiz questions covering protocol design, framework integration, multi-agent orchestration, security, and production deployment.",
       objectives: [
@@ -3020,7 +3020,7 @@ export const A2A_COURSE: CourseDefinition = {
           ],
           correctOptionId: "b",
           explanation:
-            "The Agent Card is a JSON discovery document served at /.well-known/agent.json. It describes the agent's name, URL, version, skills, and supported capabilities so other agents can discover and interact with it.",
+            "The Agent Card is a JSON discovery document served at /.well-known/agent-card.json. It describes the agent's name, URL, version, skills, and supported capabilities so other agents can discover and interact with it.",
         },
         {
           id: "q2",
@@ -3034,7 +3034,7 @@ export const A2A_COURSE: CourseDefinition = {
           ],
           correctOptionId: "c",
           explanation:
-            "A2A uses Server-Sent Events (SSE) over the tasks/sendSubscribe endpoint for streaming partial results. SSE is unidirectional (server → client), lightweight, and works over standard HTTP.",
+            "A2A uses Server-Sent Events (SSE) via the SendStreamingMessage operation for streaming partial results. SSE is unidirectional (server → client), lightweight, and works over standard HTTP.",
         },
         {
           id: "q3",
@@ -3154,39 +3154,42 @@ export const A2A_COURSE: CourseDefinition = {
         {
           id: "q9",
           question:
-            "Which JSON-RPC method does an A2A client call to initiate a new task?",
+            "Which operation does an A2A client call to initiate a new task?",
           options: [
-            { id: "a", text: "tasks/create" },
-            { id: "b", text: "tasks/send" },
-            { id: "c", text: "tasks/start" },
-            { id: "d", text: "tasks/submit" },
+            { id: "a", text: "CreateTask" },
+            { id: "b", text: "SendMessage" },
+            { id: "c", text: "SubmitTask" },
+            { id: "d", text: "StartTask" },
           ],
           correctOptionId: "b",
           explanation:
-            "The tasks/send method initiates a new task or continues an existing one. It is the primary JSON-RPC method for synchronous task execution. For streaming, use tasks/sendSubscribe instead.",
+            "SendMessage is the core A2A operation for sending a message to an agent, which initiates a new task or continues an existing one. For streaming responses, use SendStreamingMessage instead.",
         },
         {
           id: "q10",
           question:
-            "What are the five possible states in the A2A Task lifecycle?",
+            "How many states does the A2A task lifecycle define, and which are terminal?",
           options: [
             {
               id: "a",
-              text: "created, running, paused, completed, failed",
+              text: "5 states; completed and failed are terminal",
             },
             {
               id: "b",
-              text: "submitted, working, input-required, completed, failed",
+              text: "8 states; completed, failed, canceled, and rejected are terminal",
             },
-            { id: "c", text: "pending, active, waiting, done, error" },
+            {
+              id: "c",
+              text: "6 states; completed, failed, and canceled are terminal",
+            },
             {
               id: "d",
-              text: "queued, processing, blocked, succeeded, rejected",
+              text: "4 states; completed and failed are terminal",
             },
           ],
           correctOptionId: "b",
           explanation:
-            "The A2A task state machine defines five states: submitted (received), working (processing, may emit partial results), input-required (needs user/client input), completed (success), and failed (error). Extensions can add custom states like 'reviewing' or 'approved'.",
+            "The A2A task state machine defines eight states: submitted, working, input-required, auth-required, completed, failed, canceled, and rejected. The four terminal states are completed, failed, canceled, and rejected — once a task reaches any of these, it cannot transition further.",
         },
         {
           id: "q11",
@@ -3225,78 +3228,90 @@ export const A2A_COURSE: CourseDefinition = {
         {
           id: "q13",
           question:
-            "In CrewAI, what differentiates it from other A2A framework integrations?",
+            "What is the purpose of the contextId field in A2A messages?",
           options: [
-            { id: "a", text: "It uses WebSocket instead of SSE" },
+            {
+              id: "a",
+              text: "It stores the agent's internal memory state",
+            },
             {
               id: "b",
-              text: "It assigns agents explicit roles in a crew and delegates tasks based on those roles",
+              text: "It groups related messages into a logical conversation thread",
             },
             {
               id: "c",
-              text: "It only supports synchronous task execution",
+              text: "It identifies which JSON-RPC method to call",
             },
             {
               id: "d",
-              text: "It requires a central database for agent coordination",
+              text: "It references the Agent Card version number",
             },
           ],
           correctOptionId: "b",
           explanation:
-            "CrewAI's distinctive feature is role-based delegation — you define a 'crew' of agents, each with a specific role (researcher, writer, reviewer), and CrewAI orchestrates task flow between them based on those roles. This maps naturally to A2A's skill-based Agent Card discovery.",
+            "The contextId groups related messages into a conversation thread. Multiple tasks can share the same contextId, letting agents maintain context across a multi-turn interaction. Think of it as a session ID for an ongoing dialogue between client and agent.",
         },
         {
           id: "q14",
           question:
-            "What execution strategies does the MasterOrchestrator support in the multi-agent deep dive?",
+            "What are the three mechanisms A2A provides for a client to receive task updates?",
           options: [
-            { id: "a", text: "Sequential only" },
-            { id: "b", text: "Parallel only" },
+            { id: "a", text: "Polling, webhooks, and gRPC streams" },
+            {
+              id: "b",
+              text: "Polling (GetTask), streaming (SSE via SendStreamingMessage), and push notifications",
+            },
             {
               id: "c",
-              text: "Chain (sequential), parallel, and intent-based routing",
+              text: "Long polling, WebSocket, and message queues",
             },
-            { id: "d", text: "Map-reduce and scatter-gather" },
+            { id: "d", text: "Callbacks, event bus, and shared database" },
           ],
-          correctOptionId: "c",
+          correctOptionId: "b",
           explanation:
-            "The MasterOrchestrator supports three execution strategies: chain execution (sequential pipeline, e.g., intake → risk → compliance → decision), parallel execution (fan-out to multiple agents simultaneously), and intent-based routing (LLM chooses the best agent for a given query).",
+            "A2A offers three update delivery mechanisms: (1) Polling — call GetTask to check current status; (2) Streaming — use SendStreamingMessage to receive real-time SSE events; (3) Push notifications — register a webhook via SetPushNotificationConfig and the server POSTs updates to your endpoint.",
         },
         {
           id: "q15",
           question:
-            "Which HTTP header propagates distributed trace context across A2A agent boundaries?",
+            "What is the purpose of the A2A-Version header in every A2A request?",
           options: [
-            { id: "a", text: "X-Trace-ID" },
-            { id: "b", text: "traceparent" },
-            { id: "c", text: "X-Request-ID" },
-            { id: "d", text: "Correlation-ID" },
+            { id: "a", text: "It specifies the JSON-RPC version" },
+            {
+              id: "b",
+              text: "It declares which protocol version the client supports so the server can adapt its behavior",
+            },
+            { id: "c", text: "It sets the HTTP content type" },
+            { id: "d", text: "It identifies the client's Agent Card version" },
           ],
           correctOptionId: "b",
           explanation:
-            "The W3C Trace Context standard uses the traceparent header to carry trace ID and span ID across HTTP boundaries. A2A agents extract this header, create child spans, and export them to an OTLP collector for end-to-end trace visualization.",
+            "The A2A-Version header (e.g., 'A2A-Version: 1.0') is required on every request to the A2A endpoint. It tells the server which protocol version the client understands, enabling version negotiation and backward compatibility.",
         },
         {
           id: "q16",
-          question: "What are the four types of A2A protocol extensions?",
+          question: "How are extensions declared and negotiated in A2A?",
           options: [
             {
               id: "a",
-              text: "Transport, security, logging, and caching",
+              text: "Extensions are hardcoded in the protocol and cannot be customized",
             },
             {
               id: "b",
-              text: "Data-only, profile, method, and state-machine",
+              text: "Agents declare supported extensions (with URI identifiers) in their Agent Card; clients opt in via the A2A-Extensions header",
             },
-            { id: "c", text: "Input, output, middleware, and plugin" },
+            {
+              id: "c",
+              text: "Extensions are negotiated via a separate WebSocket handshake",
+            },
             {
               id: "d",
-              text: "Client, server, bidirectional, and broadcast",
+              text: "The server auto-enables all extensions for every client",
             },
           ],
           correctOptionId: "b",
           explanation:
-            "A2A defines four extension types: data-only (add metadata like priority), profile (bundle capabilities like healthcare compliance), method (add JSON-RPC methods like tasks/batch), and state-machine (add custom task states like reviewing or approved). Extensions are declared in the Agent Card.",
+            "A2A extensions use URI-based identifiers. Agents advertise their supported extensions (each with a URI, description, and required flag) in the Agent Card's extensions array. Clients opt in to specific extensions by including their URIs in the A2A-Extensions request header.",
         },
         {
           id: "q17",
@@ -3378,7 +3393,7 @@ export const A2A_COURSE: CourseDefinition = {
 
     aboutParagraphs: [
       "Most agents today work in isolation. They call tools through MCP, fetch data, execute tasks. But give three agents — built with different frameworks by different teams — a shared problem, and you are back to writing custom glue for every pair. The integration count grows with N. A2A removes that ceiling: each agent implements the protocol once, and any two agents that speak A2A can discover and work with each other without any bespoke adapter code.",
-      "The protocol is precise about what it standardises. An <strong>Agent Card</strong> at <code>/.well-known/agent.json</code> declares the agent's name, capabilities, skills, and authentication scheme. Tasks move through seven defined states — submitted, working, input-required, auth-required, completed, cancelled, failed. Messages carry typed Parts (text, data, files). Streaming responses arrive over <strong>Server-Sent Events</strong>. Authentication (OAuth 2.0, mTLS, or API key) is declared in the card, not negotiated per-call. Everything runs over JSON-RPC 2.0.",
+      "The protocol is precise about what it standardises. An <strong>Agent Card</strong> at <code>/.well-known/agent-card.json</code> declares the agent's name, capabilities, skills, and authentication scheme. Tasks move through eight defined states — submitted, working, input-required, auth-required, completed, canceled, failed, and rejected. Messages carry typed Parts (text, data, files). Streaming responses arrive over <strong>Server-Sent Events</strong>. Authentication (OAuth 2.0, mTLS, or API key) is declared in the card, not negotiated per-call. Everything runs over JSON-RPC 2.0.",
       "In this course you build the full picture. A QA agent from scratch using the A2A Python SDK. Then the same loan validation problem solved six ways — Microsoft Agent Framework, Google ADK, LangGraph backed by MCP tool servers, CrewAI, the OpenAI Agents SDK, and a bare-metal loop that shows what every framework automates. Each runs as a separate process on a fixed port. The capstone connects all six: a loan pipeline where AI handles 80% of decisions automatically, humans review the rest through a React dashboard, and every step is traced with OpenTelemetry.",
     ],
 

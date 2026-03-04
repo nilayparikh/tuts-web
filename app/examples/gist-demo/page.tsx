@@ -68,7 +68,7 @@ export default function GistDemoPage() {
         title="Hello World Agent"
         description="A minimal A2A agent that responds to any task with a greeting."
         output={`Server started on http://localhost:8000
-Agent Card: http://localhost:8000/.well-known/agent.json
+Agent Card: http://localhost:8000/.well-known/agent-card.json
 Ready to accept tasks...
 
 [Task received] id=task-001
