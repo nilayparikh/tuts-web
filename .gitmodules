@@ -1,3 +1,6 @@
 [submodule "_common"]
 	path = _common
 	url = https://github.com/nilayparikh/_tuts_common.git
+[submodule "_brand"]
+	path = _brand
+	url = https://github.com/nilayparikh/_tuts_brand.git
