@@ -5,7 +5,7 @@
  *
  * 16 lessons + quiz. 6 framework integrations. 3 model providers.
  * GitHub Models Phi-4 (L05-07), Azure AI Foundry Kimi-K2-Thinking (L08-13),
- * GitHub Models gpt-4o-mini (L14).
+ * GitHub Models openai/gpt-4o-mini (L14 capstone).
  */
 
 import type { CourseDefinition } from "./types";
@@ -51,7 +51,7 @@ export const A2A_COURSE: CourseDefinition = {
       objectives: [
         "Understand what agentic AI systems are and why they need protocols",
         "Grasp the N² integration problem that A2A solves",
-        "Preview the six frameworks and four model providers used in this course",
+        "Preview the six frameworks and three model providers used in this course",
         "Differentiate A2A (agent-to-agent) from MCP (agent-to-tool)",
       ],
       infoBoxes: [
@@ -87,7 +87,7 @@ export const A2A_COURSE: CourseDefinition = {
         {
           time: 0,
           speaker: "Instructor",
-          text: "Welcome to the A2A — Agent-to-Agent Protocol course. In this series, you are going to build production-grade multi-agent AI systems from scratch — using six different frameworks and four model providers.",
+          text: "Welcome to the A2A — Agent-to-Agent Protocol course. In this series, you are going to build production-grade multi-agent AI systems from scratch — using six different frameworks and three model providers.",
         },
         {
           time: 14,
@@ -132,7 +132,7 @@ export const A2A_COURSE: CourseDefinition = {
         {
           time: 122,
           speaker: "Instructor",
-          text: "Each agent will be powered by one of four model providers: GitHub Models Phi-4, Azure AI Foundry Kimi K2, Kimi K2 Thinking, and Foundry Local Qwen 2.5 Coder. Every model is either free or runs locally — no expensive cloud APIs required.",
+          text: "This course uses three model tracks: GitHub Models with Phi-4 for Lessons 05-07, Azure AI Foundry with Kimi-K2-Thinking for Lessons 08-13, and GitHub Models with openai/gpt-4o-mini for the Lesson 14 capstone pipeline. Foundry Local with Qwen2.5 Coder is also supported for local-first experimentation. Every model is either free-tier or runs locally — no expensive cloud APIs required.",
         },
         {
           time: 140,
@@ -2888,7 +2888,7 @@ export const A2A_COURSE: CourseDefinition = {
         {
           time: 56,
           speaker: "Nilay",
-          text: "For models: Phi-4 through GitHub Models for the QA agent and notebooks, Kimi-K2-Thinking through Azure AI Foundry for the six framework lessons, and gpt-4o-mini through GitHub Models for the capstone pipeline. All free-tier.",
+          text: "For models: Phi-4 through GitHub Models for Lessons 05-07 and notebooks, Kimi-K2-Thinking through Azure AI Foundry for Lessons 08-13, and openai/gpt-4o-mini through GitHub Models for the Lesson 14 capstone pipeline. All free-tier.",
         },
         {
           time: 72,
@@ -3362,14 +3362,14 @@ export const A2A_COURSE: CourseDefinition = {
 
   overview: {
     heroSubheading:
-      "An open protocol for building multi-agent AI systems — where agents discover, delegate, and collaborate across six frameworks and four model providers.",
+      "An open protocol for building multi-agent AI systems — where agents discover, delegate, and collaborate across six frameworks and three model providers.",
 
     learnItems: [
       {
         icon: "",
         title: "The A2A protocol, end to end",
         description:
-          "How agents advertise themselves via Agent Cards, the seven-state Task lifecycle, JSON-RPC 2.0 transport, Server-Sent Events for streaming, and the authentication model — the full spec, explained through working code.",
+          "How agents advertise themselves via Agent Cards, the eight-state Task lifecycle, JSON-RPC 2.0 transport, Server-Sent Events for streaming, and the authentication model — the full spec, explained through working code.",
       },
       {
         icon: "",
