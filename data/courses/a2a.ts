@@ -782,7 +782,6 @@ export const A2A_COURSE: CourseDefinition = {
           caption:
             "Request flow — from client POST through executor to agent and back via EventQueue",
           alt: "Sequence diagram showing the full request lifecycle through A2A server components",
-          minHeight: "22rem",
         },
       ],
       codePreview: {
