@@ -85,7 +85,7 @@ export default async function CourseOverviewPage({
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection
         eyebrow={`Short Course · ${course.parts.length} Lessons · ${course.totalDuration}`}
-        headline={formatHeadline(course.title)}
+        headline={course.title}
         subheading={ov?.heroSubheading ?? course.description}
         primaryAction={{
           label: "Start learning",
@@ -200,7 +200,7 @@ export default async function CourseOverviewPage({
 
       <InstructorDetailCard
         name="Nilay Parikh"
-        imageSrc="/brand/nilay_parikh.jpeg"
+        imageSrc="/nilay_parikh.jpg"
         role="Founder · LocalM · ErgoSum"
         bio={
           <>
@@ -240,15 +240,6 @@ export default async function CourseOverviewPage({
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
-
-/** Format "A2A: The Agent2Agent Protocol" → "**A2A**: The Agent2Agent Protocol" */
-function formatHeadline(title: string): string {
-  if (title.includes(":")) {
-    const [before, ...rest] = title.split(":");
-    return `**${before}**: ${rest.join(":").trim()}`;
-  }
-  return title;
-}
 
 // ─── Difficulty indicator ──────────────────────────────────────────────────
 
