@@ -19,7 +19,7 @@ Before acting, gather the context you need:
 | Edit `_common`        | `.github/skills/working-with-common/SKILL.md`        |
 | Deployment question   | `docs/deployment.md`                                 |
 | Architecture question | `docs/design-principles.md`                          |
-| Submodule operations  | `docs/_common-submodule.md`                          |
+| Submodule operations  | `docs/common-submodule.md`                           |
 | Course structure      | `data/courses/index.ts` + `config/site.ts`           |
 
 ## Standing Rules

@@ -20,7 +20,7 @@ export const BRAND = {
   name: "LocalM\u2122 Tuts",
   nameFull: "LocalM\u2122 Tutorials",
   copyright: `\u00A9 ${new Date().getFullYear()} LocalM\u2122. All rights reserved.`,
-  logoUrl: "/brand/icon-circle-64.png",
+  logoUrl: "/brand/icon-mark-gradient-64.png",
   profileUrl: "/brand/profile-pic-512.png",
   socials: {
     twitter: "https://x.com/nilayparikh",
@@ -58,6 +58,7 @@ export const SITE_HEADER: TutorialHeaderProps = {
 
 export const SITE_FOOTER: TutorialFooterProps = {
   siteName: "LocalM\u2122",
+  logoUrl: BRAND.logoUrl,
   links: FOOTER_LINKS,
   githubUrl: BRAND.socials.github,
   youtubeUrl: BRAND.socials.youtube,

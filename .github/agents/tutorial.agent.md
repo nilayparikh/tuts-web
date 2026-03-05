@@ -52,7 +52,7 @@ _tuts/
 │       ├── index.ts        # Course registry + SITE_TOPIC + helpers
 │       └── <slug>.ts       # One file per course (e.g. a2a.ts)
 ├── docs/                   # Site-specific documentation
-│   ├── _common-submodule.md  # How _common works + when to edit it
+│   ├── common-submodule.md   # How _common works + when to edit it
 │   ├── design-principles.md  # Architecture + guardrails
 │   └── deployment.md         # GitHub Pages deployment
 └── public/                 # Static assets
@@ -87,8 +87,8 @@ All imports from `@localm/tutorial-framework`. Full prop API in `_common/docs/tu
 | Layout   | `TutorialLayout`, `TutorialHeader`, `TutorialFooter`, `SidebarLayout`, `ThemeSelector`                                                        |
 | Course   | `CoursePlayerLayout`, `CourseSidebar`, `LessonHeader`, `LessonList`, `QuizBlock`, `QABlock`, `ArticleBlock`, `PodcastEmbed`, `SlideshowEmbed` |
 | Content  | `HeroSection`, `SectionHeading`, `SectionDivider`, `ConceptCard`, `ConceptGrid`, `StepCard`, `StepList`                                       |
-| Content  | `CodeBlock`, `CodePreview`, `KeyPoint`, `TutorialNav`, `Paragraph`, `DescriptionBox`, `StepByStepGuide`, `VideoTranscript`, `LabSettings` |
-| Lesson   | `LessonObjectives` (objectives card, Server), `GitHubRepoCard` (GitHub/external link card, Client) |
+| Content  | `CodeBlock`, `CodePreview`, `KeyPoint`, `TutorialNav`, `Paragraph`, `DescriptionBox`, `StepByStepGuide`, `VideoTranscript`, `LabSettings`     |
+| Lesson   | `LessonObjectives` (objectives card, Server), `GitHubRepoCard` (GitHub/external link card, Client)                                            |
 | Callouts | `CalloutBox`, `InfoBox`, `NoteBox`, `TipBox`, `SuccessBox`, `WarningBox`, `DangerBox` (typed aliases of `CalloutBox`)                         |
 | Diagrams | `MermaidDiagram`                                                                                                                              |
 | Polls    | `PollBlock`                                                                                                                                   |

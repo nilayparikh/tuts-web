@@ -22,30 +22,39 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/brand/profile-pic-512.png",
-        width: 512,
-        height: 512,
+        url: "/brand/og-image-template-1200x630.png",
+        width: 1200,
+        height: 630,
         alt: "LocalM\u2122 Tuts",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/brand/profile-pic-512.png"],
+    images: ["/brand/og-image-template-1200x630.png"],
   },
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
-      { url: "/brand/favicon-32.png", type: "image/png", sizes: "32x32" },
       {
-        url: "/brand/icon-circle-64.png",
+        url: "/brand/favicon-full-32.png",
+        type: "image/png",
+        sizes: "32x32",
+      },
+      {
+        url: "/brand/icon-mark-gradient-64.png",
         type: "image/png",
         sizes: "64x64",
       },
     ],
     shortcut: ["/favicon.ico"],
     apple: [
-      { url: "/brand/icon-circle-64.png", sizes: "64x64", type: "image/png" },
+      {
+        url: "/brand/icon-mark-gradient-180.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
     ],
   },
 };
@@ -58,7 +67,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Google Fonts: Inter (Variable) + JetBrains Mono + Material Symbols */}
+        {/* Google Fonts: Outfit (display) + Inter (body) + JetBrains Mono (code) */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -66,7 +75,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Outfit:wght@100..900&display=swap"
           rel="stylesheet"
         />
         <link

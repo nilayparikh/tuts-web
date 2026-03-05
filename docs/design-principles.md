@@ -19,7 +19,7 @@ This document captures the design decisions, constraints, and guardrails for the
 - Source path: `_common/frontend/tutorial-framework/`.
 - Next.js **transpiles it from source** via `transpilePackages` + Turbopack alias — no pre-build needed during development.
 - The framework build (`tsup`) is only required for production builds and CI.
-- See [`docs/_common-submodule.md`](_common-submodule.md) for the full submodule guide.
+- See [`docs/common-submodule.md`](common-submodule.md) for the full submodule guide.
 
 ### Dev Workflow
 

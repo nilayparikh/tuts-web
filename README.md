@@ -39,6 +39,8 @@ _common/                     # Git submodule → nilayparikh/_tuts_common
 ├── .github/                 # Shared agent configs, instructions, skills
 └── docs/                    # Framework documentation
 
+_brand/                      # Git submodule → nilayparikh/_tuts_brand (brand source SVGs)
+
 app/
 ├── layout.tsx               # Root layout
 ├── page.tsx                 # Topic home — lists all courses
@@ -85,7 +87,7 @@ The shared component library (`@localm/tutorial-framework`) and AI agent configu
 
 - **Always clone with submodules**: `git clone --recurse-submodules <url>`
 - **Sync updates**: `./scripts/sync-common.ps1`
-- **Full guide**: [`docs/_common-submodule.md`](docs/_common-submodule.md)
+- **Full guide**: [`docs/common-submodule.md`](docs/common-submodule.md)
 
 ## Adding a New Course
 
@@ -103,6 +105,11 @@ The shared component library (`@localm/tutorial-framework`) and AI agent configu
 5. `npm run build` → deploy `out/` to GitHub Pages
 
 See [`docs/README.md`](docs/README.md) for the full guide.
+
+Brand system docs:
+
+- [`docs/BRAND_GUIDE.md`](docs/BRAND_GUIDE.md)
+- [`docs/brand/README.md`](docs/brand/README.md)
 
 ## Deployment
 

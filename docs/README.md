@@ -77,7 +77,7 @@ _tuts/                           # ← Your forked repo
 
 The shared component library and AI agent configurations live in a separate repository ([`nilayparikh/_tuts_common`](https://github.com/nilayparikh/_tuts_common)) and are included as a git submodule at `_common/`.
 
-See [\_common-submodule.md](_common-submodule.md) for the full guide on how `_common` works, when to edit it, and how to sync updates.
+See [common-submodule.md](common-submodule.md) for the full guide on how `_common` works, when to edit it, and how to sync updates.
 
 ## How to Create Your Own Tutorial Site
 
@@ -213,13 +213,14 @@ Each lesson in a course has a `type` that controls how it renders:
 
 ## Documentation Index
 
-| Document                                      | Content                                    |
-| --------------------------------------------- | ------------------------------------------ |
-| [README.md](README.md)                        | This file — overview + quick start         |
-| [\_common-submodule.md](_common-submodule.md) | How the `_common` submodule works          |
-| [design-principles.md](design-principles.md)  | Architecture, component rules, guardrails  |
-| [deployment.md](deployment.md)                | GitHub Pages deployment guide              |
-| [`_common/docs/`](../_common/docs/README.md)  | Framework library + AI agent documentation |
+| Document                                     | Content                                      |
+| -------------------------------------------- | -------------------------------------------- |
+| [README.md](README.md)                       | This file — overview + quick start           |
+| [common-submodule.md](common-submodule.md)   | How the `_common` submodule works            |
+| [design-principles.md](design-principles.md) | Architecture, component rules, guardrails    |
+| [deployment.md](deployment.md)               | GitHub Pages deployment guide                |
+| [`_common/docs/`](../_common/docs/README.md) | Framework library + AI agent documentation   |
+| [`_brand/docs/`](../_brand/docs/README.md)   | Brand guide, colors, logos, asset generation |
 
 ## GitHub Pages Deployment
 
@@ -235,7 +236,7 @@ git add _common
 git commit -m "chore: update _common submodule"
 ```
 
-See [\_common-submodule.md](_common-submodule.md) for the full guide.
+See [common-submodule.md](common-submodule.md) for the full guide.
 
 ## Scripts
 

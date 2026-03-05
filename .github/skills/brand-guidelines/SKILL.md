@@ -1,73 +1,46 @@
 ---
 name: brand-guidelines
-description: Applies Anthropic's official brand colors and typography to any sort of artifact that may benefit from having Anthropic's look-and-feel. Use it when brand colors or style guidelines, visual formatting, or company design standards apply.
+description: Applies LocalM™ Tuts brand rules from the _brand submodule. Use when editing logos, metadata icons, public brand assets, or visual identity.
 license: Complete terms in LICENSE.txt
 ---
 
-# Anthropic Brand Styling
+# LocalM™ Brand Guidelines
 
 ## Overview
 
-To access Anthropic's official brand identity and style resources, use this skill.
+Use this skill whenever work touches brand assets, logos, favicon/OG metadata, or visual identity.
 
-**Keywords**: branding, corporate identity, visual identity, post-processing, styling, brand colors, typography, Anthropic brand, visual formatting, visual design
+## Source of Truth
 
-## Brand Guidelines
+- `_brand/localm_tuts_brands.svg` — master artboard
+- `_brand/docs/BRAND_GUIDE.md` — canonical brand guide (single source)
+- `_brand/dist/localm/` — generated SVGs + transparent PNGs
 
-### Colors
+**All brand documentation lives in `_brand/docs/`.** Do not duplicate in `_tuts/docs/`.
 
-**Main Colors:**
+## Consumer Model
 
-- Dark: `#141413` - Primary text and dark backgrounds
-- Light: `#faf9f5` - Light backgrounds and text on dark
-- Mid Gray: `#b0aea5` - Secondary elements
-- Light Gray: `#e8e6dc` - Subtle backgrounds
+`_tuts` copies **only the files actually referenced by app code** from `_brand/dist/localm/`
+directly into `public/brand/` (flat — no `localm/` subfolder).
 
-**Accent Colors:**
+Referenced files: see `public/brand/README.md` for the complete list.
 
-- Orange: `#d97757` - Primary accent
-- Blue: `#6a9bcc` - Secondary accent
-- Green: `#788c5d` - Tertiary accent
+## Workflow
 
-### Typography
+1. Edit artwork in `_brand/localm_tuts_brands.svg`.
+2. Regenerate:
 
-- **Headings**: Poppins (with Arial fallback)
-- **Body Text**: Lora (with Georgia fallback)
-- **Note**: Fonts should be pre-installed in your environment for best results
+```powershell
+python _brand/scripts/generate_localm_brand_assets.py
+```
 
-## Features
+3. Copy only needed files into `public/brand/` (see sync script in `public/brand/README.md`).
+4. Commit both `_brand` pointer and `public/brand/` files.
 
-### Smart Font Application
+## Rules
 
-- Applies Poppins font to headings (24pt and larger)
-- Applies Lora font to body text
-- Automatically falls back to Arial/Georgia if custom fonts unavailable
-- Preserves readability across all systems
-
-### Text Styling
-
-- Headings (24pt+): Poppins font
-- Body text: Lora font
-- Smart color selection based on background
-- Preserves text hierarchy and formatting
-
-### Shape and Accent Colors
-
-- Non-text shapes use accent colors
-- Cycles through orange, blue, and green accents
-- Maintains visual interest while staying on-brand
-
-## Technical Details
-
-### Font Management
-
-- Uses system-installed Poppins and Lora fonts when available
-- Provides automatic fallback to Arial (headings) and Georgia (body)
-- No font installation required - works with existing system fonts
-- For best results, pre-install Poppins and Lora fonts in your environment
-
-### Color Application
-
-- Uses RGB color values for precise brand matching
-- Applied via python-pptx's RGBColor class
-- Maintains color fidelity across different systems
+- Do not distort, skew, or recolor logos.
+- Do not introduce ad-hoc brand colors — use `_brand/docs/BRAND_GUIDE.md` tokens.
+- Do not dump the entire `_brand/dist/` into the consumer repo.
+- SVGs are transparent (except `og-image-template`). PNGs are transparent.
+- Keep `layout.tsx`, `manifest.webmanifest`, and `site.ts` icon paths pointing to `public/brand/`.
