@@ -3,7 +3,7 @@
  *
  * Slug: "a2a"  →  /a2a/, /a2a/introduction/, /a2a/why-a2a/, …
  *
- * 16 lessons + quiz. 6 framework integrations. 3 model providers.
+ * 16 lessons + 1 interview questions block. 6 framework integrations. 3 model providers.
  * GitHub Models Phi-4 (L05-07), Azure AI Foundry Kimi-K2-Thinking (L08-13),
  * GitHub Models openai/gpt-4o-mini (L14 capstone).
  */
@@ -14,8 +14,8 @@ export const A2A_COURSE: CourseDefinition = {
   slug: "a2a",
   title: "A2A: The Agent2Agent Protocol",
   description:
-    "Build multi-agent AI systems using the A2A protocol. Covers 6 frameworks (Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Agent SDK) with local-first models.",
-  totalDuration: "~130 mins",
+    "Build multi-agent AI systems using the A2A protocol. Covers 6 frameworks (Microsoft Agent Framework, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Style Agents) with local-first models.",
+  totalDuration: "~137 mins",
   tags: [
     "A2A",
     "Agent2Agent",
@@ -27,7 +27,7 @@ export const A2A_COURSE: CourseDefinition = {
     "LangGraph",
     "CrewAI",
     "OpenAI Agents SDK",
-    "Claude Agent SDK",
+    "Claude Style Agents",
     "MCP",
   ],
   icon: "🔌",
@@ -44,7 +44,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "introduction",
       title: "Introduction",
       type: "video",
-      duration: "5 mins",
+      duration: "7 mins",
       videoId: "SMKyOgzPfTA",
       description:
         "Get oriented to agentic AI systems, the N² integration problem, and why A2A exists.",
@@ -158,7 +158,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "why-a2a",
       title: "Why Agent2Agent Protocol?",
       type: "video",
-      duration: "5 mins",
+      duration: "6 mins",
       videoId: "lOq1PLh-FZk",
       description:
         "Explore the motivation behind A2A — how it solves the interoperability problem and complements MCP.",
@@ -277,7 +277,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "a2a-architecture",
       title: "A2A Architecture",
       type: "video",
-      duration: "8 mins",
+      duration: "7 mins",
       videoId: "exHERepcIsU",
       description:
         "Deep dive into A2A's architecture — Agent Cards, Messages, Task lifecycle, streaming, and JSON-RPC methods.",
@@ -411,7 +411,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "setup-resources",
       title: "Setup & Resources",
       type: "video",
-      duration: "5 mins",
+      duration: "4 mins",
       videoId: "ok1F6PuKMLk",
       description:
         "Set up your local development environment — the course repository, Python virtual environment, and all three model providers used across the lessons.",
@@ -561,7 +561,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "first-a2a-agent",
       title: "Building Your First A2A Agent",
       type: "video-code",
-      duration: "6 mins",
+      duration: "17 mins",
       videoId: "xD606KkVkoA",
       description:
         "Build a standalone QA agent powered by GitHub Phi-4 using an async class pattern with domain knowledge injection.",
@@ -852,7 +852,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "a2a-server",
       title: "Wrapping Agents as A2A Servers",
       type: "video-code",
-      duration: "7 mins",
+      duration: "10 mins",
       videoId: "mXEXEy53UTk",
       description:
         "Transform the standalone QAAgent into a fully A2A-compliant server using AgentExecutor, Agent Card, and A2AStarletteApplication.",
@@ -1036,7 +1036,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "a2a-client",
       title: "A2A Client Fundamentals",
       type: "video-code",
-      duration: "6 mins",
+      duration: "14 mins",
       videoId: "aTqo4ssrz4U",
       description:
         "Build a complete A2A client that discovers agents via Agent Cards and communicates using both blocking and streaming modes.",
@@ -1350,7 +1350,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "microsoft-agent-framework",
       title: "A2A with Microsoft Agent Framework",
       type: "video",
-      duration: "8 mins",
+      duration: "9 mins",
       videoId: "oGwg0VwGyY8",
       description:
         "Build an OrchestratorAgent with Microsoft Agent Framework that uses Kimi-K2-Thinking to validate loan applications via hard rules and multi-step LLM reasoning, then expose it as an A2A server for cross-framework interoperability.",
@@ -1834,7 +1834,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "langgraph",
       title: "A2A with LangGraph",
       type: "video",
-      duration: "10 mins",
+      duration: "6 mins",
       videoId: "Nt9eENHhGX8",
       description:
         "Build a loan-validation agent with LangGraph's create_react_agent and AzureChatOpenAI, then expose it as an A2A server using manual AgentExecutor wiring. Demonstrates the ReAct loop for automatic multi-step tool calling with Kimi-K2 via Azure AI Foundry.",
@@ -2046,7 +2046,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "crewai",
       title: "A2A with CrewAI",
       type: "video",
-      duration: "8 mins",
+      duration: "11 mins",
       videoId: "JSa8Vd9kpFM",
       description:
         "Build a loan validation crew using CrewAI's role-based agent model — a Compliance Analyst runs checks while a Senior Underwriter synthesises the verdict. The entire crew is wrapped as a single A2A endpoint powered by Kimi-K2-Thinking.",
@@ -2348,7 +2348,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "openai-agents-sdk",
       title: "A2A with OpenAI Agents SDK",
       type: "video",
-      duration: "7 mins",
+      duration: "4 mins",
       videoId: "I0C8xFZpJdQ",
       description:
         "Build a loan validation agent using the OpenAI Agents SDK with @function_tool decorators, Agent class, and Runner.run() execution. Configured for Azure-hosted models via set_default_openai_client — proving the SDK is not locked to OpenAI.",
@@ -2539,12 +2539,12 @@ export const A2A_COURSE: CourseDefinition = {
       ],
     },
 
-    // ── 13. Claude Agent SDK ─────────────────────────────────────────────
+    // ── 13. Claude Style Agents ───────────────────────────────────────────
     {
       slug: "claude-agent-sdk",
-      title: "A2A with Claude Agent SDK",
+      title: "A2A with Claude Style Agents",
       type: "video",
-      duration: "7 mins",
+      duration: "6 mins",
       videoId: "e5E-iN2lFvg",
       description:
         "Build an agent using no framework at all — a manual agentic loop with JSON-schema tool definitions, an explicit dispatch table, and conversation memory. Shows what every framework does under the hood. Powered by Kimi-K2-Thinking via Azure AI Foundry.",
@@ -2726,9 +2726,9 @@ export const A2A_COURSE: CourseDefinition = {
       qa: [
         {
           question:
-            "Why call it 'Claude Agent SDK' if the model is Kimi-K2-Thinking?",
+            "Why call it 'Claude Style Agents' if the model is Kimi-K2-Thinking?",
           answer:
-            "The lesson applies Anthropic's agent-building patterns — explicit JSON-schema tools, manual dispatch, conversation-level state. Using Kimi-K2-Thinking proves agent patterns are model-agnostic.",
+            "The lesson applies Anthropic-inspired agent-building patterns — explicit JSON-schema tools, manual dispatch, and conversation-level state. Using Kimi-K2-Thinking proves those agent patterns are model-agnostic.",
         },
         {
           question: "What is the safety limit (max iterations) for?",
@@ -2748,7 +2748,7 @@ export const A2A_COURSE: CourseDefinition = {
         },
       ],
       tags: [
-        "claude-sdk",
+        "claude-style-agents",
         "manual-loop",
         "tool-dispatch",
         "conversation-memory",
@@ -2762,7 +2762,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "multi-agent-deep-dive",
       title: "Multi-Agent System Deep Dive — Loan Approval",
       type: "video",
-      duration: "20 mins",
+      duration: "10 mins",
       videoId: "ONhelxVH1SQ",
       description:
         "Capstone: build a production-grade multi-agent loan approval system with AI-driven decisioning (80%), human-in-the-loop escalation (20%), a React dashboard for approvals, and OpenTelemetry observability.",
@@ -3073,7 +3073,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "advanced-concepts",
       title: "Advanced A2A Concepts — Extensions, Security & Observability",
       type: "video",
-      duration: "8 mins",
+      duration: "5 mins",
       videoId: "XEGpZop5vWw",
       description:
         "Explore production-ready A2A patterns: protocol extensions, security hardening (TLS, OAuth 2.0, mTLS), and observability with OpenTelemetry.",
@@ -3223,7 +3223,7 @@ export const A2A_COURSE: CourseDefinition = {
       slug: "conclusion",
       title: "Conclusion & Next Steps",
       type: "video",
-      duration: "5 mins",
+      duration: "4 mins",
       videoId: "7pyXSqUdgig",
       description:
         "Recap the complete A2A journey: protocols, six frameworks, multi-agent orchestration, and paths forward.",
@@ -3236,7 +3236,7 @@ export const A2A_COURSE: CourseDefinition = {
         {
           title: "What You Built",
           content:
-            "Over 16 lessons, you went from zero A2A knowledge to a production-ready multi-agent system. You implemented agents using six different frameworks (Microsoft AF, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude Agent SDK), connected them through three model providers (Phi-4 via GitHub Models, Kimi-K2-Thinking via Azure AI Foundry, gpt-4o-mini via GitHub Models), and built a capstone loan-approval pipeline with human-in-the-loop review, a React dashboard, and OpenTelemetry observability. All free-tier — no expensive cloud ML bills.",
+            "Over 16 lessons, you went from zero A2A knowledge to a production-ready multi-agent system. You implemented agents using six different frameworks (Microsoft AF, Google ADK, LangGraph, CrewAI, OpenAI Agents SDK, Claude-style agents), connected them through three model providers (Phi-4 via GitHub Models, Kimi-K2-Thinking via Azure AI Foundry, gpt-4o-mini via GitHub Models), and built a capstone loan-approval pipeline with human-in-the-loop review, a React dashboard, and OpenTelemetry observability. All free-tier — no expensive cloud ML bills.",
         },
       ],
       noteBoxes: [
@@ -3329,16 +3329,16 @@ export const A2A_COURSE: CourseDefinition = {
       tags: ["conclusion", "recap", "next-steps"],
     },
 
-    // ── 17. Quiz & Assessment ────────────────────────────────────────────
+    // ── 17. Interview Questions ───────────────────────────────────────────
     {
       slug: "quiz",
-      title: "Quiz & Assessment",
+      title: "Interview Questions",
       type: "quiz",
       duration: "10 mins",
       description:
-        "Test your A2A knowledge with 18 quiz questions covering protocol design, framework integration, multi-agent orchestration, security, and production deployment.",
+        "Practice 18 interview-style A2A questions covering protocol design, framework integration, multi-agent orchestration, security, and production deployment.",
       objectives: [
-        "Validate understanding of A2A protocol concepts through 18 knowledge checks",
+        "Validate understanding of A2A protocol concepts through 18 interview-style prompts",
         "Practice answering questions about multi-agent systems",
         "Reason about protocol design trade-offs and architectural decisions",
         "Apply A2A patterns to real-world system design and production scenarios",

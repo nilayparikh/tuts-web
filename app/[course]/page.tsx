@@ -61,6 +61,11 @@ export default async function CourseOverviewPage({
   if (!course) notFound();
 
   const ov = course.overview;
+  const lessonParts = course.parts.filter((part) => part.type !== "quiz");
+  const interviewParts = course.parts.filter((part) => part.type === "quiz");
+  const outlineLabel = interviewParts.length
+    ? `${lessonParts.length} lessons + ${interviewParts.length} interview questions`
+    : `${lessonParts.length} lessons`;
 
   return (
     <TutorialLayout
@@ -84,7 +89,7 @@ export default async function CourseOverviewPage({
 
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection
-        eyebrow={`Short Course · ${course.parts.length} Lessons · ${course.totalDuration}`}
+        eyebrow={`Short Course · ${outlineLabel} · ${course.totalDuration}`}
         headline={course.title}
         subheading={ov?.heroSubheading ?? course.description}
         primaryAction={{
@@ -189,7 +194,7 @@ export default async function CourseOverviewPage({
       <SectionDivider label="Course Outline" />
 
       <SectionHeading
-        title={`${course.parts.length} lessons · ${course.totalDuration}`}
+        title={`${outlineLabel} · ${course.totalDuration}`}
         subtitle="Each lesson builds on the previous one — follow them in order for the best experience."
       />
 
