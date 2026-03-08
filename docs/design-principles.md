@@ -109,8 +109,8 @@ Rationale: This is a static site — there's no backend to persist progress. Sho
 
 Visible lesson-type labels must be descriptive, not internal template jargon. Keep
 course data `type` values for rendering only, and derive the displayed vocabulary
-from real lesson assets. Example: show `Video + Code Walkthrough` only when the
-lesson actually exposes a GitHub/code example; otherwise prefer `Video Lesson`.
+from real lesson assets. Example: show `Video + Code Examples` only when the
+lesson actually includes supporting code examples; otherwise prefer `Video Lesson`.
 
 ### Lesson Header
 
