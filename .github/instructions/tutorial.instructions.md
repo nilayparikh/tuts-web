@@ -112,6 +112,8 @@ import { Icon } from 'lucide-react';
 - Every course must have a unique `slug` in `ALL_COURSES`.
 - Every part must have a unique `slug` within its course.
 - `type` determines rendering — match required fields per type (see agent docs).
+- `type` is internal rendering metadata only — do not surface raw values or template phrases like `video-code` or `Video with Code` directly in page copy.
+- User-facing lesson-type labels must come from actual lesson assets. Show `Video + Code Walkthrough` only when a real GitHub/code example exists; otherwise prefer neutral labels like `Video Lesson`, `Reading Guide`, `Assessment`, `Audio Lesson`, or `Slide Deck`.
 - `generateStaticParams` must return ALL valid `{course, part}` combos — missing ones → 404 at build.
 - Add new parts at the correct position for learning flow.
 - To add a new course: create `data/courses/<slug>.ts`, import it in `index.ts`, add to `ALL_COURSES`.

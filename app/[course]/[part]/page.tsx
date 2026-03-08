@@ -140,6 +140,7 @@ export default async function LessonPage({
           }}
         >
           <LessonHeader
+            part={part}
             type={part.type}
             duration={part.duration}
             title={part.title}

@@ -97,7 +97,7 @@ The course sidebar shows:
 
 - Course title (linked to course overview)
 - Duration + lesson count
-- Numbered lesson list with type icons
+- Numbered lesson list with user-facing lesson-type labels
 
 It does **not** show:
 
@@ -107,11 +107,16 @@ It does **not** show:
 
 Rationale: This is a static site — there's no backend to persist progress. Showing fake progress UI is misleading.
 
+Visible lesson-type labels must be descriptive, not internal template jargon. Keep
+course data `type` values for rendering only, and derive the displayed vocabulary
+from real lesson assets. Example: show `Video + Code Walkthrough` only when the
+lesson actually exposes a GitHub/code example; otherwise prefer `Video Lesson`.
+
 ### Lesson Header
 
 Each lesson page shows a `LessonHeader` with:
 
-- `PartTypeBadge` (type + duration pill)
+- `PartTypeBadge` (user-facing lesson label + duration pill)
 - Title (clamped to `40ch` max-width, responsive `clamp()` font size)
 - Description (muted, `60ch` max-width)
 
