@@ -1,6 +1,12 @@
 import type { CourseDefinition, PartQuizQuestion } from "./types";
 
 const lines = (...value: string[]) => value.join("\n");
+const EXAMPLE_LESSONS_BASE =
+  "https://github.com/nilayparikh/tuts-agentic-ai-examples/blob/001-github-copilot-sdlc/ctx-sdlc/lessons";
+const lessonArtifactUrl = (
+  lessonFolder: string,
+  artifact: "ASSESSMENT.md" | "RUN.md",
+) => `${EXAMPLE_LESSONS_BASE}/${lessonFolder}/${artifact}`;
 
 const optionIds = ["a", "b", "c", "d", "e", "f"] as const;
 
@@ -149,13 +155,54 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Implement the manual review escalation workflow for this repository. Follow existing repo conventions and architecture. Return the exact files you would change and the code for each change.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "With-context read all 3 context docs in first 15 s; without-context had none to discover" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "With-context: 25 tool calls, 1 m 24 s, 3 edits — without-context: ~40 calls, >180 s timeout, 11 edits" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "Same short prompt in both conditions; no constraints violated" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "With-context scored 14/14 on rubric; without-context scored 4.5/14" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All four lesson objectives demonstrated through the comparative gap" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "Not applicable for manual comparison" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "With-context: discovery-first, all context read before writing" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "With-context read all 3 context docs in first 15 s; without-context had none to discover",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary:
+              "With-context: 25 tool calls, 1 m 24 s, 3 edits — without-context: ~40 calls, >180 s timeout, 11 edits",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary:
+              "Same short prompt in both conditions; no constraints violated",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary:
+              "With-context scored 14/14 on rubric; without-context scored 4.5/14",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary:
+              "All four lesson objectives demonstrated through the comparative gap",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "Not applicable for manual comparison",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary:
+              "With-context: discovery-first, all context read before writing",
+          },
         ],
       },
       exampleRun: {
@@ -163,22 +210,94 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "claude-haiku-4.5",
         duration: "1m 24s",
         stages: [
-          { name: "Discovery", timeRange: "0–15 s", contextLoaded: "Listed workspace root, found .github/, docs/, src/", purpose: "Locate context files" },
-          { name: "Context Reading", timeRange: "15–22 s", contextLoaded: "Read manual-review-escalation.md (all 14 requirements), architecture.md", purpose: "Extract specification and architecture knowledge" },
-          { name: "Convention Discovery", timeRange: "22–60 s", contextLoaded: "Read 12 source files (routes, services, models, rules, audit)", purpose: "Map repo-specific conventions and codebase structure" },
-          { name: "Planning & Implementation", timeRange: "60–84 s", contextLoaded: "14-point plan matching spec, then 3 surgical edits", purpose: "Implement against discovered context" },
+          {
+            name: "Discovery",
+            timeRange: "0–15 s",
+            contextLoaded: "Listed workspace root, found .github/, docs/, src/",
+            purpose: "Locate context files",
+          },
+          {
+            name: "Context Reading",
+            timeRange: "15–22 s",
+            contextLoaded:
+              "Read manual-review-escalation.md (all 14 requirements), architecture.md",
+            purpose: "Extract specification and architecture knowledge",
+          },
+          {
+            name: "Convention Discovery",
+            timeRange: "22–60 s",
+            contextLoaded:
+              "Read 12 source files (routes, services, models, rules, audit)",
+            purpose: "Map repo-specific conventions and codebase structure",
+          },
+          {
+            name: "Planning & Implementation",
+            timeRange: "60–84 s",
+            contextLoaded: "14-point plan matching spec, then 3 surgical edits",
+            purpose: "Implement against discovered context",
+          },
         ],
         toolCalls: [
-          { tool: "view", target: "with-context/", outcome: "directory listing", success: true },
-          { tool: "view", target: "docs/", outcome: "file listing", success: true },
-          { tool: "view", target: "src/", outcome: "directory listing", success: true },
-          { tool: "view", target: "docs/manual-review-escalation.md", outcome: "read 14-point spec", success: true },
-          { tool: "view", target: "docs/architecture.md", outcome: "system design", success: true },
-          { tool: "view", target: "src/routes/applications.ts", outcome: "read 150 lines", success: true },
-          { tool: "view", target: "src/services/loan-service.ts", outcome: "read 200 lines", success: true },
-          { tool: "apply_patch", target: "routes/applications.ts", outcome: "added POST endpoint", success: true },
-          { tool: "apply_patch", target: "services/loan-service.ts", outcome: "added function", success: true },
-          { tool: "apply_patch", target: "rules/escalation-rules.ts", outcome: "new rule module", success: true },
+          {
+            tool: "view",
+            target: "with-context/",
+            outcome: "directory listing",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/",
+            outcome: "file listing",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "src/",
+            outcome: "directory listing",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/manual-review-escalation.md",
+            outcome: "read 14-point spec",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/architecture.md",
+            outcome: "system design",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "src/routes/applications.ts",
+            outcome: "read 150 lines",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "src/services/loan-service.ts",
+            outcome: "read 200 lines",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "routes/applications.ts",
+            outcome: "added POST endpoint",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "services/loan-service.ts",
+            outcome: "added function",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "rules/escalation-rules.ts",
+            outcome: "new rule module",
+            success: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~25" },
@@ -186,6 +305,11 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           { label: "Rubric Score", value: "14/14" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "01-why-context-engineering",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl("01-why-context-engineering", "RUN.md"),
     },
     {
       slug: "curate-project-context",
@@ -329,13 +453,51 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Refactor notification preference write handlers so the generic route and the existing email/SMS routes follow the same owner-only, delegated-session, audit, and FORBIDDEN-error conventions.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "Read architecture, API conventions, preference management docs, and route file" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "Completed in 1 m 44 s with ~5 tool calls; single focused file edit" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "All constraints respected; inspection-first behavior observed" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "Files match: True · Patterns match: True" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All four lesson objectives demonstrated" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "No tool boundary violations; no shell commands executed" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "Discovery-first; all context read before single write" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "Read architecture, API conventions, preference management docs, and route file",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary:
+              "Completed in 1 m 44 s with ~5 tool calls; single focused file edit",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary:
+              "All constraints respected; inspection-first behavior observed",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary: "Files match: True · Patterns match: True",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary: "All four lesson objectives demonstrated",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "No tool boundary violations; no shell commands executed",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary: "Discovery-first; all context read before single write",
+          },
         ],
       },
       exampleRun: {
@@ -343,34 +505,131 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "GPT-5.4",
         duration: "1m 44s",
         stages: [
-          { name: "Doc + Route Discovery", timeRange: "0–17 s", contextLoaded: "architecture.md, api-conventions.md, preference-management-example.md, notifications.ts, error-handler.ts", purpose: "Discover write route surface and conventions" },
-          { name: "Deep Source Read", timeRange: "25–42 s", contextLoaded: "role-permissions.ts, types.ts, audit-service.ts, preference-repository.ts, auth.ts", purpose: "Read permission model, audit patterns, existing CRUD" },
-          { name: "Code Generation", timeRange: "~60 s", contextLoaded: "All context consumed; extracts shared helpers", purpose: "DRY refactor of notification handlers" },
-          { name: "Verification", timeRange: "80–84 s", contextLoaded: "Final view to confirm all patterns applied", purpose: "Self-check correctness" },
+          {
+            name: "Doc + Route Discovery",
+            timeRange: "0–17 s",
+            contextLoaded:
+              "architecture.md, api-conventions.md, preference-management-example.md, notifications.ts, error-handler.ts",
+            purpose: "Discover write route surface and conventions",
+          },
+          {
+            name: "Deep Source Read",
+            timeRange: "25–42 s",
+            contextLoaded:
+              "role-permissions.ts, types.ts, audit-service.ts, preference-repository.ts, auth.ts",
+            purpose: "Read permission model, audit patterns, existing CRUD",
+          },
+          {
+            name: "Code Generation",
+            timeRange: "~60 s",
+            contextLoaded: "All context consumed; extracts shared helpers",
+            purpose: "DRY refactor of notification handlers",
+          },
+          {
+            name: "Verification",
+            timeRange: "80–84 s",
+            contextLoaded: "Final view to confirm all patterns applied",
+            purpose: "Self-check correctness",
+          },
         ],
         toolCalls: [
-          { tool: "view", target: "docs/architecture.md", outcome: "System layers + queue", success: true },
-          { tool: "view", target: "docs/api-conventions.md", outcome: "FORBIDDEN prefix, audit contract", success: true },
-          { tool: "view", target: "docs/preference-management-example.md", outcome: "4 constraints", success: true },
-          { tool: "view", target: "routes/notifications.ts", outcome: "272 lines", success: true },
-          { tool: "view", target: "middleware/error-handler.ts", outcome: "error prefix parsing", success: true },
-          { tool: "rg", target: "audit|publish|emit.*audit", outcome: "pattern matches", success: true },
-          { tool: "view", target: "rules/role-permissions.ts", outcome: "permission mapping", success: true },
-          { tool: "view", target: "services/audit-service.ts", outcome: "auditAction() signature", success: true },
-          { tool: "view", target: "models/preference-repository.ts", outcome: "findPreference(), setPreference()", success: true },
-          { tool: "apply_patch", target: "MODIFY notifications.ts", outcome: "extract shared helpers", success: true },
+          {
+            tool: "view",
+            target: "docs/architecture.md",
+            outcome: "System layers + queue",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/api-conventions.md",
+            outcome: "FORBIDDEN prefix, audit contract",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/preference-management-example.md",
+            outcome: "4 constraints",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "routes/notifications.ts",
+            outcome: "272 lines",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "middleware/error-handler.ts",
+            outcome: "error prefix parsing",
+            success: true,
+          },
+          {
+            tool: "rg",
+            target: "audit|publish|emit.*audit",
+            outcome: "pattern matches",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "rules/role-permissions.ts",
+            outcome: "permission mapping",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "services/audit-service.ts",
+            outcome: "auditAction() signature",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "models/preference-repository.ts",
+            outcome: "findPreference(), setPreference()",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "MODIFY notifications.ts",
+            outcome: "extract shared helpers",
+            success: true,
+          },
         ],
         decisions: [
-          { decision: "Extract assertCanWriteNotificationPreferences() helper", basis: "DRY refactor from 3 identical guard blocks", constraintType: "inferred", validated: true },
-          { decision: "Use FORBIDDEN error prefix", basis: "From api-conventions.md", constraintType: "prompt", validated: true },
-          { decision: "Block delegated sessions from writing", basis: "From preference-management-example.md", constraintType: "prompt", validated: true },
-          { decision: "Add setPreferenceWithAudit() wrapper", basis: "Discovered auditAction() API", constraintType: "inferred", validated: true },
+          {
+            decision: "Extract assertCanWriteNotificationPreferences() helper",
+            basis: "DRY refactor from 3 identical guard blocks",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Use FORBIDDEN error prefix",
+            basis: "From api-conventions.md",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Block delegated sessions from writing",
+            basis: "From preference-management-example.md",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Add setPreferenceWithAudit() wrapper",
+            basis: "Discovered auditAction() API",
+            constraintType: "inferred",
+            validated: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~18" },
           { label: "Lines Changed", value: "~30" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "02-curate-project-context",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl("02-curate-project-context", "RUN.md"),
     },
     {
       slug: "instruction-architecture",
@@ -513,13 +772,52 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Create a pure business-rule module at src/backend/src/rules/notification-channel-rules.ts and matching tests. The rule should validate when disabling a notification channel is allowed for mandatory events, including the California decline LEGAL-218 restriction.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "Read types, existing rules, permissions, and instruction layers" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "Completed in 2 m 3 s with ~4 tool calls; two files added cleanly" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "All constraints respected; discovered instruction-layer conventions" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "Files match: True · Patterns match: True" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All four lesson objectives demonstrated" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "No tool boundary violations" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "5 instructions injected; 9-turn discovery gap before writes" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "Read types, existing rules, permissions, and instruction layers",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary:
+              "Completed in 2 m 3 s with ~4 tool calls; two files added cleanly",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary:
+              "All constraints respected; discovered instruction-layer conventions",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary: "Files match: True · Patterns match: True",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary: "All four lesson objectives demonstrated",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "No tool boundary violations",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary:
+              "5 instructions injected; 9-turn discovery gap before writes",
+          },
         ],
       },
       exampleRun: {
@@ -527,36 +825,144 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "GPT-5.4",
         duration: "2m 41s",
         stages: [
-          { name: "Initial Discovery", timeRange: "0–19 s", contextLoaded: "Glob patterns empty, rg found mandatory-events, notification patterns", purpose: "Map guardrail files" },
-          { name: "Fallback: Directory Traversal", timeRange: "25–42 s", contextLoaded: "architecture.md, instruction-layering-example.md, mandatory-events.ts source of truth", purpose: "Manual mapping after glob failure" },
-          { name: "Deep Read: Rules & Tests", timeRange: "46–57 s", contextLoaded: "mandatory-events.ts, business-rules.ts, state-machine.ts, role-permissions.ts", purpose: "Understand rule API and test patterns" },
-          { name: "Notification Surface Scan", timeRange: "1 m 3–1 m 9 s", contextLoaded: "14 matching files across routes, models, services", purpose: "Map notification domain" },
+          {
+            name: "Initial Discovery",
+            timeRange: "0–19 s",
+            contextLoaded:
+              "Glob patterns empty, rg found mandatory-events, notification patterns",
+            purpose: "Map guardrail files",
+          },
+          {
+            name: "Fallback: Directory Traversal",
+            timeRange: "25–42 s",
+            contextLoaded:
+              "architecture.md, instruction-layering-example.md, mandatory-events.ts source of truth",
+            purpose: "Manual mapping after glob failure",
+          },
+          {
+            name: "Deep Read: Rules & Tests",
+            timeRange: "46–57 s",
+            contextLoaded:
+              "mandatory-events.ts, business-rules.ts, state-machine.ts, role-permissions.ts",
+            purpose: "Understand rule API and test patterns",
+          },
+          {
+            name: "Notification Surface Scan",
+            timeRange: "1 m 3–1 m 9 s",
+            contextLoaded: "14 matching files across routes, models, services",
+            purpose: "Map notification domain",
+          },
         ],
         toolCalls: [
-          { tool: "glob", target: "src/backend/src/rules/**/*.ts", outcome: "no matches", success: false },
-          { tool: "glob", target: "src/backend/tests/**/*.test.ts", outcome: "no matches", success: false },
-          { tool: "glob", target: "docs/*.md", outcome: "2 files", success: true },
-          { tool: "view", target: "docs/architecture.md", outcome: "60 lines", success: true },
-          { tool: "view", target: "docs/instruction-layering-example.md", outcome: "59 lines, 10 constraints", success: true },
-          { tool: "view", target: "mandatory-events.ts", outcome: "MANDATORY_EVENTS map", success: true },
-          { tool: "view", target: "business-rules.ts", outcome: "RuleViolation interface", success: true },
-          { tool: "view", target: "role-permissions.ts", outcome: "ROLE_PERMISSIONS", success: true },
-          { tool: "view", target: "business-rules.test.ts", outcome: "baseLoan fixture, vitest", success: true },
-          { tool: "apply_patch", target: "CREATE notification-channel-rules.ts", outcome: "pure rule module", success: true },
-          { tool: "apply_patch", target: "CREATE notification-channel-rules.test.ts", outcome: "4 test cases", success: true },
+          {
+            tool: "glob",
+            target: "src/backend/src/rules/**/*.ts",
+            outcome: "no matches",
+            success: false,
+          },
+          {
+            tool: "glob",
+            target: "src/backend/tests/**/*.test.ts",
+            outcome: "no matches",
+            success: false,
+          },
+          {
+            tool: "glob",
+            target: "docs/*.md",
+            outcome: "2 files",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/architecture.md",
+            outcome: "60 lines",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/instruction-layering-example.md",
+            outcome: "59 lines, 10 constraints",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "mandatory-events.ts",
+            outcome: "MANDATORY_EVENTS map",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "business-rules.ts",
+            outcome: "RuleViolation interface",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "role-permissions.ts",
+            outcome: "ROLE_PERMISSIONS",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "business-rules.test.ts",
+            outcome: "baseLoan fixture, vitest",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE notification-channel-rules.ts",
+            outcome: "pure rule module",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE notification-channel-rules.test.ts",
+            outcome: "4 test cases",
+            success: true,
+          },
         ],
         decisions: [
-          { decision: "Glob-to-directory-walk fallback", basis: "Path resolution issue", constraintType: "inferred", validated: true },
-          { decision: "Use getMandatoryEvents() over direct map", basis: "Public API pattern", constraintType: "prompt", validated: true },
-          { decision: "Case-insensitive state code handling", basis: "Instruction requirement", constraintType: "prompt", validated: true },
-          { decision: "California LEGAL-218 check first", basis: "Priority ordering", constraintType: "prompt", validated: true },
-          { decision: "ReadonlyArray input pattern", basis: "Purity constraint", constraintType: "prompt", validated: true },
+          {
+            decision: "Glob-to-directory-walk fallback",
+            basis: "Path resolution issue",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Use getMandatoryEvents() over direct map",
+            basis: "Public API pattern",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Case-insensitive state code handling",
+            basis: "Instruction requirement",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "California LEGAL-218 check first",
+            basis: "Priority ordering",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "ReadonlyArray input pattern",
+            basis: "Purity constraint",
+            constraintType: "prompt",
+            validated: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~34" },
           { label: "Lines Changed", value: "~150" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "03-instruction-architecture",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl("03-instruction-architecture", "RUN.md"),
     },
     {
       slug: "planning-workflows",
@@ -718,13 +1124,52 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Inspect the relevant docs/, specs/, and existing source surfaces for notification preferences. Discover the architecture, ADR, product, and NFR context you need rather than assuming a fixed file list. Produce a structured implementation plan.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "Discovered architecture, ADR, product spec, and NFR docs autonomously" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "Completed in 1 m 14 s with ~5 tool calls; single plan artifact" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "All plan sections present; discovery-first behavior observed" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "Files match: True · Patterns match: True" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All four lesson objectives demonstrated" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "No tool boundary violations; read-only discovery phase" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "61 files read before writing; plan built from broad discovery" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "Discovered architecture, ADR, product spec, and NFR docs autonomously",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary:
+              "Completed in 1 m 14 s with ~5 tool calls; single plan artifact",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary:
+              "All plan sections present; discovery-first behavior observed",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary: "Files match: True · Patterns match: True",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary: "All four lesson objectives demonstrated",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "No tool boundary violations; read-only discovery phase",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary:
+              "61 files read before writing; plan built from broad discovery",
+          },
         ],
       },
       exampleRun: {
@@ -732,28 +1177,121 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "GPT-5.4",
         duration: "3m 57s",
         stages: [
-          { name: "Initial Discovery", timeRange: "0–18 s", contextLoaded: "Glob patterns failed, rg found docs (19 hits), specs (84 hits)", purpose: "Identify doc and spec files" },
-          { name: "Read Docs & ADR", timeRange: "25–46 s", contextLoaded: "architecture.md, planning-workflow-example.md (10 plan reqs), ADR-003-frontend-state.md", purpose: "Load system knowledge and planning constraints" },
-          { name: "Read All Specs", timeRange: "46 s+", contextLoaded: "product-spec (FR-1–FR-6, SC-1–SC-3), NFRs (7 items), feature-request, bug-report", purpose: "Extract normalized requirements" },
-          { name: "Source Surfaces", timeRange: "46 s–3 m 41 s", contextLoaded: "~50 source files across backend and frontend", purpose: "Map exact change surfaces and behavior" },
+          {
+            name: "Initial Discovery",
+            timeRange: "0–18 s",
+            contextLoaded:
+              "Glob patterns failed, rg found docs (19 hits), specs (84 hits)",
+            purpose: "Identify doc and spec files",
+          },
+          {
+            name: "Read Docs & ADR",
+            timeRange: "25–46 s",
+            contextLoaded:
+              "architecture.md, planning-workflow-example.md (10 plan reqs), ADR-003-frontend-state.md",
+            purpose: "Load system knowledge and planning constraints",
+          },
+          {
+            name: "Read All Specs",
+            timeRange: "46 s+",
+            contextLoaded:
+              "product-spec (FR-1–FR-6, SC-1–SC-3), NFRs (7 items), feature-request, bug-report",
+            purpose: "Extract normalized requirements",
+          },
+          {
+            name: "Source Surfaces",
+            timeRange: "46 s–3 m 41 s",
+            contextLoaded: "~50 source files across backend and frontend",
+            purpose: "Map exact change surfaces and behavior",
+          },
         ],
         toolCalls: [
-          { tool: "glob", target: "docs/**/*", outcome: "no matches", success: false },
-          { tool: "glob", target: "specs/**/*", outcome: "no matches", success: false },
-          { tool: "rg", target: "notification|preference|LEGAL-218|delegated", outcome: "19 + 84 hits", success: true },
-          { tool: "view", target: "docs/architecture.md", outcome: "system architecture", success: true },
-          { tool: "view", target: "docs/adr/ADR-003-frontend-state.md", outcome: "central store requirement", success: true },
-          { tool: "view", target: "specs/product-spec-notification-preferences.md", outcome: "193 lines, FR-1–FR-6", success: true },
-          { tool: "view", target: "specs/non-functional-requirements.md", outcome: "110 lines, NFR-1–NFR-7", success: true },
-          { tool: "view", target: "routes/notifications.ts", outcome: "271 lines — write endpoints", success: true },
-          { tool: "view", target: "middleware/auth.ts", outcome: "delegation detection", success: true },
-          { tool: "apply_patch", target: "CREATE plan.md", outcome: "structured implementation plan", success: true },
+          {
+            tool: "glob",
+            target: "docs/**/*",
+            outcome: "no matches",
+            success: false,
+          },
+          {
+            tool: "glob",
+            target: "specs/**/*",
+            outcome: "no matches",
+            success: false,
+          },
+          {
+            tool: "rg",
+            target: "notification|preference|LEGAL-218|delegated",
+            outcome: "19 + 84 hits",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/architecture.md",
+            outcome: "system architecture",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/adr/ADR-003-frontend-state.md",
+            outcome: "central store requirement",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "specs/product-spec-notification-preferences.md",
+            outcome: "193 lines, FR-1–FR-6",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "specs/non-functional-requirements.md",
+            outcome: "110 lines, NFR-1–NFR-7",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "routes/notifications.ts",
+            outcome: "271 lines — write endpoints",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "middleware/auth.ts",
+            outcome: "delegation detection",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE plan.md",
+            outcome: "structured implementation plan",
+            success: true,
+          },
         ],
         decisions: [
-          { decision: "Product spec is canonical for FR/SC requirements", basis: "More detailed than feature-request.md", constraintType: "inferred", validated: true },
-          { decision: "Separate confirmed vs inferred requirements", basis: "Planning discipline", constraintType: "prompt", validated: true },
-          { decision: "3 false positives and 5 hard negatives documented", basis: "Prompt requirement", constraintType: "prompt", validated: true },
-          { decision: "Highlight fail-closed audit gap as largest risk", basis: "NFR analysis", constraintType: "inferred", validated: true },
+          {
+            decision: "Product spec is canonical for FR/SC requirements",
+            basis: "More detailed than feature-request.md",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Separate confirmed vs inferred requirements",
+            basis: "Planning discipline",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "3 false positives and 5 hard negatives documented",
+            basis: "Prompt requirement",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Highlight fail-closed audit gap as largest risk",
+            basis: "NFR analysis",
+            constraintType: "inferred",
+            validated: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~87" },
@@ -762,6 +1300,11 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           { label: "Writing", value: "14 s" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "04-planning-workflows",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl("04-planning-workflows", "RUN.md"),
     },
     {
       slug: "implementation-workflows",
@@ -908,13 +1451,52 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Inspect docs/, specs/, and the relevant notification-preference write surfaces. Write tests first, then add a pure rule module, and wire the minimal production changes into the route file.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "Read playbook, NFRs, routes, rules, models, and services before editing" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "Completed in 2 m 30 s with 31 tool calls; three files changed" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "All constraints respected; TDD skill loaded; tests written before rules" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "Files match: True · Patterns match: True" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All four lesson objectives demonstrated" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "No tool boundary violations; denied tools respected" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "Implementation follows context inspection; 3 writes after 16 reads" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "Read playbook, NFRs, routes, rules, models, and services before editing",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary:
+              "Completed in 2 m 30 s with 31 tool calls; three files changed",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary:
+              "All constraints respected; TDD skill loaded; tests written before rules",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary: "Files match: True · Patterns match: True",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary: "All four lesson objectives demonstrated",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "No tool boundary violations; denied tools respected",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary:
+              "Implementation follows context inspection; 3 writes after 16 reads",
+          },
         ],
       },
       exampleRun: {
@@ -922,29 +1504,128 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "GPT-5.4",
         duration: "2m 30s",
         stages: [
-          { name: "Skill Load + Doc Discovery", timeRange: "0–20 s", contextLoaded: "TDD skill loaded, glob empty, rg found docs and specs", purpose: "Load TDD pattern and map files" },
-          { name: "Architecture + Specs", timeRange: "25–45 s", contextLoaded: "architecture.md (rule-layer pattern), product-spec (FR-1–FR-6)", purpose: "Learn system shape and requirements" },
-          { name: "Deep Code Read", timeRange: "50 s–1 m 10 s", contextLoaded: "notifications.ts (272 lines), mandatory-events, business-rules, types, preference-repo, audit", purpose: "Understand existing patterns" },
-          { name: "TDD: Tests First", timeRange: "1 m 15 s", contextLoaded: "All context consumed; test file created before rule module", purpose: "Follow TDD skill workflow" },
+          {
+            name: "Skill Load + Doc Discovery",
+            timeRange: "0–20 s",
+            contextLoaded:
+              "TDD skill loaded, glob empty, rg found docs and specs",
+            purpose: "Load TDD pattern and map files",
+          },
+          {
+            name: "Architecture + Specs",
+            timeRange: "25–45 s",
+            contextLoaded:
+              "architecture.md (rule-layer pattern), product-spec (FR-1–FR-6)",
+            purpose: "Learn system shape and requirements",
+          },
+          {
+            name: "Deep Code Read",
+            timeRange: "50 s–1 m 10 s",
+            contextLoaded:
+              "notifications.ts (272 lines), mandatory-events, business-rules, types, preference-repo, audit",
+            purpose: "Understand existing patterns",
+          },
+          {
+            name: "TDD: Tests First",
+            timeRange: "1 m 15 s",
+            contextLoaded:
+              "All context consumed; test file created before rule module",
+            purpose: "Follow TDD skill workflow",
+          },
         ],
         toolCalls: [
-          { tool: "skill", target: "tdd-workflow", outcome: "TDD instructions loaded", success: true },
-          { tool: "glob", target: "docs/**/*", outcome: "no matches", success: false },
-          { tool: "rg", target: "notification|preference|LEGAL-218", outcome: "hits found", success: true },
-          { tool: "view", target: "docs/implementation-workflow-example.md", outcome: "assessment criteria", success: true },
-          { tool: "view", target: "routes/notifications.ts", outcome: "272 lines — write surface", success: true },
-          { tool: "view", target: "rules/mandatory-events.ts", outcome: "MANDATORY_EVENTS + getMandatoryEvents()", success: true },
-          { tool: "view", target: "models/types.ts", outcome: "domain types", success: true },
-          { tool: "apply_patch", target: "CREATE write-rules.test.ts", outcome: "5 test cases", success: true },
-          { tool: "apply_patch", target: "CREATE write-rules.ts", outcome: "pure rule module", success: true },
-          { tool: "apply_patch", target: "MODIFY notifications.ts", outcome: "wired validator", success: true },
+          {
+            tool: "skill",
+            target: "tdd-workflow",
+            outcome: "TDD instructions loaded",
+            success: true,
+          },
+          {
+            tool: "glob",
+            target: "docs/**/*",
+            outcome: "no matches",
+            success: false,
+          },
+          {
+            tool: "rg",
+            target: "notification|preference|LEGAL-218",
+            outcome: "hits found",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/implementation-workflow-example.md",
+            outcome: "assessment criteria",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "routes/notifications.ts",
+            outcome: "272 lines — write surface",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "rules/mandatory-events.ts",
+            outcome: "MANDATORY_EVENTS + getMandatoryEvents()",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "models/types.ts",
+            outcome: "domain types",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE write-rules.test.ts",
+            outcome: "5 test cases",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE write-rules.ts",
+            outcome: "pure rule module",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "MODIFY notifications.ts",
+            outcome: "wired validator",
+            success: true,
+          },
         ],
         decisions: [
-          { decision: "Load TDD skill before discovery", basis: "Recognized TDD requirement from prompt", constraintType: "skill", validated: true },
-          { decision: "Create pure rule module (no DB access)", basis: "Spec constraint", constraintType: "prompt", validated: true },
-          { decision: "Include false-positive/hard-negative comments", basis: "Spec constraint", constraintType: "prompt", validated: true },
-          { decision: "Defer bulk email/SMS surfaces", basis: "Scope constraint — documented in handoff", constraintType: "prompt", validated: true },
-          { decision: "Escalation must keep ≥1 channel enabled", basis: "Spec constraint", constraintType: "prompt", validated: true },
+          {
+            decision: "Load TDD skill before discovery",
+            basis: "Recognized TDD requirement from prompt",
+            constraintType: "skill",
+            validated: true,
+          },
+          {
+            decision: "Create pure rule module (no DB access)",
+            basis: "Spec constraint",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Include false-positive/hard-negative comments",
+            basis: "Spec constraint",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Defer bulk email/SMS surfaces",
+            basis: "Scope constraint — documented in handoff",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Escalation must keep ≥1 channel enabled",
+            basis: "Spec constraint",
+            constraintType: "prompt",
+            validated: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~38" },
@@ -952,6 +1633,11 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           { label: "Files Changed", value: "3" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "05-implementation-workflows",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl("05-implementation-workflows", "RUN.md"),
     },
     {
       slug: "tools-and-guardrails",
@@ -1091,13 +1777,52 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Inspect the lesson's guardrail-related instructions, hook configs, scripts, MCP config, and policy docs before answering. Then implement a new import-validation guardrail.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "Discovered all existing hooks, scripts, MCP config, and policy docs" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "Completed in 3 m 13 s with ~9 tool calls; two files created" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "All constraints respected; discovery-first across 8+ files" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "Files match: True · Patterns match: True" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All four lesson objectives demonstrated" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "No tool boundary violations" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "Discovery-first across hooks/scripts/docs; 2 writes after 19 reads" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "Discovered all existing hooks, scripts, MCP config, and policy docs",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary:
+              "Completed in 3 m 13 s with ~9 tool calls; two files created",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary:
+              "All constraints respected; discovery-first across 8+ files",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary: "Files match: True · Patterns match: True",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary: "All four lesson objectives demonstrated",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "No tool boundary violations",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary:
+              "Discovery-first across hooks/scripts/docs; 2 writes after 19 reads",
+          },
         ],
       },
       exampleRun: {
@@ -1105,34 +1830,132 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "GPT-5.4",
         duration: "3m 21s",
         stages: [
-          { name: "Surface Discovery", timeRange: "0–17 s", contextLoaded: "3 glob empty, 1 rg (103 hits) mapping hooks, scripts, MCP, policy", purpose: "Map guardrail infrastructure" },
-          { name: "Convention Reading", timeRange: "17–31 s", contextLoaded: "copilot-instructions, mcp.json, 3 hook JSONs, 3 Python scripts", purpose: "Learn hook structure and script patterns" },
-          { name: "Import Landscape", timeRange: "31–43 s", contextLoaded: "rg for imports, glob for index.ts (none), relative imports scan", purpose: "Understand TypeScript barrel usage" },
-          { name: "Implementation", timeRange: "2 m 4–2 m 42 s", contextLoaded: "Session plan + 2 new files created", purpose: "Hook config + validation script" },
+          {
+            name: "Surface Discovery",
+            timeRange: "0–17 s",
+            contextLoaded:
+              "3 glob empty, 1 rg (103 hits) mapping hooks, scripts, MCP, policy",
+            purpose: "Map guardrail infrastructure",
+          },
+          {
+            name: "Convention Reading",
+            timeRange: "17–31 s",
+            contextLoaded:
+              "copilot-instructions, mcp.json, 3 hook JSONs, 3 Python scripts",
+            purpose: "Learn hook structure and script patterns",
+          },
+          {
+            name: "Import Landscape",
+            timeRange: "31–43 s",
+            contextLoaded:
+              "rg for imports, glob for index.ts (none), relative imports scan",
+            purpose: "Understand TypeScript barrel usage",
+          },
+          {
+            name: "Implementation",
+            timeRange: "2 m 4–2 m 42 s",
+            contextLoaded: "Session plan + 2 new files created",
+            purpose: "Hook config + validation script",
+          },
         ],
         toolCalls: [
-          { tool: "glob", target: ".github/**/*.json", outcome: "0 matches", success: false },
-          { tool: "glob", target: ".github/**/*.py", outcome: "0 matches", success: false },
-          { tool: "rg", target: "guardrail|hook|MCP|policy|security", outcome: "103 matches", success: true },
-          { tool: "view", target: ".github/copilot-instructions.md", outcome: "50 lines — hook/MCP policy", success: true },
-          { tool: "view", target: ".github/mcp.json", outcome: "33 lines — sqlite + filesystem", success: true },
-          { tool: "view", target: ".github/hooks/file-protection.json", outcome: "11 lines — PreToolUse", success: true },
-          { tool: "view", target: ".github/scripts/check_protected_files.py", outcome: "64 lines — deny payload", success: true },
-          { tool: "view", target: ".github/scripts/format_file.py", outcome: "24 lines — PostSave script", success: true },
-          { tool: "apply_patch", target: "CREATE import-validation.json", outcome: "hook config created", success: true },
-          { tool: "apply_patch", target: "CREATE validate_imports.py", outcome: "255 lines — validator", success: true },
+          {
+            tool: "glob",
+            target: ".github/**/*.json",
+            outcome: "0 matches",
+            success: false,
+          },
+          {
+            tool: "glob",
+            target: ".github/**/*.py",
+            outcome: "0 matches",
+            success: false,
+          },
+          {
+            tool: "rg",
+            target: "guardrail|hook|MCP|policy|security",
+            outcome: "103 matches",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/copilot-instructions.md",
+            outcome: "50 lines — hook/MCP policy",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/mcp.json",
+            outcome: "33 lines — sqlite + filesystem",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/hooks/file-protection.json",
+            outcome: "11 lines — PreToolUse",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/scripts/check_protected_files.py",
+            outcome: "64 lines — deny payload",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/scripts/format_file.py",
+            outcome: "24 lines — PostSave script",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE import-validation.json",
+            outcome: "hook config created",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE validate_imports.py",
+            outcome: "255 lines — validator",
+            success: true,
+          },
         ],
         decisions: [
-          { decision: "Used PreToolUse event type", basis: "Matches existing hook patterns", constraintType: "inferred", validated: true },
-          { decision: "Hook invokes python validate_imports.py", basis: "Established command pattern from existing hooks", constraintType: "inferred", validated: true },
-          { decision: "Emit deny payload with permissionDecision", basis: "Standard pattern from check_protected_files.py", constraintType: "inferred", validated: true },
-          { decision: "Simplified format_relative_import after first pass", basis: "Used os.path.relpath instead", constraintType: "inferred", validated: true },
+          {
+            decision: "Used PreToolUse event type",
+            basis: "Matches existing hook patterns",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Hook invokes python validate_imports.py",
+            basis: "Established command pattern from existing hooks",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Emit deny payload with permissionDecision",
+            basis: "Standard pattern from check_protected_files.py",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Simplified format_relative_import after first pass",
+            basis: "Used os.path.relpath instead",
+            constraintType: "inferred",
+            validated: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~31" },
           { label: "Files Created", value: "2" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "06-tools-and-guardrails",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl("06-tools-and-guardrails", "RUN.md"),
     },
     {
       slug: "surface-strategy",
@@ -1215,13 +2038,50 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Inspect the lesson's surface-strategy artifacts. Discover baseline instructions, agents, prompts, MCP, hooks, and docs. Then create portable-baseline.instructions.md and docs/surface-portability-notes.md.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "Discovered all existing instructions, agents, prompts, and docs" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "Completed in 38 s with ~4 tool calls; two files created" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "All constraints respected; analysis-driven file creation" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "Files match: True · Patterns match: True" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All four lesson objectives demonstrated" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "No tool boundary violations" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "3 instructions + focused discovery; 2 writes after 10 reads" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "Discovered all existing instructions, agents, prompts, and docs",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary: "Completed in 38 s with ~4 tool calls; two files created",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary: "All constraints respected; analysis-driven file creation",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary: "Files match: True · Patterns match: True",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary: "All four lesson objectives demonstrated",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "No tool boundary violations",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary:
+              "3 instructions + focused discovery; 2 writes after 10 reads",
+          },
         ],
       },
       exampleRun: {
@@ -1229,34 +2089,131 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "GPT-5.4",
         duration: "1m 53s",
         stages: [
-          { name: "Surface Discovery", timeRange: "0–19 s", contextLoaded: "glob × 3 and rg for surface strategy artifacts", purpose: "Map instructions, agents, docs" },
-          { name: "Deep Reading", timeRange: "19 s–1 m 23 s", contextLoaded: "copilot-instructions, api.instructions, reviewer.agent, portability-matrix, cli-guide", purpose: "Read baseline and understand portability" },
-          { name: "Absence Checking", timeRange: "1 m 23–1 m 39 s", contextLoaded: "3 glob for prompts/hooks/extras confirmed none present", purpose: "Verify absence of other surface layers" },
-          { name: "Implementation", timeRange: "1 m 39–1 m 45 s", contextLoaded: "1 apply_patch creating both files", purpose: "Generate portable baseline + analysis" },
+          {
+            name: "Surface Discovery",
+            timeRange: "0–19 s",
+            contextLoaded: "glob × 3 and rg for surface strategy artifacts",
+            purpose: "Map instructions, agents, docs",
+          },
+          {
+            name: "Deep Reading",
+            timeRange: "19 s–1 m 23 s",
+            contextLoaded:
+              "copilot-instructions, api.instructions, reviewer.agent, portability-matrix, cli-guide",
+            purpose: "Read baseline and understand portability",
+          },
+          {
+            name: "Absence Checking",
+            timeRange: "1 m 23–1 m 39 s",
+            contextLoaded:
+              "3 glob for prompts/hooks/extras confirmed none present",
+            purpose: "Verify absence of other surface layers",
+          },
+          {
+            name: "Implementation",
+            timeRange: "1 m 39–1 m 45 s",
+            contextLoaded: "1 apply_patch creating both files",
+            purpose: "Generate portable baseline + analysis",
+          },
         ],
         toolCalls: [
-          { tool: "glob", target: ".github/**/*", outcome: "3 files", success: true },
-          { tool: "glob", target: "docs/**/*", outcome: "3 files", success: true },
-          { tool: "rg", target: "surface|instruction|agent|hook|mcp", outcome: "multi-file hits", success: true },
-          { tool: "view", target: ".github/copilot-instructions.md", outcome: "66 lines — universal baseline", success: true },
-          { tool: "view", target: ".github/instructions/api.instructions.md", outcome: "route-scoped rules", success: true },
-          { tool: "view", target: ".github/agents/reviewer.agent.md", outcome: "reviewer agent definition", success: true },
-          { tool: "view", target: "docs/portability-matrix.md", outcome: "surface compatibility reference", success: true },
-          { tool: "view", target: "docs/surface-strategy-example.md", outcome: "lesson target constraints", success: true },
-          { tool: "apply_patch", target: "CREATE portable-baseline.instructions.md", outcome: "portable baseline", success: true },
-          { tool: "apply_patch", target: "CREATE surface-portability-notes.md", outcome: "portability analysis", success: true },
+          {
+            tool: "glob",
+            target: ".github/**/*",
+            outcome: "3 files",
+            success: true,
+          },
+          {
+            tool: "glob",
+            target: "docs/**/*",
+            outcome: "3 files",
+            success: true,
+          },
+          {
+            tool: "rg",
+            target: "surface|instruction|agent|hook|mcp",
+            outcome: "multi-file hits",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/copilot-instructions.md",
+            outcome: "66 lines — universal baseline",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/instructions/api.instructions.md",
+            outcome: "route-scoped rules",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/agents/reviewer.agent.md",
+            outcome: "reviewer agent definition",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/portability-matrix.md",
+            outcome: "surface compatibility reference",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/surface-strategy-example.md",
+            outcome: "lesson target constraints",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE portable-baseline.instructions.md",
+            outcome: "portable baseline",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE surface-portability-notes.md",
+            outcome: "portability analysis",
+            success: true,
+          },
         ],
         decisions: [
-          { decision: "Used applyTo: '**' for portable baseline", basis: "Cross-surface scope", constraintType: "prompt", validated: true },
-          { decision: "Extracted universal guidance only", basis: "Exclude scoped instructions", constraintType: "prompt", validated: true },
-          { decision: "Confirmed absence of prompts, hooks, MCP", basis: "Verified via glob", constraintType: "inferred", validated: true },
-          { decision: "Documented agent portability disagreement", basis: "Resolved using portability-matrix", constraintType: "inferred", validated: true },
+          {
+            decision: "Used applyTo: '**' for portable baseline",
+            basis: "Cross-surface scope",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Extracted universal guidance only",
+            basis: "Exclude scoped instructions",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Confirmed absence of prompts, hooks, MCP",
+            basis: "Verified via glob",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Documented agent portability disagreement",
+            basis: "Resolved using portability-matrix",
+            constraintType: "inferred",
+            validated: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~18" },
           { label: "Files Created", value: "2" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "07-surface-strategy",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl("07-surface-strategy", "RUN.md"),
     },
     {
       slug: "operating-model",
@@ -1340,13 +2297,50 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Inspect the lesson's context-maintenance artifacts. Fix the drifted example at .github/examples/drifted/copilot-instructions.md by resolving all drift issues: update stale technology references, remove contradictory rules, fix dead file path references.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "Read clean example, drifted example, audit scripts, and maintenance docs" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "Completed in 30 s with ~4 tool calls; single file fixed" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "All drift issues resolved; discovery-first comparison approach" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "Files match: True · Patterns match: True" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All four lesson objectives demonstrated" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "No tool boundary violations" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "4 instructions; drift comparison before single-file fix" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "Read clean example, drifted example, audit scripts, and maintenance docs",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary: "Completed in 30 s with ~4 tool calls; single file fixed",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary:
+              "All drift issues resolved; discovery-first comparison approach",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary: "Files match: True · Patterns match: True",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary: "All four lesson objectives demonstrated",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "No tool boundary violations",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary: "4 instructions; drift comparison before single-file fix",
+          },
         ],
       },
       exampleRun: {
@@ -1354,29 +2348,128 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "GPT-5.4",
         duration: "1m 33s",
         stages: [
-          { name: "Surface Discovery", timeRange: "0–13 s", contextLoaded: "glob × 2 empty, rg found 60 matches for audit/stale/drift keywords", purpose: "Map context-maintenance files" },
-          { name: "Convention Reading", timeRange: "13–35 s", contextLoaded: "copilot-instructions, clean example, drifted example, audit scripts, maintenance docs", purpose: "Load clean baseline and drift patterns" },
-          { name: "Dead Path Verification", timeRange: "50 s–1 m 24 s", contextLoaded: "View of helpers/ failed (confirmed deleted), glob × 4 verified actual structure", purpose: "Confirm dead reference" },
-          { name: "Implementation", timeRange: "1 m 24–1 m 29 s", contextLoaded: "apply_patch to fix all 5 drift issues", purpose: "Apply corrections" },
+          {
+            name: "Surface Discovery",
+            timeRange: "0–13 s",
+            contextLoaded:
+              "glob × 2 empty, rg found 60 matches for audit/stale/drift keywords",
+            purpose: "Map context-maintenance files",
+          },
+          {
+            name: "Convention Reading",
+            timeRange: "13–35 s",
+            contextLoaded:
+              "copilot-instructions, clean example, drifted example, audit scripts, maintenance docs",
+            purpose: "Load clean baseline and drift patterns",
+          },
+          {
+            name: "Dead Path Verification",
+            timeRange: "50 s–1 m 24 s",
+            contextLoaded:
+              "View of helpers/ failed (confirmed deleted), glob × 4 verified actual structure",
+            purpose: "Confirm dead reference",
+          },
+          {
+            name: "Implementation",
+            timeRange: "1 m 24–1 m 29 s",
+            contextLoaded: "apply_patch to fix all 5 drift issues",
+            purpose: "Apply corrections",
+          },
         ],
         toolCalls: [
-          { tool: "glob", target: ".github/**/*", outcome: "5 files", success: true },
-          { tool: "rg", target: "audit_context|stale_refs|context-maintenance|drift", outcome: "60 matches", success: true },
-          { tool: "view", target: ".github/examples/clean/copilot-instructions.md", outcome: "clean reference", success: true },
-          { tool: "view", target: ".github/examples/drifted/copilot-instructions.md", outcome: "drifted example", success: true },
-          { tool: "view", target: ".github/scripts/audit_context.py", outcome: "context audit script", success: true },
-          { tool: "view", target: ".github/scripts/detect_stale_refs.py", outcome: "stale reference detector", success: true },
-          { tool: "view", target: "docs/maintenance-schedule.md", outcome: "maintenance cadence", success: true },
-          { tool: "view", target: "app/backend/src/helpers/", outcome: "FAILED — path not found", success: false },
-          { tool: "glob", target: "Check actual src structure", outcome: "confirmed no helpers", success: true },
-          { tool: "apply_patch", target: "FIX drifted copilot-instructions.md", outcome: "5 drift issues resolved", success: true },
+          {
+            tool: "glob",
+            target: ".github/**/*",
+            outcome: "5 files",
+            success: true,
+          },
+          {
+            tool: "rg",
+            target: "audit_context|stale_refs|context-maintenance|drift",
+            outcome: "60 matches",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/examples/clean/copilot-instructions.md",
+            outcome: "clean reference",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/examples/drifted/copilot-instructions.md",
+            outcome: "drifted example",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/scripts/audit_context.py",
+            outcome: "context audit script",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/scripts/detect_stale_refs.py",
+            outcome: "stale reference detector",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/maintenance-schedule.md",
+            outcome: "maintenance cadence",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "app/backend/src/helpers/",
+            outcome: "FAILED — path not found",
+            success: false,
+          },
+          {
+            tool: "glob",
+            target: "Check actual src structure",
+            outcome: "confirmed no helpers",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "FIX drifted copilot-instructions.md",
+            outcome: "5 drift issues resolved",
+            success: true,
+          },
         ],
         decisions: [
-          { decision: "Changed Node.js 18 → Node.js 20 LTS", basis: "Matches clean example", constraintType: "prompt", validated: true },
-          { decision: "Changed winston → pino", basis: "Matches clean example", constraintType: "prompt", validated: true },
-          { decision: "Removed console.log() permission", basis: "Contradicts structured logging", constraintType: "prompt", validated: true },
-          { decision: "Removed app/backend/src/helpers/ reference", basis: "Path confirmed deleted", constraintType: "prompt", validated: true },
-          { decision: "Updated banner from 'intentionally contains drift' to 'repaired'", basis: "Maintenance protocol", constraintType: "inferred", validated: true },
+          {
+            decision: "Changed Node.js 18 → Node.js 20 LTS",
+            basis: "Matches clean example",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Changed winston → pino",
+            basis: "Matches clean example",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Removed console.log() permission",
+            basis: "Contradicts structured logging",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Removed app/backend/src/helpers/ reference",
+            basis: "Path confirmed deleted",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision:
+              "Updated banner from 'intentionally contains drift' to 'repaired'",
+            basis: "Maintenance protocol",
+            constraintType: "inferred",
+            validated: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~19" },
@@ -1384,6 +2477,11 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           { label: "Drift Issues", value: "5" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "08-operating-model",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl("08-operating-model", "RUN.md"),
     },
     {
       slug: "ai-assisted-sdlc-capstone",
@@ -1497,13 +2595,51 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         promptUnderTest:
           "Inspect project instructions, backend and frontend scoped instructions, architecture doc, and implement a notification preference event-channel validator as a cross-stack hardening slice with validator, tests, and route wiring.",
         dimensions: [
-          { name: "Context Utilization", abbr: "CU", rating: "pass", summary: "Discovered instructions, architecture, and backend/frontend surfaces autonomously" },
-          { name: "Session Efficiency", abbr: "SE", rating: "pass", summary: "Completed in 3 m 57 s with ~11 tool calls; three files changed" },
-          { name: "Prompt Alignment", abbr: "PA", rating: "pass", summary: "Discovery-first; all three implementation steps completed" },
-          { name: "Change Correctness", abbr: "CC", rating: "pass", summary: "Files match: True · Patterns match: True" },
-          { name: "Objective Completion", abbr: "OC", rating: "pass", summary: "All five capstone objectives demonstrated" },
-          { name: "Behavioral Compliance", abbr: "BC", rating: "pass", summary: "No tool boundary violations" },
-          { name: "Context Validation", abbr: "CV", rating: "pass", summary: "Full-stack discovery (33 reads) before 3 targeted writes" },
+          {
+            name: "Context Utilization",
+            abbr: "CU",
+            rating: "pass",
+            summary:
+              "Discovered instructions, architecture, and backend/frontend surfaces autonomously",
+          },
+          {
+            name: "Session Efficiency",
+            abbr: "SE",
+            rating: "pass",
+            summary:
+              "Completed in 3 m 57 s with ~11 tool calls; three files changed",
+          },
+          {
+            name: "Prompt Alignment",
+            abbr: "PA",
+            rating: "pass",
+            summary:
+              "Discovery-first; all three implementation steps completed",
+          },
+          {
+            name: "Change Correctness",
+            abbr: "CC",
+            rating: "pass",
+            summary: "Files match: True · Patterns match: True",
+          },
+          {
+            name: "Objective Completion",
+            abbr: "OC",
+            rating: "pass",
+            summary: "All five capstone objectives demonstrated",
+          },
+          {
+            name: "Behavioral Compliance",
+            abbr: "BC",
+            rating: "pass",
+            summary: "No tool boundary violations",
+          },
+          {
+            name: "Context Validation",
+            abbr: "CV",
+            rating: "pass",
+            summary: "Full-stack discovery (33 reads) before 3 targeted writes",
+          },
         ],
       },
       exampleRun: {
@@ -1511,30 +2647,134 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         model: "GPT-5.4",
         duration: "3m 57s",
         stages: [
-          { name: "Surface Discovery", timeRange: "0–21 s", contextLoaded: "view root, glob × 2, rg for notification/preference/LEGAL-218", purpose: "Map project context" },
-          { name: "Instruction Reading", timeRange: "21–50 s", contextLoaded: "copilot-instructions, api.instructions, frontend.instructions, architecture, capstone-example", purpose: "Load project and lesson conventions" },
-          { name: "Backend Mapping", timeRange: "50 s–1 m 23 s", contextLoaded: "5 glob + 2 rg + follow-up globs for rules, routes, models, tests", purpose: "Discover implementation surfaces" },
-          { name: "Deep Source Reading", timeRange: "1 m 23 s–2 m 36 s", contextLoaded: "12 views of mandatory-events, role-permissions, business-rules, notifications, types, tests", purpose: "Understand existing patterns" },
+          {
+            name: "Surface Discovery",
+            timeRange: "0–21 s",
+            contextLoaded:
+              "view root, glob × 2, rg for notification/preference/LEGAL-218",
+            purpose: "Map project context",
+          },
+          {
+            name: "Instruction Reading",
+            timeRange: "21–50 s",
+            contextLoaded:
+              "copilot-instructions, api.instructions, frontend.instructions, architecture, capstone-example",
+            purpose: "Load project and lesson conventions",
+          },
+          {
+            name: "Backend Mapping",
+            timeRange: "50 s–1 m 23 s",
+            contextLoaded:
+              "5 glob + 2 rg + follow-up globs for rules, routes, models, tests",
+            purpose: "Discover implementation surfaces",
+          },
+          {
+            name: "Deep Source Reading",
+            timeRange: "1 m 23 s–2 m 36 s",
+            contextLoaded:
+              "12 views of mandatory-events, role-permissions, business-rules, notifications, types, tests",
+            purpose: "Understand existing patterns",
+          },
         ],
         toolCalls: [
-          { tool: "view", target: "repo root", outcome: "7 items", success: true },
-          { tool: "glob", target: ".github/**/*.md", outcome: "3 instruction files", success: true },
-          { tool: "glob", target: "**/architecture*.md", outcome: "1 architecture doc", success: true },
-          { tool: "rg", target: "notification|preference|LEGAL-218|mandatory", outcome: "multi-file matches", success: true },
-          { tool: "view", target: ".github/copilot-instructions.md", outcome: "project conventions", success: true },
-          { tool: "view", target: "docs/architecture.md", outcome: "system architecture", success: true },
-          { tool: "view", target: "docs/capstone-example.md", outcome: "lesson constraints", success: true },
-          { tool: "view", target: "rules/mandatory-events.ts", outcome: "MANDATORY_EVENTS map", success: true },
-          { tool: "apply_patch", target: "CREATE event-channel-validator.ts", outcome: "pure validation function", success: true },
-          { tool: "apply_patch", target: "CREATE event-channel-validator.test.ts", outcome: "focused tests", success: true },
-          { tool: "apply_patch", target: "MODIFY notifications.ts", outcome: "wired validator", success: true },
+          {
+            tool: "view",
+            target: "repo root",
+            outcome: "7 items",
+            success: true,
+          },
+          {
+            tool: "glob",
+            target: ".github/**/*.md",
+            outcome: "3 instruction files",
+            success: true,
+          },
+          {
+            tool: "glob",
+            target: "**/architecture*.md",
+            outcome: "1 architecture doc",
+            success: true,
+          },
+          {
+            tool: "rg",
+            target: "notification|preference|LEGAL-218|mandatory",
+            outcome: "multi-file matches",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: ".github/copilot-instructions.md",
+            outcome: "project conventions",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/architecture.md",
+            outcome: "system architecture",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "docs/capstone-example.md",
+            outcome: "lesson constraints",
+            success: true,
+          },
+          {
+            tool: "view",
+            target: "rules/mandatory-events.ts",
+            outcome: "MANDATORY_EVENTS map",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE event-channel-validator.ts",
+            outcome: "pure validation function",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "CREATE event-channel-validator.test.ts",
+            outcome: "focused tests",
+            success: true,
+          },
+          {
+            tool: "apply_patch",
+            target: "MODIFY notifications.ts",
+            outcome: "wired validator",
+            success: true,
+          },
         ],
         decisions: [
-          { decision: "Import MANDATORY_EVENTS from existing module", basis: "Reuse pattern", constraintType: "prompt", validated: true },
-          { decision: "Pure validation function in rules/", basis: "Business logic convention", constraintType: "inferred", validated: true },
-          { decision: "Wire validator before persistence/audit", basis: "Audit-first pattern", constraintType: "inferred", validated: true },
-          { decision: "Rename isCaliforniaLoan → isCaliforniaRestrictedContext", basis: "Conservative approach, default true", constraintType: "inferred", validated: true },
-          { decision: "No shell commands or SQL", basis: "Denied tools respected", constraintType: "prompt", validated: true },
+          {
+            decision: "Import MANDATORY_EVENTS from existing module",
+            basis: "Reuse pattern",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Pure validation function in rules/",
+            basis: "Business logic convention",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Wire validator before persistence/audit",
+            basis: "Audit-first pattern",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "Rename isCaliforniaLoan → isCaliforniaRestrictedContext",
+            basis: "Conservative approach, default true",
+            constraintType: "inferred",
+            validated: true,
+          },
+          {
+            decision: "No shell commands or SQL",
+            basis: "Denied tools respected",
+            constraintType: "prompt",
+            validated: true,
+          },
         ],
         metadata: [
           { label: "Tool Calls", value: "~77" },
@@ -1542,6 +2782,14 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           { label: "Discovery Reads", value: "33" },
         ],
       },
+      exampleAssessmentUrl: lessonArtifactUrl(
+        "09-ai-assisted-sdlc-capstone",
+        "ASSESSMENT.md",
+      ),
+      exampleRunUrl: lessonArtifactUrl(
+        "09-ai-assisted-sdlc-capstone",
+        "RUN.md",
+      ),
     },
     {
       slug: "questions",

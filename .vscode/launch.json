@@ -10,28 +10,19 @@
     },
     {
       "name": "Debug App (Next server)",
-      "type": "node",
+      "type": "node-terminal",
       "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "dev"
-      ],
+      "command": "npm run dev",
       "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
       "skipFiles": [
         "<node_internals>/**"
       ]
     },
     {
       "name": "Debug App (Chrome + Next)",
-      "type": "node",
+      "type": "node-terminal",
       "request": "launch",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": [
-        "run",
-        "dev"
-      ],
+      "command": "npm run dev",
       "cwd": "${workspaceFolder}",
       "serverReadyAction": {
         "action": "debugWithChrome",

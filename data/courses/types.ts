@@ -208,8 +208,12 @@ export interface CoursePartMeta extends CoursePart {
   stepGuides?: PartStepGuide[];
   /** Example assessment results (AI-assisted coding evaluation) */
   exampleAssessment?: PartExampleAssessment;
+  /** Direct link to the source ASSESSMENT.md artifact */
+  exampleAssessmentUrl?: string;
   /** Example run analysis (AI session trajectory) */
   exampleRun?: PartExampleRun;
+  /** Direct link to the source RUN.md artifact */
+  exampleRunUrl?: string;
 }
 
 // ─── Rich overview content (optional per-course) ──────────────────────────

@@ -375,7 +375,9 @@ function DataDrivenContent({
           <SectionDivider label="Example Results" />
           <ExampleResults
             assessment={part.exampleAssessment}
+            assessmentUrl={part.exampleAssessmentUrl}
             run={part.exampleRun}
+            runUrl={part.exampleRunUrl}
           />
         </>
       )}
