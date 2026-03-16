@@ -26,6 +26,7 @@ import {
   NotebookEmbed,
   LessonObjectives,
   GitHubRepoCard,
+  ExampleResults,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import {
@@ -366,6 +367,17 @@ function DataDrivenContent({
           <SectionDivider label="Q & A" />
           <QABlock items={part.qa} />
         </section>
+      )}
+
+      {/* ── Group 8: Example Results ───────────────────────── */}
+      {(part.exampleAssessment || part.exampleRun) && (
+        <>
+          <SectionDivider label="Example Results" />
+          <ExampleResults
+            assessment={part.exampleAssessment}
+            run={part.exampleRun}
+          />
+        </>
       )}
     </>
   );
