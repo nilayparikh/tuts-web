@@ -75,9 +75,22 @@ _tuts/                           # ← Your forked repo
 
 ## The `_common` Submodule
 
-The shared component library and AI agent configurations live in a separate repository ([`nilayparikh/_tuts_common`](https://github.com/nilayparikh/_tuts_common)) and are included as a git submodule at `_common/`.
+The shared component library and AI agent configurations live in a separate repository (<a href="https://github.com/nilayparikh/_tuts_common" target="_blank" rel="noopener noreferrer">`nilayparikh/_tuts_common`</a>) and are included as a git submodule at `_common/`.
 
 See [common-submodule.md](common-submodule.md) for the full guide on how `_common` works, when to edit it, and how to sync updates.
+
+## External Link Convention
+
+For README and docs markdown, external links should use HTML anchors so they
+open in a new tab:
+
+```html
+<a href="https://example.com" target="_blank" rel="noopener noreferrer"
+  >Example</a
+>
+```
+
+Keep internal relative links in standard Markdown form.
 
 ## How to Create Your Own Tutorial Site
 

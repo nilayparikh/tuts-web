@@ -32,25 +32,26 @@ import type {
 // ─── Import individual courses ────────────────────────────────────────────
 
 import { A2A_COURSE } from "./a2a";
+import { CTX_SDLC_COURSE } from "./ctx-sdlc";
 
 // ─── All courses (display order) ──────────────────────────────────────────
 
-export const ALL_COURSES: CourseDefinition[] = [A2A_COURSE];
+export const ALL_COURSES: CourseDefinition[] = [A2A_COURSE, CTX_SDLC_COURSE];
 
 // ─── Site-level topic configuration ───────────────────────────────────────
 
 export const SITE_TOPIC: SiteTopicConfig = {
-  topicName: "Agentic AI",
+  topicName: "AI Engineering",
   tagline:
-    "Hands-on courses on building, orchestrating, and deploying AI agent systems",
+    "Hands-on courses on agent systems, context engineering, and AI-assisted software delivery",
   description:
-    "Deep-dive tutorials on Agentic AI — from inter-agent protocols and multi-agent orchestration to production deployment. Learn by building real systems with A2A, MCP, LangGraph, Google ADK, BeeAI, and more.",
+    "Deep-dive tutorials on modern AI engineering, from multi-agent protocols to context engineering for GitHub Copilot. Learn how to build, orchestrate, and operationalize practical AI workflows with real project structures and delivery patterns.",
   tags: [
+    "AI Engineering",
     "Agentic AI",
-    "AI Agents",
-    "A2A",
+    "Context Engineering",
+    "GitHub Copilot",
     "MCP",
-    "LangGraph",
     "Multi-Agent Systems",
   ],
   courses: ALL_COURSES,
