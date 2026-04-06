@@ -1,6 +1,6 @@
 # Working with `_common` (Git Submodule)
 
-The `_common/` directory is a **git submodule** pointing to [`nilayparikh/_tuts_common`](https://github.com/nilayparikh/_tuts_common). It contains the shared component library (`@localm/tutorial-framework`), AI agent configurations, documentation, and Copilot skills used across all LocalM tutorial sites.
+The `_common/` directory is a **git submodule** pointing to <a href="https://github.com/nilayparikh/_tuts_common" target="_blank" rel="noopener noreferrer">`nilayparikh/_tuts_common`</a>. It contains the shared component library (`@localm/tutorial-framework`), AI agent configurations, documentation, and Copilot skills used across all LocalM tutorial sites.
 
 ---
 

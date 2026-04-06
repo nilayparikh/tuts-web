@@ -78,6 +78,92 @@ export interface PartStepGuide {
   }>;
 }
 
+// ─── Example Run & Assessment (AI-assisted coding results) ─────────────
+
+export type AssessmentRating = "pass" | "partial" | "fail";
+
+export interface AssessmentDimension {
+  /** Dimension name, e.g. "Context Utilization" */
+  name: string;
+  /** Short abbreviation, e.g. "CU" */
+  abbr: string;
+  /** Rating for this dimension */
+  rating: AssessmentRating;
+  /** One-line summary */
+  summary: string;
+  /** Detailed metrics key-value pairs */
+  metrics?: Array<{ label: string; value: string }>;
+  /** Evidence text (markdown-friendly) */
+  evidence?: string;
+}
+
+export interface PartExampleAssessment {
+  /** AI model used, e.g. "gpt-5.4" */
+  model: string;
+  /** Session duration, e.g. "2m 30s" */
+  duration: string;
+  /** Assessment date ISO, e.g. "2026-03-14" */
+  date: string;
+  /** Overall verdict */
+  verdict: AssessmentRating;
+  /** The prompt text that was tested */
+  promptUnderTest?: string;
+  /** Seven assessment dimensions */
+  dimensions: AssessmentDimension[];
+}
+
+export interface RunToolCall {
+  /** Tool name, e.g. "view", "rg", "glob", "apply_patch" */
+  tool: string;
+  /** Target path or query */
+  target: string;
+  /** Outcome description */
+  outcome: string;
+  /** Whether the call succeeded */
+  success: boolean;
+}
+
+export interface RunContextStage {
+  /** Stage name, e.g. "Discovery" */
+  name: string;
+  /** Time range, e.g. "0s–17s" */
+  timeRange?: string;
+  /** What context was loaded */
+  contextLoaded: string;
+  /** Purpose of this phase */
+  purpose: string;
+}
+
+export interface RunDecision {
+  /** What the AI decided */
+  decision: string;
+  /** Why — discovery result, prompt constraint, etc. */
+  basis: string;
+  /** Constraint source: "prompt" | "skill" | "inferred" | "implicit" */
+  constraintType?: string;
+  /** Whether validated */
+  validated: boolean;
+}
+
+export interface PartExampleRun {
+  /** Session ID (UUID) */
+  sessionId?: string;
+  /** AI model used */
+  model: string;
+  /** Session duration, e.g. "2m 30s" */
+  duration: string;
+  /** Mermaid flowchart of the thinking trajectory */
+  trajectoryChart?: string;
+  /** Context stages */
+  stages?: RunContextStage[];
+  /** Complete tool call timeline */
+  toolCalls?: RunToolCall[];
+  /** Assumptions and decisions */
+  decisions?: RunDecision[];
+  /** Key session metadata key-value pairs */
+  metadata?: Array<{ label: string; value: string }>;
+}
+
 export interface CoursePartMeta extends CoursePart {
   /** YouTube video ID (type "video" | "video-code") */
   videoId?: string;
@@ -120,6 +206,14 @@ export interface CoursePartMeta extends CoursePart {
   transcript?: PartTranscriptEntry[];
   /** Step-by-step guides (beyond auto-generated clone/install) */
   stepGuides?: PartStepGuide[];
+  /** Example assessment results (AI-assisted coding evaluation) */
+  exampleAssessment?: PartExampleAssessment;
+  /** Direct link to the source ASSESSMENT.md artifact */
+  exampleAssessmentUrl?: string;
+  /** Example run analysis (AI session trajectory) */
+  exampleRun?: PartExampleRun;
+  /** Direct link to the source RUN.md artifact */
+  exampleRunUrl?: string;
 }
 
 // ─── Rich overview content (optional per-course) ──────────────────────────

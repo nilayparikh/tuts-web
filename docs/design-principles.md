@@ -15,7 +15,7 @@ This document captures the design decisions, constraints, and guardrails for the
 
 ### Single Package, Source-linked
 
-- The framework (`@localm/tutorial-framework`) lives in the `_common/` git submodule (→ [`nilayparikh/_tuts_common`](https://github.com/nilayparikh/_tuts_common)).
+- The framework (`@localm/tutorial-framework`) lives in the `_common/` git submodule (→ <a href="https://github.com/nilayparikh/_tuts_common" target="_blank" rel="noopener noreferrer">`nilayparikh/_tuts_common`</a>).
 - Source path: `_common/frontend/tutorial-framework/`.
 - Next.js **transpiles it from source** via `transpilePackages` + Turbopack alias — no pre-build needed during development.
 - The framework build (`tsup`) is only required for production builds and CI.
