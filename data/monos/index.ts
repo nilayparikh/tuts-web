@@ -22,11 +22,17 @@ import { PARALLEL_AGENT_MONO } from "./parallel-agent";
 import { LOOP_AND_CRITIQUE_MONO } from "./loop-and-critique";
 import { COORDINATOR_MONO } from "./coordinator";
 import { AGENT_AS_TOOL_MONO } from "./agent-as-tool";
+import { AGENT_PATTERNS_SERIES_INTRO_MONO } from "./agent-patterns-series-intro";
+import { NEED_FOR_AGENT_PATTERNS_MONO } from "./need-for-agent-patterns";
+import { WHY_SIX_PATTERNS_MONO } from "./why-six-patterns";
 
 // ─── All monos (display order) ───────────────────────────────────────────
 
 /** All monos (including drafts) — for static generation */
 export const ALL_MONOS: MonoDefinition[] = [
+  AGENT_PATTERNS_SERIES_INTRO_MONO,
+  NEED_FOR_AGENT_PATTERNS_MONO,
+  WHY_SIX_PATTERNS_MONO,
   SINGLE_AGENT_MONO,
   SEQUENTIAL_AGENT_MONO,
   PARALLEL_AGENT_MONO,
