@@ -37,10 +37,14 @@ export const BRAND = {
 
 /* ─── Navigation ───────────────────────────────────────────────────────── */
 
-const NAV_ITEMS: NavItem[] = [{ label: "Courses", href: "/" }];
+const NAV_ITEMS: NavItem[] = [
+  { label: "Courses", href: "/courses/" },
+  { label: "Monos", href: "/monos/" },
+];
 
 const FOOTER_LINKS: FooterLink[] = [
-  { label: "Courses", href: "/" },
+  { label: "Courses", href: "/courses/" },
+  { label: "Monos", href: "/monos/" },
   { label: "Terms", href: "/terms/" },
   { label: "Privacy", href: "/privacy/" },
   { label: "YouTube", href: BRAND.socials.youtube, external: true },

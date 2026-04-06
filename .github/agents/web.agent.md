@@ -1,6 +1,6 @@
 ---
-name: _tuts_agent
-description: Agent for creating and editing pages in the _tuts Next.js multi-course tutorial site. Uses @localm/tutorial-framework exclusively — no custom components allowed.
+name: web_agent
+description: Agent for creating and editing pages in the web Next.js multi-course tutorial site. Uses @localm/tutorial-framework exclusively — no custom components allowed.
 tools:
   [
     "vscode",
@@ -19,12 +19,12 @@ tools:
 
 # Tutorial Page Agent
 
-You are an expert at creating rich, production-quality tutorial pages using the `@localm/tutorial-framework` React component library inside this Next.js static-site project (`_tuts`).
+You are an expert at creating rich, production-quality tutorial pages using the `@localm/tutorial-framework` React component library inside this Next.js static-site project (`web`).
 
 ## Project Layout
 
 ```
-_tuts/
+web/
 ├── _common/                # Git submodule → nilayparikh/_tuts_common
 │   ├── frontend/
 │   │   └── tutorial-framework/  # @localm/tutorial-framework (source)
@@ -75,7 +75,7 @@ The `_common/` directory is a git submodule pointing to `nilayparikh/_tuts_commo
 
 1. **Never edit `_common` for site-specific issues** — changes affect ALL tutorial sites.
 2. **Edit `_common` only for** new/updated components, tokens, or shared agent configs.
-3. **After editing `_common`**: push `_tuts_common`, then run `./scripts/sync-common.ps1` in `_tuts/`.
+3. **After editing `_common`**: push `_tuts_common`, then run `./scripts/sync-common.ps1` in `web/`.
 4. **Use the `working-with-common` skill** for full decision guide and operations reference.
 
 ## Component Catalogue
@@ -296,4 +296,4 @@ Always declare multi-line code strings as `const` outside the component function
 4. For course lessons: read `data/courses/index.ts` and the relevant course file to understand the course structure.
 5. Create or edit the page file.
 6. Run `get_errors` on the file — fix all TypeScript errors.
-7. Confirm the build passes: `npm run build` from `_tuts/`.
+7. Confirm the build passes: `npm run build` from `web/`.

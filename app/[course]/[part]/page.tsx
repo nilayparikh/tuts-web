@@ -117,7 +117,13 @@ export default async function LessonPage({
         <nav aria-label="Breadcrumb" className="tf-breadcrumb">
           <ol>
             <li>
-              <a href="/">Courses</a>
+              <a href="/">Home</a>
+            </li>
+            <li aria-hidden="true" className="tf-breadcrumb-sep">
+              /
+            </li>
+            <li>
+              <a href="/courses/">Courses</a>
             </li>
             <li aria-hidden="true" className="tf-breadcrumb-sep">
               /

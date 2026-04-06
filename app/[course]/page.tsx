@@ -17,6 +17,7 @@ import { SITE_CONFIG, BRAND } from "@/config/site";
 import { InstructorDetailCard } from "@/app/components/InstructorDetailCard";
 import { ALL_COURSE_SLUGS, findCourse } from "@/data/courses";
 import type { CourseDefinition } from "@/data/courses";
+// NOTE: ALL_COURSE_SLUGS includes drafts for static gen; findCourse gates on slug
 
 // ─── Static params ────────────────────────────────────────────────────────
 
@@ -78,7 +79,13 @@ export default async function CourseOverviewPage({
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">
         <ol>
           <li>
-            <a href="/">Courses</a>
+            <a href="/">Home</a>
+          </li>
+          <li aria-hidden="true" className="tf-breadcrumb-sep">
+            /
+          </li>
+          <li>
+            <a href="/courses/">Courses</a>
           </li>
           <li aria-hidden="true" className="tf-breadcrumb-sep">
             /

@@ -9,7 +9,7 @@ import {
   ConceptGrid,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
-import { ALL_COURSES } from "@/data/courses";
+import { PUBLISHED_COURSES } from "@/data/courses";
 
 // ─── Metadata ─────────────────────────────────────────────────────────────
 
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
 
-const codeExamples = ALL_COURSES.flatMap((course) =>
+const codeExamples = PUBLISHED_COURSES.flatMap((course) =>
   course.parts
     .filter((p) => p.codeUrl)
     .map((p) => ({
@@ -55,7 +55,7 @@ export default function ExamplesPage() {
         subheading="Runnable code from every hands-on lesson. Clone the repo and follow along."
         primaryAction={{
           label: "View on GitHub",
-          href: ALL_COURSES[0]?.githubUrl ?? "#",
+          href: PUBLISHED_COURSES[0]?.githubUrl ?? "#",
         }}
         tags={["Python", "A2A", "Google ADK", "LangGraph", "BeeAI"]}
       />
@@ -99,7 +99,7 @@ export default function ExamplesPage() {
       <NoteBox title="Getting Started">
         Clone the{" "}
         <a
-          href={ALL_COURSES[0]?.githubUrl}
+          href={PUBLISHED_COURSES[0]?.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: "var(--tf-color-primary-light)" }}

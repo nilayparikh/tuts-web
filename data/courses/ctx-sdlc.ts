@@ -47,6 +47,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
     "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/ctx-sdlc",
   icon: "🧭",
   difficulty: "beginner",
+  status: "draft",
   instructor: {
     name: "Nilay Parikh",
     imageSrc: "/brand/nilay_parikh.jpeg",

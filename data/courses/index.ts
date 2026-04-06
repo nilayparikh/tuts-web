@@ -21,6 +21,7 @@ export type {
   PartQA,
   PartQuizQuestion,
   SiteTopicConfig,
+  ContentStatus,
 } from "./types";
 
 import type {
@@ -36,7 +37,13 @@ import { CTX_SDLC_COURSE } from "./ctx-sdlc";
 
 // ─── All courses (display order) ──────────────────────────────────────────
 
+/** All courses (including drafts) — for static generation */
 export const ALL_COURSES: CourseDefinition[] = [A2A_COURSE, CTX_SDLC_COURSE];
+
+/** Published courses only — for public listings */
+export const PUBLISHED_COURSES: CourseDefinition[] = ALL_COURSES.filter(
+  (c) => (c.status ?? "publish") === "publish",
+);
 
 // ─── Site-level topic configuration ───────────────────────────────────────
 
@@ -54,7 +61,7 @@ export const SITE_TOPIC: SiteTopicConfig = {
     "MCP",
     "Multi-Agent Systems",
   ],
-  courses: ALL_COURSES,
+  courses: PUBLISHED_COURSES,
 };
 
 // ─── Course lookup helpers ────────────────────────────────────────────────

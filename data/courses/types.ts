@@ -249,6 +249,10 @@ export interface CourseInstructor {
   role: string;
 }
 
+// ─── Publish status ───────────────────────────────────────────────────────
+
+export type ContentStatus = "publish" | "draft";
+
 // ─── Course definition ────────────────────────────────────────────────────
 
 export interface CourseDefinition {
@@ -274,6 +278,8 @@ export interface CourseDefinition {
   parts: CoursePartMeta[];
   /** Rich overview content for the course page */
   overview?: CourseOverview;
+  /** Publish status — defaults to "publish" when omitted */
+  status?: ContentStatus;
 }
 
 // ─── Site-level topic definition ──────────────────────────────────────────
