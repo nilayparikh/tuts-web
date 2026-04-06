@@ -97,6 +97,13 @@ import { Icon } from 'lucide-react';
 - **Course title in sidebar**: Clickable link back to course overview (`/${courseSlug}/`).
 - **Internal links**: All links within a course must include the course prefix (`/${courseSlug}/${partSlug}/`).
 
+## External Link Rules
+
+- Any link to an external site must open in a new tab.
+- In React/TSX, external anchors must include `target="_blank"` and `rel="noopener noreferrer"`.
+- Use shared helpers or shared components that automatically add those attributes for external `href` values.
+- Internal route links must stay in the same tab.
+
 ## Content Quality
 
 - Each page must stand alone — don't assume the reader read another page.

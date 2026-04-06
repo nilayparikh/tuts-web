@@ -1,8 +1,8 @@
 # Agentic AI — Tutorial Site
 
-A multi-course tutorial website built with the [LocalM Tutorial Framework](https://github.com/nilayparikh). Each site covers a single **topic** (e.g. Agentic AI) and hosts one or more **courses** under that topic.
+A multi-course tutorial website built with the <a href="https://github.com/nilayparikh" target="_blank" rel="noopener noreferrer">LocalM Tutorial Framework</a>. Each site covers a single **topic** (e.g. Agentic AI) and hosts one or more **courses** under that topic.
 
-**Live site**: [nilayparikh.github.io/\_tuts/](https://nilayparikh.github.io/_tuts/)
+**Live site**: <a href="https://nilayparikh.github.io/_tuts/" target="_blank" rel="noopener noreferrer">nilayparikh.github.io/_tuts/</a>
 
 ## Quick Start
 
@@ -83,7 +83,7 @@ docs/                        # Site documentation
 
 ## The `_common` Submodule
 
-The shared component library (`@localm/tutorial-framework`) and AI agent configurations live in [`nilayparikh/_tuts_common`](https://github.com/nilayparikh/_tuts_common), included as a git submodule at `_common/`.
+The shared component library (`@localm/tutorial-framework`) and AI agent configurations live in <a href="https://github.com/nilayparikh/_tuts_common" target="_blank" rel="noopener noreferrer">`nilayparikh/_tuts_common`</a>, included as a git submodule at `_common/`.
 
 - **Always clone with submodules**: `git clone --recurse-submodules <url>`
 - **Sync updates**: `./scripts/sync-common.ps1`
