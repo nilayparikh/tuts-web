@@ -2,7 +2,7 @@
 
 A multi-course tutorial website built with the <a href="https://github.com/nilayparikh" target="_blank" rel="noopener noreferrer">LocalM Tutorial Framework</a>. Each site covers a single **topic** (e.g. Agentic AI) and hosts one or more **courses** under that topic.
 
-**Live site**: <a href="https://nilayparikh.github.io/_tuts/" target="_blank" rel="noopener noreferrer">nilayparikh.github.io/_tuts/</a>
+**Live site**: <a href="https://nilayparikh.github.io/_tuts/" target="_blank" rel="noopener noreferrer">nilayparikh.github.io/\_tuts/</a>
 
 ## Quick Start
 

@@ -85,7 +85,9 @@ For README and docs markdown, external links should use HTML anchors so they
 open in a new tab:
 
 ```html
-<a href="https://example.com" target="_blank" rel="noopener noreferrer">Example</a>
+<a href="https://example.com" target="_blank" rel="noopener noreferrer"
+  >Example</a
+>
 ```
 
 Keep internal relative links in standard Markdown form.
