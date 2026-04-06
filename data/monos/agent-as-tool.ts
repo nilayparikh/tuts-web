@@ -22,7 +22,8 @@ export const AGENT_AS_TOOL_MONO: MonoDefinition = {
     imageSrc: "/brand/nilay_parikh.jpeg",
     role: "Founder · LocalM · ErgoSum",
   },
-  githubUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/agents/mono/agent-design-patterns-2/05-agent-as-tool",
   objectives: [
     "Describe how agent-as-tool composition lets a primary agent call specialists as stateless functions",
     "Implement an agent-as-tool system using ADK's AgentTool wrapper",

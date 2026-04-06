@@ -22,7 +22,8 @@ export const COORDINATOR_MONO: MonoDefinition = {
     imageSrc: "/brand/nilay_parikh.jpeg",
     role: "Founder · LocalM · ErgoSum",
   },
-  githubUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/agents/mono/agent-design-patterns-2/04-coordinator",
   objectives: [
     "Describe how the coordinator pattern enables dynamic task routing via LLM-driven delegation",
     "Implement a coordinator with specialist sub-agents using ADK's transfer_to_agent mechanism",

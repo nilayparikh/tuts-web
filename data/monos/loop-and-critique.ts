@@ -23,7 +23,8 @@ export const LOOP_AND_CRITIQUE_MONO: MonoDefinition = {
     imageSrc: "/brand/nilay_parikh.jpeg",
     role: "Founder · LocalM · ErgoSum",
   },
-  githubUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/agents/mono/agent-design-patterns-2/06-loop-and-critique",
   objectives: [
     "Explain the loop & critique pattern and identify when iterative refinement is necessary",
     "Implement a generator-critic feedback loop using Google ADK's LoopAgent",

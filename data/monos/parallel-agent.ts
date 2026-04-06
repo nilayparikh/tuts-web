@@ -22,7 +22,8 @@ export const PARALLEL_AGENT_MONO: MonoDefinition = {
     imageSrc: "/brand/nilay_parikh.jpeg",
     role: "Founder · LocalM · ErgoSum",
   },
-  githubUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/agents/mono/agent-design-patterns-1/03-parallel-agents",
   objectives: [
     "Define the parallel agent pattern and explain how concurrent execution reduces latency",
     "Describe the fan-out/fan-in architecture: parallel dispatch followed by sequential aggregation",

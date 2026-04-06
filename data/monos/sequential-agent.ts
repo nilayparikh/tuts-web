@@ -22,7 +22,8 @@ export const SEQUENTIAL_AGENT_MONO: MonoDefinition = {
     imageSrc: "/brand/nilay_parikh.jpeg",
     role: "Founder · LocalM · ErgoSum",
   },
-  githubUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/agents/mono/agent-design-patterns-1/02-sequential-agents",
   objectives: [
     "Define the sequential agent pattern and explain deterministic execution order",
     "Describe how shared session state enables data flow between pipeline stages via output_key",

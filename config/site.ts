@@ -25,8 +25,8 @@ export const BRAND = {
   logoIconUrlFooter: "/brand/icon-mark-gradient-32.png",
   profileUrl: "/brand/profile-pic-512.png",
   socials: {
-    twitter: "https://x.com/nilayparikh",
-    twitterHandle: "@nilayparikh",
+    twitter: "https://x.com/localm_ai",
+    twitterHandle: "localm @ X",
     linkedin: "https://linkedin.com/in/niparikh",
     linkedinNewsletter:
       "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7404590598986375168",

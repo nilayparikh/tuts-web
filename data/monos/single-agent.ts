@@ -22,7 +22,8 @@ export const SINGLE_AGENT_MONO: MonoDefinition = {
     imageSrc: "/brand/nilay_parikh.jpeg",
     role: "Founder · LocalM · ErgoSum",
   },
-  githubUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/agents/mono/agent-design-patterns-1/01-single-agent",
   objectives: [
     "Define the single agent pattern and explain how it differs from multi-agent architectures",
     "Identify when a single agent is the correct architectural choice versus over-engineering",
