@@ -2,11 +2,11 @@ import type { MonoDefinition } from "./types";
 
 export const NEED_FOR_AGENT_PATTERNS_MONO: MonoDefinition = {
   slug: "need-for-agent-patterns",
-  title: "Why Your AI Agents Need Design Patterns",
+  title: "Your AI \"Tech Debt\" is Exploding. Here's Why.",
   description:
-    "Moving from experimental agents to production-grade systems requires architectural standardisation. Without it, teams face the monolith trap, cascading failures, agent sprawl, and compounding AI tech debt.",
-  duration: "5 mins",
-  videoId: "",
+    "Production AI agents need standard patterns. Without them, teams run into tech debt, cascading failures, and agent sprawl fast.",
+  duration: "6 mins",
+  videoId: "V74YBIFpM6U",
   series: "AI Agent Design Patterns",
   tags: [
     "Agent Patterns",
@@ -22,7 +22,8 @@ export const NEED_FOR_AGENT_PATTERNS_MONO: MonoDefinition = {
     imageSrc: "/brand/nilay_parikh.jpeg",
     role: "Founder · LocalM · ErgoSum",
   },
-  githubUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/agents/mono",
   objectives: [
     "Explain why architectural standardisation is essential for production agentic AI systems",
     "Identify the three critical risks of ad-hoc agent design: monolith trap, cascading failures, and agent sprawl",
@@ -30,5 +31,5 @@ export const NEED_FOR_AGENT_PATTERNS_MONO: MonoDefinition = {
     "Describe how standardised patterns provide predictability, interoperability, and scalability",
     "Reference industry findings from Squirro (Dec 2025), Mario Thomas (Aug 2025), LowTouch.ai (April 2025), and Medium (Dec 2025)",
   ],
-  status: "draft",
+  status: "publish",
 };

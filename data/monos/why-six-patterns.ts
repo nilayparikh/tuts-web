@@ -2,11 +2,11 @@ import type { MonoDefinition } from "./types";
 
 export const WHY_SIX_PATTERNS_MONO: MonoDefinition = {
   slug: "why-six-patterns",
-  title: "Why Six Agent Patterns Are All You Need",
+  title: "The Only 6 AI Agent Patterns You'll Ever Need",
   description:
-    "Six composable patterns cover five orthogonal control-flow axes — execution order, concurrency, iteration, delegation, and complexity. Adding a seventh would duplicate an existing axis or be a composition of two.",
-  duration: "5 mins",
-  videoId: "",
+    "Six agent patterns cover every major control-flow choice in production AI systems. This overview shows why a seventh pattern adds nothing.",
+  duration: "9 mins",
+  videoId: "IOrkQeqvNbk",
   series: "AI Agent Design Patterns",
   tags: [
     "Agent Patterns",
@@ -14,6 +14,7 @@ export const WHY_SIX_PATTERNS_MONO: MonoDefinition = {
     "Control Flow",
     "Architecture",
     "Design Patterns",
+    "Case Studies",
   ],
   icon: "🧮",
   difficulty: "beginner",
@@ -22,7 +23,8 @@ export const WHY_SIX_PATTERNS_MONO: MonoDefinition = {
     imageSrc: "/brand/nilay_parikh.jpeg",
     role: "Founder · LocalM · ErgoSum",
   },
-  githubUrl: "https://github.com/nilayparikh/tuts-agentic-ai-examples",
+  githubUrl:
+    "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/agents/mono",
   objectives: [
     "Map each of the six patterns to one of five orthogonal control-flow axes",
     "Explain the Unix analogy: pipes, conditionals, loops, and functions compose to express any workflow",
@@ -30,5 +32,5 @@ export const WHY_SIX_PATTERNS_MONO: MonoDefinition = {
     "Prove that a hypothetical seventh pattern either duplicates an axis or is a composition of existing patterns",
     "Use the interactive decision framework to select the right pattern for a given agent task",
   ],
-  status: "draft",
+  status: "publish",
 };
