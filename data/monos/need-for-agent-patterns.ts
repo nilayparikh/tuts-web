@@ -2,7 +2,7 @@ import type { MonoDefinition } from "./types";
 
 export const NEED_FOR_AGENT_PATTERNS_MONO: MonoDefinition = {
   slug: "need-for-agent-patterns",
-  title: "Your AI \"Tech Debt\" is Exploding. Here's Why.",
+  title: 'Your AI "Tech Debt" is Exploding. Here\'s Why.',
   description:
     "Production AI agents need standard patterns. Without them, teams run into tech debt, cascading failures, and agent sprawl fast.",
   duration: "6 mins",
