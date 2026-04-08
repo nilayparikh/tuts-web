@@ -16,7 +16,10 @@
     "**/target": true,
     "**/.gradle": true,
     "**/*.class": true,
-    "**/*.jar": true
+    "**/*.jar": true,
+    "**/.mypy_cache": true,
+    "**/.vite": true,
+    "**/.ruff_cache": true
   },
   "search.exclude": {
     "**/.next": true,
@@ -24,6 +27,8 @@
     "**/dist": true,
     "**/node_modules": true,
     "**/playwright-report": true,
-    "**/test-results": true
+    "**/test-results": true,
+    "**/.mypy_cache": true,
+    "**/.vite": true
   }
 }
