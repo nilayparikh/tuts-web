@@ -25,8 +25,8 @@ export const BRAND = {
   logoIconUrlFooter: "/brand/icon-mark-gradient-32.png",
   profileUrl: "/brand/profile-pic-512.png",
   socials: {
-    twitter: "https://x.com/localm_ai",
-    twitterHandle: "localm @ X",
+    twitter: "https://x.com/localm_tuts",
+    twitterHandle: "@localm_tuts",
     linkedin: "https://linkedin.com/in/niparikh",
     linkedinNewsletter:
       "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7404590598986375168",
@@ -69,7 +69,9 @@ export const SITE_FOOTER: TutorialFooterProps = {
   githubUrl: BRAND.socials.github,
   youtubeUrl: BRAND.socials.youtube,
   twitterUrl: BRAND.socials.twitter,
+  twitterHandle: BRAND.socials.twitterHandle,
   linkedinUrl: BRAND.socials.linkedin,
+  linkedinNewsletterUrl: BRAND.socials.linkedinNewsletter,
   hideFollowBar: true,
 };
 
