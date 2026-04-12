@@ -48,3 +48,10 @@ next-env.d.ts
 
 # playwright test artifacts
 .playwright-mcp/
+
+footer-16-9.png
+footer-feed.png
+footer-hub.png
+footer-main-16-9.png
+footer-presenter.png
+footer-shorts.png
