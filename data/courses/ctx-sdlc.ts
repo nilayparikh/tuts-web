@@ -59,7 +59,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       title: "Why Context Engineering Matters",
       type: "video",
       duration: "7 mins",
-      videoId: "placeholder-why-context-engineering",
+      videoId: "YBXo_hxr9k4",
       description:
         "Understand why AI-assisted engineering fails without durable project context and why context engineering is the most impactful skill for AI-assisted development.",
       objectives: [
