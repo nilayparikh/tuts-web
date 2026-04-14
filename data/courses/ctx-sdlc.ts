@@ -317,7 +317,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       title: "Curate Project Context with .github and /docs/",
       type: "video",
       duration: "10 mins",
-      videoId: "placeholder-curate-project-context",
+      videoId: "1B90MkDnmhs",
       description:
         "Build the shared context layer that powers every AI interaction in your project by combining .github behavioral guidance with /docs knowledge context.",
       objectives: [
