@@ -970,7 +970,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       title: "Planning Workflows with Prompts and Plan Agents",
       type: "video",
       duration: "10 mins",
-      videoId: "placeholder-planning-workflows",
+      videoId: "KuLgT8Wck_E",
       description:
         "Separate planning from implementation using prompt files for repeatable workflows and read-only planning agents that decompose tasks, surface ambiguity, and produce actionable implementation plans.",
       objectives: [
@@ -980,7 +980,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         "Design a planning workflow that turns vague requests into actionable implementation tasks",
       ],
       codeUrl:
-        "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/ctx-sdlc/lessons/04-planning-workflows",
+        "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/ctx-sdlc/ghctx-tut/lessons/04-planning-workflows",
       infoBoxes: [
         {
           title: "Plan Before You Code",
