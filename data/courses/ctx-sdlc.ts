@@ -637,7 +637,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       title: "Design Instruction Architecture",
       type: "video",
       duration: "9 mins",
-      videoId: "placeholder-instruction-architecture",
+      videoId: "BS2NbFnyYJY",
       description:
         "Design a layered instruction architecture with repository-wide defaults, path-specific scoping, and the three-axis context model that keeps AI guidance precise and maintainable.",
       objectives: [
