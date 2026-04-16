@@ -1312,7 +1312,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       title: "Implementation Workflows with Agents and Skills",
       type: "video",
       duration: "11 mins",
-      videoId: "placeholder-implementation-workflows",
+      videoId: "ZvclU2Jyx5o",
       description:
         "Design implementation workflows using custom agents for role separation, skills for reusable patterns, and TDD handoffs for disciplined execution — all governed by least-privilege tool boundaries.",
       objectives: [
