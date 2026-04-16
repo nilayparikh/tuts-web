@@ -1645,7 +1645,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       title: "MCP, Hooks, and Guardrails",
       type: "video",
       duration: "10 mins",
-      videoId: "placeholder-tools-and-guardrails",
+      videoId: "MBHvkVrEgRk",
       description:
         "Extend agent capabilities with MCP servers for external tool access, then enforce safety with hooks and validation scripts that run at key lifecycle points — keeping your AI workflows powerful and trustworthy.",
       objectives: [
