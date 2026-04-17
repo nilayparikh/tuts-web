@@ -2236,7 +2236,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       title: "Context Engineering Governance & Operating Model",
       type: "video",
       duration: "12 mins",
-      videoId: "placeholder-operating-model",
+      videoId: "7XBVtDGi87I",
       description:
         "Context engineering is the operating model for coding agents — not just better prompts. Learn the four-layer architecture, MCP as the universal adaptor, the F.I.T. rule for lean context, and the maintenance discipline that keeps your agent aligned as the codebase evolves.",
       objectives: [
