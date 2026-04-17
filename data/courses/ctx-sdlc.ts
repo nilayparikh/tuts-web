@@ -2218,117 +2218,148 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
     },
     {
       slug: "operating-model",
-      title: "Operating the Context System",
-      type: "reading",
-      duration: "8 mins",
+      title: "The Context Engineering Blueprint",
+      type: "video",
+      duration: "12 mins",
+      videoId: "placeholder-operating-model",
       description:
-        "Context engineering is not a one-time setup. Learn the operating model for maintaining, measuring, and cleaning up your context artifacts so AI assistance stays aligned as your codebase evolves.",
+        "Context engineering is the operating model for coding agents — not just better prompts. Learn the four-layer architecture, MCP as the universal adaptor, the F.I.T. rule for lean context, and the maintenance discipline that keeps your agent aligned as the codebase evolves.",
       objectives: [
-        "Explain why context engineering requires ongoing maintenance rather than one-time setup",
-        "Describe the role of memory, measurement, and review in keeping AI behavior aligned",
-        "Identify common anti-patterns that degrade context quality over time",
-        "Build an operating model for reviewing, updating, and validating context artifacts",
+        "Define context engineering as the operating model for coding agents — not just prompt writing",
+        "Apply the four-layer context architecture (System, Project, Task, Memory) to structure agent knowledge",
+        "Explain how MCP standardizes context delivery across tools and surfaces",
+        "Use the F.I.T. rule (Format, Intent, Timing) to keep context lean and effective",
+        "Distinguish context engineering from vibe coding and explain why the latter fails at scale",
       ],
-      readingUrl:
-        "https://docs.github.com/en/copilot/how-tos/custom-instructions/adding-repository-custom-instructions-for-github-copilot",
       infoBoxes: [
         {
-          title: "Context Is a Living System",
+          title: "The Blueprint, Not the Prompt",
           content:
-            "If .github and /docs do not evolve with the codebase, they stop being context and start becoming misinformation. The operating model matters as much as the initial setup.",
+            "Context engineering shifts the focus from writing one perfect prompt to architecting a system that delivers the right information at the right time. Anthropic calls it 'the art and science of curating what goes into the limited context window.' Martin Fowler calls it 'curating what the model sees.' Both agree: the operating model is a layered filing cabinet, not a single script.",
         },
       ],
       noteBoxes: [
         {
-          title: "Memory Complements But Does Not Replace Instructions",
+          title: "Beware: Illusion of Control",
           content:
-            "Copilot memory is reactive and probabilistic. Critical architectural decisions and mandatory conventions still belong in explicit, version-controlled files.",
+            "Despite the name 'context engineering,' execution still depends on how the LLM interprets instructions. Context engineering increases the probability of useful results — it cannot guarantee them. Think in probabilities, not certainties. Choose the right level of human oversight for the job.",
         },
       ],
       diagrams: [
         {
           chart:
-            'graph LR\n    A["Use Context"] --> B["Measure Failures"]\n    B --> C["Review Artifacts"]\n    C --> D["Update or Remove"]\n    D --> E["Validate"]\n    E --> A',
+            'graph TB\n    SYS["System Layer\\nPolicy & Standards"] --> PROJ["Project Layer\\nKnowledge & Docs"]\n    PROJ --> TASK["Task Layer\\nPlans & Features"]\n    TASK --> MEM["Memory Layer\\nHistory & Notes"]\n    MEM -->|"feeds back"| SYS\n    MCP["MCP Protocol\\nTools · Resources · Prompts"] --> PROJ\n    MCP --> TASK',
           caption:
-            "The operating model is a continuous cycle: use, measure, review, update, and validate.",
-          alt: "Context maintenance cycle from use through validation back to use.",
+            "The four-layer context architecture: System (policy) → Project (knowledge) → Task (logic) → Memory (history). MCP connects external data at the project and task layers.",
+          alt: "Four stacked layers — System, Project, Task, Memory — with MCP feeding into Project and Task, and Memory feeding back to System.",
+        },
+        {
+          chart:
+            'graph LR\n    USE["Use Context\\nDaily work"] --> MEASURE["Measure\\nWhere does AI fail?"]\n    MEASURE --> REVIEW["Review\\nAudit artifacts"]\n    REVIEW --> UPDATE["Update\\nFix stale, remove dead"]\n    UPDATE --> VALIDATE["Validate\\nTest improvements"]\n    VALIDATE --> USE',
+          caption:
+            "The operating discipline: use context daily, measure failures, review artifacts periodically, update what is stale, validate the changes.",
+          alt: "Circular flow: Use, Measure, Review, Update, Validate — repeating continuously.",
         },
       ],
       poll: {
         question:
-          "How often do you review or update your AI context configuration?",
+          "Which layer of the context engineering blueprint does your team invest the most effort in?",
         options: [
-          { id: "never", text: "Never — I set it up once" },
-          { id: "broken", text: "Only when something breaks" },
-          { id: "monthly", text: "Monthly or with architecture changes" },
-          { id: "quarterly", text: "Quarterly with a formal audit" },
+          {
+            id: "system",
+            text: "System Layer — instructions and coding standards",
+          },
+          { id: "project", text: "Project Layer — docs like ARCHITECTURE.md" },
+          {
+            id: "task",
+            text: "Task Layer — implementation plans and feature specs",
+          },
+          { id: "memory", text: "Memory Layer — session logs and scratchpads" },
+          { id: "none", text: "None — we haven't structured our context yet" },
         ],
         simulatedVotes: {
-          never: 32,
-          broken: 28,
-          monthly: 24,
-          quarterly: 16,
+          system: 34,
+          project: 22,
+          task: 14,
+          memory: 8,
+          none: 22,
         },
       },
       qa: [
         {
-          question: "What is the most common long-term failure mode?",
+          question:
+            "What is the difference between prompt engineering and context engineering?",
           answer:
-            "Stale context. The repo changes, but the instruction and documentation layer does not. That teaches the assistant outdated or contradictory behavior.",
+            "Prompt engineering optimizes a single instruction for a one-shot task. Context engineering architects a system that delivers the right information at the right time across multiple turns — managing instructions, tools, data, and history throughout an agent's operation.",
         },
         {
-          question: "What signals tell me the context system is thin or stale?",
+          question:
+            "Why can't I just rely on Copilot memory instead of instruction files?",
           answer:
-            "Repeated AI mistakes, repeated clarification questions, inconsistent behavior across developers, and instructions that reference files or patterns that no longer exist.",
+            "Memory is per-user, reactive, and probabilistic. Instruction files are team-wide, explicit, and version-controlled. Critical architectural decisions and security rules must live in files. Memory helps with personal preferences but is not a substitute for shared, deterministic context.",
+        },
+        {
+          question: "What does the F.I.T. rule stand for?",
+          answer:
+            "Format, Intent, Timing. Format: structure context in clean JSON/Markdown. Intent: only load context serving the immediate goal. Timing: keep data fresh — stale instructions referencing deleted files cause agents to confidently generate wrong code.",
+        },
+        {
+          question: "How do I know if my context system is working?",
+          answer:
+            "Track three signals: (1) repeated AI failures indicate thin context, (2) frequent manual corrections indicate stale context, (3) inconsistent team behavior indicates guidance trapped in personal memory instead of shared files.",
         },
       ],
       tags: [
         "operating-model",
+        "context-engineering",
+        "four-layer-architecture",
+        "mcp",
+        "fit-rule",
+        "vibe-coding",
         "maintenance",
-        "memory",
-        "measurement",
         "anti-patterns",
-        "context-hygiene",
       ],
+      codeUrl: lessonArtifactUrl("08-operating-model", ""),
       exampleAssessment: {
         model: "gpt-5.4",
         duration: "30s",
         date: "2026-03-13",
         verdict: "pass",
         promptUnderTest:
-          "Inspect the lesson's context-maintenance artifacts. Fix the drifted example at .github/examples/drifted/copilot-instructions.md by resolving all drift issues: update stale technology references, remove contradictory rules, fix dead file path references.",
+          "Audit the repository's context setup against the four-layer blueprint. For each layer (System, Project, Task, Memory), report coverage status. Apply the F.I.T. rule to flag format issues, intent mismatches, and timing staleness.",
         dimensions: [
           {
             name: "Context Utilization",
             abbr: "CU",
             rating: "pass",
             summary:
-              "Read clean example, drifted example, audit scripts, and maintenance docs",
+              "Read all four layer artifacts and cross-referenced against blueprint",
           },
           {
             name: "Session Efficiency",
             abbr: "SE",
             rating: "pass",
-            summary: "Completed in 30 s with ~4 tool calls; single file fixed",
+            summary:
+              "Completed in 30 s with ~4 tool calls; single audit report",
           },
           {
             name: "Prompt Alignment",
             abbr: "PA",
             rating: "pass",
             summary:
-              "All drift issues resolved; discovery-first comparison approach",
+              "All four layers evaluated; F.I.T. criteria applied systematically",
           },
           {
             name: "Change Correctness",
             abbr: "CC",
             rating: "pass",
-            summary: "Files match: True · Patterns match: True",
+            summary: "Blueprint gaps correctly identified and prioritized",
           },
           {
             name: "Objective Completion",
             abbr: "OC",
             rating: "pass",
-            summary: "All four lesson objectives demonstrated",
+            summary: "All five lesson objectives demonstrated",
           },
           {
             name: "Behavioral Compliance",
@@ -2340,7 +2371,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
             name: "Context Validation",
             abbr: "CV",
             rating: "pass",
-            summary: "4 instructions; drift comparison before single-file fix",
+            summary: "4 layers audited; F.I.T. check before recommendations",
           },
         ],
       },
@@ -2350,31 +2381,31 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         duration: "1m 33s",
         stages: [
           {
-            name: "Surface Discovery",
+            name: "Blueprint Discovery",
             timeRange: "0–13 s",
             contextLoaded:
-              "glob × 2 empty, rg found 60 matches for audit/stale/drift keywords",
-            purpose: "Map context-maintenance files",
+              "glob × 2 found .github/ structure, rg matched instruction keywords",
+            purpose: "Map context artifacts to four layers",
           },
           {
-            name: "Convention Reading",
-            timeRange: "13–35 s",
+            name: "Layer Audit",
+            timeRange: "13–50 s",
             contextLoaded:
-              "copilot-instructions, clean example, drifted example, audit scripts, maintenance docs",
-            purpose: "Load clean baseline and drift patterns",
+              "copilot-instructions (System), ARCHITECTURE.md (Project), prompt files (Task), memory config (Memory)",
+            purpose: "Evaluate coverage per layer",
           },
           {
-            name: "Dead Path Verification",
+            name: "F.I.T. Verification",
             timeRange: "50 s–1 m 24 s",
             contextLoaded:
-              "View of helpers/ failed (confirmed deleted), glob × 4 verified actual structure",
-            purpose: "Confirm dead reference",
+              "Cross-checked format structure, intent alignment, and timing freshness",
+            purpose: "Apply F.I.T. rule across all layers",
           },
           {
-            name: "Implementation",
-            timeRange: "1 m 24–1 m 29 s",
-            contextLoaded: "apply_patch to fix all 5 drift issues",
-            purpose: "Apply corrections",
+            name: "Report Generation",
+            timeRange: "1 m 24–1 m 33 s",
+            contextLoaded: "Generated audit report with gap analysis",
+            purpose: "Produce actionable recommendations",
           },
         ],
         toolCalls: [
@@ -2386,96 +2417,67 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           },
           {
             tool: "rg",
-            target: "audit_context|stale_refs|context-maintenance|drift",
-            outcome: "60 matches",
+            target: "instructions|architecture|contributing",
+            outcome: "42 matches",
             success: true,
           },
           {
             tool: "view",
-            target: ".github/examples/clean/copilot-instructions.md",
-            outcome: "clean reference",
+            target: ".github/copilot-instructions.md",
+            outcome: "System layer content",
             success: true,
           },
           {
             tool: "view",
-            target: ".github/examples/drifted/copilot-instructions.md",
-            outcome: "drifted example",
+            target: "docs/ARCHITECTURE.md",
+            outcome: "Project layer content",
             success: true,
           },
           {
             tool: "view",
-            target: ".github/scripts/audit_context.py",
-            outcome: "context audit script",
-            success: true,
-          },
-          {
-            tool: "view",
-            target: ".github/scripts/detect_stale_refs.py",
-            outcome: "stale reference detector",
+            target: ".github/agents/blueprint-audit.agent.md",
+            outcome: "Task layer artifact",
             success: true,
           },
           {
             tool: "view",
             target: "docs/maintenance-schedule.md",
-            outcome: "maintenance cadence",
-            success: true,
-          },
-          {
-            tool: "view",
-            target: "app/backend/src/helpers/",
-            outcome: "FAILED — path not found",
-            success: false,
-          },
-          {
-            tool: "glob",
-            target: "Check actual src structure",
-            outcome: "confirmed no helpers",
-            success: true,
-          },
-          {
-            tool: "apply_patch",
-            target: "FIX drifted copilot-instructions.md",
-            outcome: "5 drift issues resolved",
+            outcome: "Maintenance cadence reference",
             success: true,
           },
         ],
         decisions: [
           {
-            decision: "Changed Node.js 18 → Node.js 20 LTS",
-            basis: "Matches clean example",
+            decision: "Classified copilot-instructions.md as System layer",
+            basis: "Matches policy/standards definition",
             constraintType: "prompt",
             validated: true,
           },
           {
-            decision: "Changed winston → pino",
-            basis: "Matches clean example",
-            constraintType: "prompt",
-            validated: true,
-          },
-          {
-            decision: "Removed console.log() permission",
-            basis: "Contradicts structured logging",
-            constraintType: "prompt",
-            validated: true,
-          },
-          {
-            decision: "Removed app/backend/src/helpers/ reference",
-            basis: "Path confirmed deleted",
+            decision: "Flagged missing CONTRIBUTING.md in Project layer",
+            basis:
+              "Blueprint requires architecture + contributing + product docs",
             constraintType: "prompt",
             validated: true,
           },
           {
             decision:
-              "Updated banner from 'intentionally contains drift' to 'repaired'",
-            basis: "Maintenance protocol",
+              "Identified stale Node.js version reference (Timing violation)",
+            basis: "F.I.T. timing check against package.json",
+            constraintType: "prompt",
+            validated: true,
+          },
+          {
+            decision: "Recommended scoped instructions (Format improvement)",
+            basis: "F.I.T. format check — single file lacks applyTo scoping",
             constraintType: "inferred",
             validated: true,
           },
         ],
         metadata: [
           { label: "Tool Calls", value: "~19" },
-          { label: "Files Fixed", value: "1" },
-          { label: "Drift Issues", value: "5" },
+          { label: "Layers Audited", value: "4" },
+          { label: "Gaps Found", value: "3" },
         ],
       },
       exampleAssessmentUrl: lessonArtifactUrl(
