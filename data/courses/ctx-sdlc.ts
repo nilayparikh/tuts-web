@@ -1960,76 +1960,91 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
     },
     {
       slug: "surface-strategy",
-      title: "Surface Strategy and Portability",
-      type: "reading",
-      duration: "8 mins",
+      title: "Surface Strategy: Copilot, Claude, and Codex",
+      type: "video",
+      duration: "25 mins",
+      videoId: "XvUSBlrXZoA",
       description:
-        "Not every Copilot surface supports the same context artifacts. Learn to invest in portable foundations first, then layer surface-specific capabilities where they deliver clear value.",
+        "Build a portable context layer that works across GitHub Copilot, Claude Code, and Codex by separating shared project knowledge from tool-specific wrappers.",
       objectives: [
-        "Compare how context artifacts behave across VS Code, Copilot CLI, coding agent, and review surfaces",
-        "Explain why portability matters when choosing where to invest in customization work",
-        "Use surface strategy to decide which artifacts should be foundational and which should be optional layers",
-        "Treat surface support as a design constraint rather than an afterthought",
+        "Compare the repository entry points used by GitHub Copilot, Claude Code, Codex, Cursor, and related AI coding tools",
+        "Design a hybrid folder strategy with a portable base and thin tool-specific layers",
+        "Explain how graph.json and transform.py can project one shared context source into multiple tool-native outputs",
+        "Choose when IDE agents or CLI agents should lead based on task shape, review cost, and team workflow",
       ],
-      readingUrl:
-        "https://code.visualstudio.com/docs/copilot/customization/overview",
+      codeUrl:
+        "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/ctx-sdlc/ghctx-tut/lessons/07-surface-strategy",
       infoBoxes: [
         {
-          title: "Build Portable Foundations First",
+          title: "Portable Base First",
           content:
-            "The most common mistake is optimizing for the richest surface and forgetting the rest. Repository instructions and documentation should form the portable foundation that every surface can benefit from.",
+            "Keep shared project knowledge in a portable base such as AGENTS.md and docs. Then add thin tool-native layers like .github/, CLAUDE.md, or .cursor/rules/ only where a specific tool needs them.",
         },
       ],
       noteBoxes: [
         {
-          title: "Surface Support Changes Frequently",
+          title: "Thin Wrappers, No Duplication",
           content:
-            "Treat support matrices as design guidance, not timeless truth. Always verify the current documentation before making long-lived architecture decisions.",
+            "If the same repository rules are copied into five tool-specific files, they will drift. Keep the source of truth in shared context and generate or reference the wrappers from that base.",
         },
       ],
       diagrams: [
         {
           chart:
-            'graph TB\n    subgraph Foundation["Portable Foundation — All Surfaces"]\n        A["Repository Instructions"]\n        B["Documentation"]\n    end\n    subgraph Mid["Broad Support — Most Surfaces"]\n        C["Custom Instructions"]\n        D["MCP Servers"]\n    end\n    subgraph Specialized["Surface-Specific"]\n        E["Agents"]\n        F["Skills"]\n        G["Hooks"]\n        H["Prompts"]\n    end\n    Foundation --> Mid --> Specialized',
+            'graph TB\n    CTX[".code.agent/context/*.md\\nShared app knowledge"] --> MAP["graph.json\\nContext to output map"]\n    MAP --> TPL["templates/*.tpl\\nTool-native shells"]\n    TPL --> PY["transform.py\\nResolve and render"]\n    PY --> COP["GitHub Copilot outputs\\n.github instructions, agents, skills, prompts"]\n    COP --> XTOOL["Cross-tool outputs\\nAGENTS.md, CLAUDE.md, Claude rules"]\n    XTOOL --> SYNC["Sync guard\\n--write refreshes, --check verifies"]',
           caption:
-            "Invest in portable foundations first, then layer specialized features on top.",
-          alt: "Portability pyramid from repository instructions and docs up to surface-specific features.",
+            "One shared context source can be projected into multiple tool-native outputs when graph.json and transform.py keep the mapping explicit.",
+          alt: "Flow showing shared markdown context feeding graph.json, templates, transform.py, GitHub Copilot outputs, cross-tool outputs such as AGENTS.md and CLAUDE.md, and a sync guard for regeneration and drift checks.",
         },
       ],
       poll: {
-        question: "Which Copilot surface do you use most often?",
+        question: "Which AI coding setup is closest to your team today?",
         options: [
-          { id: "vscode", text: "VS Code chat or inline" },
-          { id: "cli", text: "Copilot CLI" },
-          { id: "coding-agent", text: "Coding agent" },
-          { id: "review", text: "Code review" },
+          { id: "copilot-only", text: "GitHub Copilot only" },
+          { id: "copilot-claude", text: "Copilot plus Claude Code" },
+          { id: "copilot-codex", text: "Copilot plus Codex" },
+          { id: "dual-ide", text: "Copilot plus Cursor or another second IDE" },
+          { id: "mixed-team", text: "Different tools across different teams" },
         ],
         simulatedVotes: {
-          vscode: 66,
-          cli: 12,
-          "coding-agent": 12,
-          review: 10,
+          "copilot-only": 24,
+          "copilot-claude": 28,
+          "copilot-codex": 14,
+          "dual-ide": 12,
+          "mixed-team": 22,
         },
       },
       qa: [
         {
-          question: "What should I build first if portability matters?",
+          question:
+            "If I want one portable starting point, what should I build first?",
           answer:
-            "Repository instructions and docs. They are the broadest, most reusable context layer across surfaces.",
+            "Start with a shared base like AGENTS.md plus docs that explain architecture, commands, and conventions. That gives every tool the same project truth before you add tool-native wrappers.",
         },
         {
-          question: "Should I avoid VS Code-specific features entirely?",
+          question: "Why not just copy the same rules into every tool file?",
           answer:
-            "No. They add real value. The principle is to build portable foundations first, then layer deeper IDE-specific workflows where they are justified.",
+            "Because copied context drifts. One tool gets updated, another gets stale, and now your AI surfaces disagree about the same project. Keep the source material shared and generate or reference the wrappers from that base.",
+        },
+        {
+          question: "When should CLI agents lead instead of IDE agents?",
+          answer:
+            "Use CLI agents for delegation-heavy work such as refactors, migrations, and cross-file audits. Use IDE agents when you need inline feedback, visual diffs, or UI iteration.",
+        },
+        {
+          question: "What does transform.py buy me in this lesson?",
+          answer:
+            "It makes the mapping explicit. Shared markdown context lives once, graph.json decides which pieces go where, templates define the wrappers, and transform.py renders the outputs each tool reads.",
         },
       ],
       tags: [
         "surface-strategy",
         "portability",
-        "copilot-cli",
-        "coding-agent",
-        "code-review",
-        "cross-surface",
+        "agents-md",
+        "claude-md",
+        "codex",
+        "multi-tooling",
+        "transform-pipeline",
       ],
       exampleAssessment: {
         model: "gpt-5.4",
@@ -2218,7 +2233,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
     },
     {
       slug: "operating-model",
-      title: "The Context Engineering Blueprint",
+      title: "Context Engineering Governance & Operating Model",
       type: "video",
       duration: "12 mins",
       videoId: "placeholder-operating-model",
@@ -2263,7 +2278,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       ],
       poll: {
         question:
-          "Which layer of the context engineering blueprint does your team invest the most effort in?",
+          "Which layer of the context engineering governance & operating model does your team invest the most effort in?",
         options: [
           {
             id: "system",
@@ -2319,7 +2334,6 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
         "maintenance",
         "anti-patterns",
       ],
-      codeUrl: lessonArtifactUrl("08-operating-model", ""),
       exampleAssessment: {
         model: "gpt-5.4",
         duration: "30s",
