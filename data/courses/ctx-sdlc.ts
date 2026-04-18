@@ -2505,7 +2505,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
       title: "End-to-End AI-Assisted SDLC Workflow",
       type: "video",
       duration: "12 mins",
-      videoId: "placeholder-ai-assisted-sdlc-capstone",
+      videoId: "AQEzRSVYf0c",
       description:
         "Synthesize the entire course into one end-to-end AI-assisted engineering workflow. Map shared context, planning, implementation, tooling, and maintenance into a curate → plan → build → validate delivery loop.",
       objectives: [
