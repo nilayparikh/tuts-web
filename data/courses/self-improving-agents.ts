@@ -147,47 +147,62 @@ export const SELF_IMPROVING_AGENTS_COURSE: CourseDefinition = {
 
     // ── Lesson 02 ────────────────────────────────────────────────────────
     {
-      slug: "inside-autoresearch",
-      title: "Inside AutoResearch",
+      slug: "self-improving-agent-landscape",
+      title: "The Self-Improving Agent Landscape",
       type: "video",
       duration: "6 mins",
 
       description:
-        "Walk through Karpathy's real AutoResearch repo. See how 700 automated experiments generated published ML improvements — and extract the reusable pattern.",
+        "Map the self-improving agent field before you build one. Learn narrow vs. broad improvement, the main mechanism families, where Karpathy Loop fits, and why this course follows the CleanLoop branch.",
       objectives: [
-        "Trace the AutoResearch workflow: prepare → modify → evaluate → commit/revert",
-        "Identify the three-file pattern: referee, genome, orchestrator",
-        "Explain binary assertions and why they matter",
-        "Connect AutoResearch to the CleanLoop project you'll build",
+        "Distinguish narrow self-improvement from broad or metacognitive self-improvement",
+        "Identify four common mechanism families used by self-improving agents",
+        "Explain where autonomous research and the Karpathy Loop fit in the wider landscape",
+        "Connect the landscape view to the CleanLoop branch built in later lessons",
+      ],
+
+      infoBoxes: [
+        {
+          title: "Course Focus",
+          content:
+            "This course does not try to cover every self-improving paradigm equally. It uses the landscape to orient you, then goes deep on a narrow, code-modifying, verifier-driven loop that you can actually build and audit.",
+        },
       ],
 
       diagrams: [
         {
           chart:
-            'graph TD\n    A["Read program.md (agenda)"] --> B["Read current genome"]\n    B --> C["LLM: propose hypothesis + code"]\n    C --> D["Write new genome to disk"]\n    D --> E["Run evaluation (assertions)"]\n    E --> F{"All pass?"}\n    F -->|Yes| G["git commit"]\n    F -->|No| H["git reset"]\n    G --> I["Next iteration"]\n    H --> I\n    I --> A',
+            'graph TD\n    A["Self-Improving Agents"] --> B["Narrow Improvement"]\n    A --> C["Broad / Metacognitive Improvement"]\n    B --> D["Prompt Evolution"]\n    B --> E["Skill Mastery"]\n    B --> F["Code Modification"]\n    B --> G["Autonomous Research"]\n    C --> H["Tool Creation"]\n    C --> I["Meta-Loop Redesign"]\n    C --> J["Open-Ended Search"]\n    C --> K["Cross-Domain Transfer"]',
           caption:
-            "The Karpathy Loop — each iteration reads, hypothesizes, modifies, evaluates, then commits or reverts.",
-          alt: "Flowchart of the Karpathy Loop cycle from reading code through LLM hypothesis to evaluation and Git commit/revert",
+            "Lesson 02 starts with the landscape: narrow branches that optimize inside fixed boundaries, and broader branches that change how the agent improves.",
+          alt: "Landscape map showing self-improving agents splitting into narrow and broad categories, with prompt evolution, skill mastery, code modification, autonomous research, tool creation, meta-loop redesign, open-ended search, and cross-domain transfer as sub-branches",
+        },
+        {
+          chart:
+            'graph LR\n    A["Self-Improving Agent Landscape"] --> B["Autonomous Research"]\n    B --> C["Karpathy Loop"]\n    C --> D["Arena Architecture"]\n    D --> E["CleanLoop"]\n\n    style C fill:#191c23,stroke:#22c55e,stroke-width:2px\n    style D fill:#191c23,stroke:#818cf8,stroke-width:2px\n    style E fill:#191c23,stroke:#f59e0b,stroke-width:2px',
+          caption:
+            "The branch this course follows: autonomous research leads to the Karpathy Loop, which becomes the arena architecture and then the CleanLoop build.",
+          alt: "Linear diagram showing the course branch from the wider self-improving-agent landscape into autonomous research, then Karpathy Loop, then arena architecture, then CleanLoop",
         },
       ],
 
       poll: {
         question:
-          "AutoResearch ran 700 experiments. How many do you think a human would run manually?",
+          "Which self-improvement mechanism is closest to what you want to build first?",
         options: [
-          { id: "5", text: "About 5" },
-          { id: "20", text: "About 20" },
-          { id: "50", text: "About 50" },
-          { id: "100", text: "100+" },
+          { id: "prompt", text: "Prompt evolution" },
+          { id: "skill", text: "Skill mastery" },
+          { id: "code", text: "Code modification" },
+          { id: "rl", text: "Self-play or RL" },
         ],
-        simulatedVotes: { "5": 35, "20": 40, "50": 18, "100": 7 },
+        simulatedVotes: { prompt: 19, skill: 22, code: 36, rl: 17 },
       },
 
       noteBoxes: [
         {
-          title: "AutoResearch Scale",
+          title: "Autonomous Research Is One Branch",
           content:
-            "AutoResearch ran 630+ lines of generated code across 700 experiments over multiple nights. Each experiment was a full hypothesis-code-evaluate cycle — far beyond what manual iteration can achieve.",
+            "Karpathy's AutoResearch made the category visible, but self-improving agents also evolve prompts, accumulate skills, rewrite code, and improve through self-play or reinforcement learning.",
         },
       ],
 
@@ -195,59 +210,64 @@ export const SELF_IMPROVING_AGENTS_COURSE: CourseDefinition = {
         {
           time: 0,
           speaker: "Instructor",
-          text: "In February 2025, Karpathy published the AutoResearch repo. It's a Python project — about 800 lines of orchestration code — that ran 700 automated ML experiments. Some of those experiments produced genuine improvements that were published on arXiv.\n\nLet's walk through exactly how it works.",
+          text: "Autonomous research got the headlines, but it is not the whole field. Karpathy's loop is one branch of self-improving agents, not the definition of the category.\n\nIf you miss that distinction, every later lesson feels narrower than it should. So this lesson maps the landscape first.",
         },
         {
-          time: 16,
+          time: 18,
           speaker: "Instructor",
-          text: "Three files. That's the core pattern. First — prepare.py. This is the referee. It sets up the experiment, defines the evaluation criteria, and scores results. The agent cannot edit this file.\n\nSecond — the genome. In AutoResearch, that's the ML training code. This is the only file the agent can modify.",
+          text: "Start with the cleanest split. Narrow self-improvement means the agent gets better inside fixed boundaries. The task stays the same. The evaluator stays mostly fixed. The loop just gets sharper.\n\nBroad self-improvement goes further. The agent changes how it improves, builds new tools, or redesigns parts of its own operating logic.",
         },
         {
-          time: 36,
+          time: 42,
           speaker: "Instructor",
-          text: "Third — the orchestrator. It reads the current genome and the agenda — a markdown file called program.md — sends them to the LLM, gets back a hypothesis and new code, writes the code to disk, and runs the evaluation.\n\nIf all assertions pass, git commit. If any fail, git reset. Move to the next iteration.",
+          text: "Then come the four mechanism families you keep seeing in the literature. Prompt evolution changes instructions. Skill mastery builds reusable habits or tools. Code modification rewrites the logic around the model. Self-play and RL generate their own training pressure.\n\nDifferent papers emphasize different mechanisms, but those four buckets explain most of the current field.",
         },
         {
-          time: 54,
+          time: 70,
           speaker: "Instructor",
-          text: 'The key insight is binary assertions. Each evaluation check is pass or fail — not a gradient, not a score from 1 to 10. Binary.\n\nWhy? Because LLMs work better with clear success/failure signals. "Your code failed the date_is_parseable check" is more actionable than "your code scored 6.3 out of 10."',
+          text: "Now place autonomous research inside that map. Karpathy Loop is a narrow, code-modifying branch with a clear verifier. One file changes. One metric matters. One run budget keeps experiments comparable.\n\nThat is why it works as a teaching pattern. It is bounded, auditable, and clear about what counts as better.",
         },
         {
-          time: 72,
+          time: 96,
           speaker: "Instructor",
-          text: "The commit/revert mechanism is the selection pressure. Good mutations survive. Bad ones are rolled back. The Git log becomes a fossil record of genuine improvements.\n\nThis is evolution — not gradient descent. Mutation, selection, survival.",
+          text: "Our example is not an ML research loop. It is CleanLoop, a self-improving data engineer. The agent edits clean_data.py, the referee checks finance outputs, and the orchestrator commits or reverts based on evidence.\n\nIt is the same branch of the tree, but in a different domain. That is the bridge into the rest of the course.",
         },
         {
-          time: 92,
+          time: 122,
           speaker: "Instructor",
-          text: "In this course, you'll build the same pattern — but for data engineering instead of ML research. CleanLoop uses prepare.py as the referee, clean_data.py as the genome, and loop.py as the orchestrator.\n\nSame three-file pattern. Same binary assertions. Same Git commit/revert cycle. Different domain.",
+          text: "Why does self-improvement work at all? Because the loop compresses failure into usable signal. A vague instruction like do better is weak. A concrete failure like row reconciliation failed on finance collections is actionable.\n\nGood verifiers create focused search. Focused search compounds. That is the engine behind the whole pattern.",
+        },
+        {
+          time: 148,
+          speaker: "Instructor",
+          text: "The takeaway is simple. Self-improving agents are a family, not a single pattern. Autonomous research is one important member of that family. This course chooses the narrow, code-modifying, verifiable path because it is the best place to learn the engineering honestly.\n\nNext, the course turns that branch into the arena architecture that makes the loop safe and repeatable.",
         },
       ],
 
       qa: [
         {
-          question: "Why can't the agent edit prepare.py?",
+          question: "Does narrow self-improvement mean the system is weak?",
           answer:
-            "If the agent could modify the referee, it could weaken the evaluation to make itself look good. The separation between referee and genome is the core safety property of the arena architecture.",
+            "No. Narrow means the scope is bounded, not that the result is small. Many useful production systems are narrow by design because bounded loops are easier to test, audit, and deploy.",
         },
         {
-          question: "What is program.md?",
+          question: "Why not start with HyperAgents or self-play?",
           answer:
-            "The agenda file. It tells the agent what to focus on — like a sprint backlog. The orchestrator sends it to the LLM alongside the current code and failure history.",
+            "Because those systems add extra layers before you understand the core loop. This course starts with the branch that gives you a writable genome, a fixed referee, and an obvious commit-or-revert decision.",
         },
         {
-          question: "Why binary assertions instead of a continuous score?",
+          question: "What makes a domain a good fit for self-improvement?",
           answer:
-            "Binary signals give the LLM a clear target. Instead of 'improve your score,' it's 'fix this specific failing check.' Clear failures produce better hypotheses.",
+            "You need something editable, something measurable, and a verifier you trust. If the outcome is too soft or too political to score reliably, the loop becomes much less stable.",
         },
       ],
 
       tags: [
-        "AutoResearch",
-        "Karpathy",
-        "three-file pattern",
-        "binary assertions",
-        "Git",
+        "self-improving agents",
+        "Karpathy Loop",
+        "autonomous research",
+        "agent taxonomy",
+        "CleanLoop",
       ],
     },
 
