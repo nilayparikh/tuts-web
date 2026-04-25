@@ -1,7 +1,7 @@
 /**
  * Course: Self-Improving Agents — The Karpathy Loop
  *
- * Slug: "self-improving-agents"  →  /self-improving-agents/, /self-improving-agents/the-bottleneck-problem/, …
+ * Slug: "self-improving-agents"  →  /self-improving-agents/, /self-improving-agents/bounded-self-improvement/, …
  *
  * 12 lessons + 1 quiz. 6 hands-on code lessons (50% coverage).
  * Running project: CleanLoop — a self-healing data engineer.
@@ -40,18 +40,19 @@ export const SELF_IMPROVING_AGENTS_COURSE: CourseDefinition = {
 
     // ── Lesson 01 ────────────────────────────────────────────────────────
     {
-      slug: "the-bottleneck-problem",
-      title: "The Bottleneck Problem",
+      slug: "bounded-self-improvement",
+      title: "Why Bounded Self-Improvement Matters",
       type: "video",
-      duration: "6 mins",
+      duration: "7 mins",
+      videoId: "loYCwyRU_tM",
 
       description:
-        "LLMs are powerful but frozen after training. Explore why static models hit a ceiling and how the Karpathy Loop breaks through it.",
+        "Why human-in-the-loop is still the real bottleneck in AI development, and why the safest way to start with self-improving agents is a bounded loop with an editable surface, a fixed judge, and fast feedback.",
       objectives: [
-        "Identify the freeze problem in deployed LLMs",
-        "Explain the concept of the 'LLM OS' and its limitations",
-        "Describe the core hypothesis of the Karpathy Loop",
-        "Differentiate static inference from self-improving loops",
+        "Explain why human-in-the-loop iteration becomes the main bottleneck in AI work",
+        "Describe the LLM-as-kernel framing and the shift from Software 1.0 to 3.0",
+        "State the bounded recipe: editable surface, fixed judge, and fast feedback loop",
+        "Use production evidence to justify why bounded loops are the right place to start",
       ],
 
       infoBoxes: [

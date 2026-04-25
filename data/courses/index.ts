@@ -34,6 +34,7 @@ import type {
 
 import { A2A_COURSE } from "./a2a";
 import { CTX_SDLC_COURSE } from "./ctx-sdlc";
+import { SELF_IMPROVING_AI_AGENTS_CODE_MODIFICATION_COURSE } from "./self-improving-ai-agents-code-modification";
 import { SELF_IMPROVING_AGENTS_COURSE } from "./self-improving-agents";
 
 // ─── All courses (display order) ──────────────────────────────────────────
@@ -43,6 +44,7 @@ export const ALL_COURSES: CourseDefinition[] = [
   A2A_COURSE,
   CTX_SDLC_COURSE,
   SELF_IMPROVING_AGENTS_COURSE,
+  SELF_IMPROVING_AI_AGENTS_CODE_MODIFICATION_COURSE,
 ];
 
 /** Published courses only — for public listings */
