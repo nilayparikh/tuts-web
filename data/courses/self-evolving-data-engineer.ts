@@ -5,10 +5,11 @@ const CLEANLOOP_REPO_URL =
 
 export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
   slug: "self-evolving-data-engineer",
-  title: "Build an AI Data Engineer: Self-Improving Pipelines with AutoGen Framework",
+  title:
+    "Build an AI Data Engineer: Self-Improving Pipelines with AutoGen Framework",
   description:
     "Build one bounded AI data-engineering loop with AutoGen, a fixed judge, dashboard evidence, and safe mutation over messy finance pipelines.",
-  totalDuration: "8 mins",
+  totalDuration: "17 mins",
   tags: [
     "Data Engineering",
     "AutoGen",
@@ -129,6 +130,108 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       ],
       tags: ["data engineering", "AutoGen", "mutation engine"],
     },
+    {
+      slug: "pipeline-genome",
+      title: "Defining the Pipeline Genome",
+      type: "video-code",
+      duration: "9 mins",
+      videoId: "8Y7MEbEw8wc",
+      description:
+        "Define the one mutable pipeline genome for CleanLoop. This lesson reconnects to the Lesson 01 contract, shows why one file and one fixed judge keep mutation auditable, and walks the runtime surface where deterministic cleanup hands off to the mutation playbook.",
+      objectives: [
+        "Identify the mutable genome file and the fixed judge file in CleanLoop.",
+        "Explain why bounded mutation is both a file-scope boundary and a problem-scope boundary.",
+        "Trace where deterministic cleanup stops and the mutation playbook begins.",
+        "See why worktrees and measurable diffs make genome evolution reviewable.",
+      ],
+      codeUrl: CLEANLOOP_REPO_URL,
+      infoBoxes: [
+        {
+          title: "One Mutable File",
+          content:
+            "The loop stays auditable only when one file is mutable, the judge stays fixed, and every failure maps back to a concrete diff you can inspect or roll back.",
+        },
+      ],
+      stepGuides: [
+        {
+          title: "Define the Genome Boundary",
+          steps: [
+            {
+              title: "Open the genome and the fixed judge side by side",
+              description:
+                "Read the mutable genome next to the immutable referee so the mutation boundary is visible before you run anything.",
+              code: "cd _examples/self-improving-agent/cleanloop\ncode clean_data.py prepare.py",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Trace the runtime handoff",
+              description:
+                "Inspect the runtime and loop files so you can see where deterministic cleanup ends and the mutation playbook takes over.",
+              code: "code clean_data_runtime.py loop.py",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Run the evaluation and inspect the dashboard",
+              description:
+                "Validate the setup, run the bounded evaluation flow, and inspect the evidence surface from the dashboard.",
+              code: "python util.py status\npython util.py verify\npython util.py evaluate\npython util.py dashboard",
+              codeLanguage: "bash",
+            },
+          ],
+        },
+      ],
+      transcript: [
+        {
+          time: 0,
+          speaker: "Instructor",
+          text: "The recording opens with the failure mode. Self-improving systems usually do not fail because the idea is wrong. They fail because the loop mutates the wrong surface.\n\nThat sets up the whole lesson: if the mutation boundary is vague, the loop becomes noisy and hard to trust.",
+        },
+        {
+          time: 73,
+          speaker: "Instructor",
+          text: "The next section reconnects this lesson to Lesson 01. The earlier contract stays active, AutoGen stays on the orchestration seam, and the correctness boundary stays fixed.\n\nLesson 02 does not restart the system. It narrows the exact genome the loop is allowed to touch.",
+        },
+        {
+          time: 131,
+          speaker: "Instructor",
+          text: "From there, the lesson argues for one mutable file whenever the problem allows it. A single-file genome makes diffs smaller, review easier, and rollback more believable.\n\nThe recording also clarifies that bounded mutation is not just about file count. It is also about the exact problem scope the loop is meant to solve.",
+        },
+        {
+          time: 703,
+          speaker: "Instructor",
+          text: "The hands-on walkthrough then moves into CleanLoop. The runtime surface shows where deterministic normalization runs first and where the mutation playbook takes over for unresolved finance CSV failures.\n\nThat is the practical genome boundary: deterministic rules first, mutation only where the fixed logic runs out of road.",
+        },
+        {
+          time: 833,
+          speaker: "Instructor",
+          text: "The demo section validates status, verifies model connectivity, and runs the bounded evaluation flow. The lesson explains why smaller, cost-effective models such as Phi-4 can still be enough when the mutation task is tightly scoped.\n\nThe point is not model prestige. It is choosing a model that fits the bounded repair job.",
+        },
+        {
+          time: 953,
+          speaker: "Instructor",
+          text: "The closing segment introduces worktrees as the safer production posture for trial mutations and starter-genome evolution. The dashboard then becomes the review surface for evidence, validation, and future exercises.\n\nThe outro points directly into Lesson 03, where the orchestrator will decide which candidate mutations to keep and which to reject.",
+        },
+      ],
+      qa: [
+        {
+          question:
+            "Why insist on one mutable file if a repo has many moving parts?",
+          answer:
+            "Because the loop becomes reviewable only when failures map back to a small diff surface. One file is not a universal rule, but it is the safest default when the problem can be bounded that tightly.",
+        },
+        {
+          question: "What does bounded mutation actually bound in this lesson?",
+          answer:
+            "It bounds both the physical file surface and the business problem surface. CleanLoop is not trying to become a universal data engineer. It is trying to repair a narrow class of finance CSV inconsistencies.",
+        },
+        {
+          question: "Why bring up worktrees before the orchestrator lesson?",
+          answer:
+            "Because the recording wants the learner to see early that mutation should run in an auditable workspace with a clean rollback path, not as unchecked branch churn.",
+        },
+      ],
+      tags: ["pipeline genome", "bounded mutation", "AutoGen"],
+    },
   ],
   overview: {
     heroSubheading:
@@ -148,20 +251,20 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       },
       {
         icon: "🛠️",
-        title: "Tour the live CleanLoop surface",
+        title: "Pick the one mutable genome",
         description:
-          "Walk the repo, run the setup flow, and inspect the dashboard evidence for one bounded loop.",
+          "See why one file, one problem scope, and one fixed judge make repair auditable before the orchestrator arrives.",
       },
     ],
     aboutParagraphs: [
-      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first published lesson frames the business problem, the mutation contract, and the CleanLoop example that the rest of the series will build on.",
-      "The focus is narrow on purpose: one mutable surface, one fixed judge, and one repeatable repair loop. That keeps the first lesson auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
+      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first two published lessons frame the business problem, define the mutation contract, and lock the exact pipeline genome inside the CleanLoop example.",
+      "The focus is narrow on purpose: one mutable surface, one fixed judge, and one repeatable repair loop. That keeps the current public lessons auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
     ],
     detailItems: [
       {
         title: "What is live right now?",
         description:
-          "Lesson 01 is live with the published YouTube video, the CleanLoop code surface, and the lesson transcript, Q&A, and step guide synced into the site.",
+          "Lessons 01 and 02 are live with published YouTube videos, the CleanLoop code surface, and the synced lesson transcript, Q&A, and step-guide content for the current public course boundary.",
       },
       {
         title: "What comes next?",
@@ -174,7 +277,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       subtitle: "What you need before starting",
       tags: ["Python basics", "Data pipelines", "CSV cleanup"],
       description:
-        "You do not need prior AutoGen experience for Lesson 01. It helps if you already understand basic Python workflows, messy CSV data, and why deterministic rules fail on real-world pipeline inputs.",
+        "You do not need prior AutoGen experience for Lessons 01 and 02. It helps if you already understand basic Python workflows, messy CSV data, and why deterministic rules fail on real-world pipeline inputs.",
     },
     audienceCards: [
       {
