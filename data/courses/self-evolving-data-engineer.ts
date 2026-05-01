@@ -8,8 +8,8 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
   title:
     "Build an AI Data Engineer: Self-Improving Pipelines with AutoGen Framework",
   description:
-    "Build one bounded AI data-engineering loop with AutoGen, a fixed judge, dashboard evidence, and safe mutation over messy finance pipelines.",
-  totalDuration: "17 mins",
+    "Build one bounded AI data-engineering loop with AutoGen, a fixed judge, and safe mutation over messy finance pipelines.",
+  totalDuration: "26 mins",
   tags: [
     "Data Engineering",
     "AutoGen",
@@ -232,10 +232,111 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       ],
       tags: ["pipeline genome", "bounded mutation", "AutoGen"],
     },
+    {
+      slug: "orchestrator",
+      title: "The Orchestrator",
+      type: "video-code",
+      duration: "9 mins",
+      videoId: "--mpnJ8f4Sg",
+      description:
+        "Show the CleanLoop orchestrator as the real control surface. This lesson explains the reader, repair forge, and crucible split, traces one bounded loop run, and shows why dashboard evidence matters before the system gets more autonomous.",
+      objectives: [
+        "Trace one full round of the CleanLoop orchestrator.",
+        "Explain why read, propose, verify, and revert must stay separate.",
+        "Show where AutoGen helps inside the proposal step without owning correctness.",
+        "Connect row-level traces and dashboard evidence to the next observability lesson.",
+      ],
+      codeUrl: CLEANLOOP_REPO_URL,
+      infoBoxes: [
+        {
+          title: "Deterministic Frame",
+          content:
+            "The orchestrator can use an LLM for bounded proposals, but the loop stays trustworthy only when the read, verify, and survival decisions remain explicit and inspectable.",
+        },
+      ],
+      stepGuides: [
+        {
+          title: "Trace the Orchestrator Loop",
+          steps: [
+            {
+              title: "Open the control path in code",
+              description:
+                "Read the main loop beside the AutoGen runtime so you can see where failure context becomes a bounded mutation request.",
+              code: "cd _examples/self-improving-agent/cleanloop\ncode loop.py autogen_runtime.py",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Run one bounded iteration",
+              description:
+                "Reset the genome, evaluate the baseline, and run one loop round so the control path is visible in the terminal output.",
+              code: "python util.py reset\npython util.py evaluate\npython util.py loop --max-iterations 1",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Inspect dashboard evidence",
+              description:
+                "Open the dashboard and review artifacts, score movement, and trace decisions so you can see why observability is the next lesson.",
+              code: "python util.py dashboard",
+              codeLanguage: "bash",
+            },
+          ],
+        },
+      ],
+      transcript: [
+        {
+          time: 0,
+          speaker: "Instructor",
+          text: "The recording opens with the control question. Once the genome is bounded, who reads the failure, asks for the next mutation, and decides whether the candidate survives?\n\nThat is the orchestrator's job. It is the control layer around the proposal step, not just another prompt wrapper.",
+        },
+        {
+          time: 55,
+          speaker: "Instructor",
+          text: "The next section walks the control diagram. The reader grounds the next move in failure evidence, the repair forge asks AutoGen for a bounded change, and the crucible plus Git decide what survives.\n\nThat keeps the loop deterministic around the agentic seam instead of turning the whole system into a black box.",
+        },
+        {
+          time: 125,
+          speaker: "Instructor",
+          text: "The hands-on portion then moves into the repo. The lesson points at the orchestration code path and explains that the pattern is sequential here, but the same reasoning applies to broader agent architectures too.\n\nWhat matters is not the exact topology. What matters is that the control steps stay explicit.",
+        },
+        {
+          time: 225,
+          speaker: "Instructor",
+          text: "From there, the live run resets the genome, evaluates the baseline, and runs one bounded iteration. The lesson shows how the loop preserves the starter surface, requests one proposal, and checks the result before anything is allowed to persist.\n\nThe model can suggest. It does not get to declare success.",
+        },
+        {
+          time: 380,
+          speaker: "Instructor",
+          text: "The dashboard segment widens the view. Nilay inspects artifacts, score movement, and row-level trace decisions so you can see deterministic handling versus mutation-playbook handling.\n\nThat evidence surface is what makes control decisions reviewable instead of mystical.",
+        },
+        {
+          time: 500,
+          speaker: "Instructor",
+          text: "The closing discussion makes the bridge to observability explicit. If you want to broaden the search space or increase pressure later, you need traces, backtesting, and clear dashboards first.\n\nThe outro points directly into Lesson 04, where observability becomes the main topic.",
+        },
+      ],
+      qa: [
+        {
+          question: "Why call the orchestrator the real control surface?",
+          answer:
+            "Because it owns the sequence that turns failure into the next verified attempt. Without that control shell, you only have raw suggestions and no reliable survival rule.",
+        },
+        {
+          question: "Where should AutoGen sit in this lesson?",
+          answer:
+            "Inside the bounded proposal step. It can suggest the next mutation, but the fixed evaluation path still decides whether the candidate survives.",
+        },
+        {
+          question: "Why end an orchestration lesson on dashboards and traces?",
+          answer:
+            "Because orchestration without observability does not scale. If you cannot inspect the evidence trail, you cannot safely widen the search space or trust the next stage of autonomy.",
+        },
+      ],
+      tags: ["orchestrator", "AutoGen", "control loop"],
+    },
   ],
   overview: {
     heroSubheading:
-      "Build one bounded mutation loop over messy finance data, keep the judge fixed, and use AutoGen only at the orchestration seam.",
+      "Build one bounded mutation loop over messy finance data, keep the judge fixed, lock the genome, and see how the orchestrator decides what survives.",
     learnItems: [
       {
         icon: "🧠",
@@ -251,25 +352,25 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       },
       {
         icon: "🛠️",
-        title: "Pick the one mutable genome",
+        title: "Understand the control loop",
         description:
-          "See why one file, one problem scope, and one fixed judge make repair auditable before the orchestrator arrives.",
+          "See how the orchestrator turns one failure into the next bounded repair attempt without letting the model own correctness.",
       },
     ],
     aboutParagraphs: [
-      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first two published lessons frame the business problem, define the mutation contract, and lock the exact pipeline genome inside the CleanLoop example.",
-      "The focus is narrow on purpose: one mutable surface, one fixed judge, and one repeatable repair loop. That keeps the current public lessons auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
+      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first three published lessons frame the business problem, define the mutation contract, lock the exact pipeline genome, and show how the orchestrator controls one bounded repair loop inside CleanLoop.",
+      "The focus is narrow on purpose: one mutable surface, one fixed judge, and one repeatable control path. That keeps the current public lessons auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
     ],
     detailItems: [
       {
         title: "What is live right now?",
         description:
-          "Lessons 01 and 02 are live with published YouTube videos, the CleanLoop code surface, and the synced lesson transcript, Q&A, and step-guide content for the current public course boundary.",
+          "Lessons 01 through 03 are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the current public course boundary.",
       },
       {
         title: "What comes next?",
         description:
-          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content.",
+          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content. Observability is the next lesson in line.",
       },
     ],
     prerequisites: {
@@ -277,7 +378,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       subtitle: "What you need before starting",
       tags: ["Python basics", "Data pipelines", "CSV cleanup"],
       description:
-        "You do not need prior AutoGen experience for Lessons 01 and 02. It helps if you already understand basic Python workflows, messy CSV data, and why deterministic rules fail on real-world pipeline inputs.",
+        "You do not need prior AutoGen experience for Lessons 01 through 03. It helps if you already understand basic Python workflows, messy CSV data, and why deterministic rules fail on real-world pipeline inputs.",
     },
     audienceCards: [
       {
