@@ -9,7 +9,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
     "Build an AI Data Engineer: Self-Improving Pipelines with AutoGen Framework",
   description:
     "Build one bounded AI data-engineering loop with AutoGen, a fixed judge, and safe mutation over messy finance pipelines.",
-  totalDuration: "26 mins",
+  totalDuration: "34 mins",
   tags: [
     "Data Engineering",
     "AutoGen",
@@ -333,6 +333,120 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       ],
       tags: ["orchestrator", "AutoGen", "control loop"],
     },
+    {
+      slug: "observability-feedback",
+      title: "Observability & The Feedback Signal",
+      type: "video-code",
+      duration: "8 mins",
+      videoId: "0loLP30v0qM",
+      description:
+        "Make the CleanLoop loop observable. This lesson shows where run history, strategy snapshots, row-level traces, and dashboard metrics come from so you can tell whether a mutation actually taught the system anything.",
+      objectives: [
+        "Explain why eval history is part of the loop, not an optional dashboard extra.",
+        "Show how the dashboard turns raw history into operator-facing metrics.",
+        "Connect score movement, row-level traces, and mutation diffs into one feedback surface.",
+        "Show when a human should continue, reset, or intervene based on the artifact trail.",
+      ],
+      codeUrl: CLEANLOOP_REPO_URL,
+      infoBoxes: [
+        {
+          title: "External Memory",
+          content:
+            "Observability is not decoration in this course. The loop needs durable history, trace rows, and operator controls so you can tell whether a mutation improved the system, repeated a failure, or never produced the artifact you expected.",
+        },
+      ],
+      stepGuides: [
+        {
+          title: "Generate and Inspect the Feedback Surface",
+          steps: [
+            {
+              title: "Write one bounded history artifact",
+              description:
+                "Run one loop iteration so CleanLoop exports the history, strategy, and trace artifacts that the rest of the lesson depends on.",
+              code: "cd _examples/self-improving-agent/cleanloop\npython util.py reset\npython util.py loop --max-iterations 1",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Inspect the saved artifacts directly",
+              description:
+                "Open the history and trace files before you rely on the dashboard so you know exactly which evidence the UI is reading.",
+              code: "code .output/finance_eval_history.json .output/finance_strategy.json .output/traces/row-decisions.jsonl",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Review the dashboard like an operator",
+              description:
+                "Launch the Streamlit dashboard and connect score movement, invoice-level traces, and mutation evidence into one review surface.",
+              code: "python util.py dashboard",
+              codeLanguage: "bash",
+            },
+          ],
+        },
+      ],
+      transcript: [
+        {
+          time: 0,
+          speaker: "Instructor",
+          text: "The recording opens with the dashboard analogy. If you cannot see speed, fuel, warnings, or score movement, the system may still be moving, but it is moving blind. That is the lesson hook: a mutation loop without observability does not really learn.\n\nIt just keeps changing until you expose the signals that matter.",
+        },
+        {
+          time: 34,
+          speaker: "Instructor",
+          text: "Next, Nilay reconnects Lesson 04 to the earlier lessons. The course is still one system, not four disconnected demos, so the reader, proposal, crucible, and dashboard evidence all stay in play together.\n\nObservability is the layer that lets the rest of the system stay reviewable.",
+        },
+        {
+          time: 73,
+          speaker: "Instructor",
+          text: "The architecture segment explains the feedback signal directly. Run history, strategy state, live evidence, and operator control belong on the same surface because the real questions are simple: did the loop improve, is it repeating the same mistake, and should a human intervene?\n\nThat is why score movement alone is not enough.",
+        },
+        {
+          time: 148,
+          speaker: "Instructor",
+          text: "The hands-on section then moves into the lesson README and the CleanLoop repo. Nilay frames observability as external memory and points the learner at the dashboard, metric helpers, and the saved `finance_eval_history.json` artifact.\n\nThose small stored decisions are what make later autonomy safer.",
+        },
+        {
+          time: 243,
+          speaker: "Instructor",
+          text: "From there, the recording separates score from trace. The score answers whether the run improved. The trace answers what happened to one row, one proposal, or one correlation path.\n\nThe loan-application example makes the case for correlation IDs and row-level evidence across distributed systems.",
+        },
+        {
+          time: 304,
+          speaker: "Instructor",
+          text: "The implementation segment explains the storage posture. CleanLoop uses OpenTelemetry-shaped traces and simple JSON artifacts instead of a full Grafana or Prometheus stack so the example stays lightweight for learners.\n\nThe lesson still keeps the same design idea you would use in production: durable history plus searchable trace context.",
+        },
+        {
+          time: 415,
+          speaker: "Instructor",
+          text: "The dashboard walkthrough shows operator signals, score timelines, mutation evidence, invoice drill-down, and trace timelines. Nilay uses specific invoice examples to show how deterministic handling and mutation-playbook handling expose different evidence.\n\nThat is the practical meaning of the feedback signal in this lesson.",
+        },
+        {
+          time: 618,
+          speaker: "Instructor",
+          text: "The closing section points back to the exercises and the production mindset. Learners are asked to read the dashboard like operators, not spectators, and to treat missing artifacts as useful feedback instead of silent failure.\n\nThe outro then tees up the next lesson, where the loop will face more pressure without giving up control.",
+        },
+      ],
+      qa: [
+        {
+          question:
+            "Why does this lesson separate score from trace instead of treating them as one metric surface?",
+          answer:
+            "Because they answer different engineering questions. The score tells you whether the run improved overall, while the trace tells you what actually happened to one row, proposal, or failure path. You need both to trust the loop.",
+        },
+        {
+          question:
+            "Why spend time on correlation IDs in a lesson about a local CleanLoop example?",
+          answer:
+            "Because the same reasoning scales to distributed systems. Correlation IDs let you connect one business event across multiple components, which is exactly how you keep agentic systems legible once they spread beyond one file or one process.",
+        },
+        {
+          question:
+            "Why are missing artifacts considered feedback in this lesson?",
+          answer:
+            "Because absence is a signal. If the history, strategy, or trace files never appear, that tells you the run never reached the stage you expected. Observability should help when the system fails early, not only when the happy path works.",
+        },
+      ],
+      tags: ["observability", "feedback signal", "CleanLoop"],
+    },
   ],
   overview: {
     heroSubheading:
@@ -358,19 +472,19 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       },
     ],
     aboutParagraphs: [
-      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first three published lessons frame the business problem, define the mutation contract, lock the exact pipeline genome, and show how the orchestrator controls one bounded repair loop inside CleanLoop.",
-      "The focus is narrow on purpose: one mutable surface, one fixed judge, and one repeatable control path. That keeps the current public lessons auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
+      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first four published lessons frame the business problem, define the mutation contract, lock the exact pipeline genome, show how the orchestrator controls one bounded repair loop, and make that loop observable inside CleanLoop.",
+      "The focus is narrow on purpose: one mutable surface, one fixed judge, one repeatable control path, and one readable feedback surface. That keeps the current public lessons auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
     ],
     detailItems: [
       {
         title: "What is live right now?",
         description:
-          "Lessons 01 through 03 are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the current public course boundary.",
+          "Lessons 01 through 04 are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the current public course boundary.",
       },
       {
         title: "What comes next?",
         description:
-          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content. Observability is the next lesson in line.",
+          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content. The next lesson raises pressure with a fixed judge and harder generated data.",
       },
     ],
     prerequisites: {
