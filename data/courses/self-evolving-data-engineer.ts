@@ -9,7 +9,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
     "Build an AI Data Engineer: Self-Improving Pipelines with AutoGen Framework",
   description:
     "Build one bounded AI data-engineering loop with AutoGen, a fixed judge, and safe mutation over messy finance pipelines.",
-  totalDuration: "34 mins",
+  totalDuration: "42 mins",
   tags: [
     "Data Engineering",
     "AutoGen",
@@ -447,6 +447,123 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       ],
       tags: ["observability", "feedback signal", "CleanLoop"],
     },
+    {
+      slug: "judge-self-challenging",
+      title: "The Judge & Self-Challenging Loops",
+      type: "video-code",
+      duration: "8 mins",
+      videoId: "vx9Lpm67RZk",
+      description:
+        "Keep the judge fixed while the data gets harder. This lesson shows how CleanLoop generates adversarial finance CSVs, applies targeted pressure, and forces the loop to improve without redefining correctness.",
+      objectives: [
+        "Explain why the judge must stay fixed while the data gets harder.",
+        "Show how the challenger generates adversarial data without changing correctness.",
+        "Connect targeted pressure to observed weaknesses instead of random noise.",
+        "Show how challenge generation, evaluation, and dashboard review fit into one arena.",
+      ],
+      codeUrl: CLEANLOOP_REPO_URL,
+      infoBoxes: [
+        {
+          title: "Fixed Judge Rule",
+          content:
+            "The challenger can only change the data and the pressure profile. The judge still reads the same correctness contract. If the judge changes with the challenge, the loop stops learning and starts moving the goalposts.",
+        },
+      ],
+      stepGuides: [
+        {
+          title: "Generate Pressure Without Moving the Goalposts",
+          steps: [
+            {
+              title: "Create one fresh adversarial arena",
+              description:
+                "Clear the old challenger files and generate a fresh adversarial set so you know exactly which pressure level you are testing.",
+              code: "cd _examples/self-improving-agent/cleanloop\nRemove-Item .input\\adversarial_d*.csv -ErrorAction SilentlyContinue\npython util.py challenge --levels 1 2 3",
+              codeLanguage: "powershell",
+            },
+            {
+              title: "Evaluate the same fixed judge",
+              description:
+                "Run evaluation and one loop pass so you can compare how the unchanged referee responds to the harder data surface.",
+              code: "python util.py evaluate\npython util.py loop --max-iterations 1",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Inspect challenge outcomes in the dashboard",
+              description:
+                "Open the dashboard after the adversarial run and inspect which rows stayed deterministic, which required mutation, and how the judge reported the outcome.",
+              code: "python util.py dashboard",
+              codeLanguage: "bash",
+            },
+          ],
+        },
+      ],
+      transcript: [
+        {
+          time: 0,
+          speaker: "Instructor",
+          text: "The recording opens with the gym analogy. If the system only lifts easy cases, it does not get stronger. It just gets comfortable. That leads directly into the lesson claim: self-challenging loops need pressure, but they need the right kind of pressure.\n\nA fixed judge plus a smart challenger is the mechanism that makes that possible.",
+        },
+        {
+          time: 24,
+          speaker: "Instructor",
+          text: "Next, Nilay frames the two-role split. The judge defines truth, the challenger raises difficulty, and the loop must improve without being allowed to cheat.\n\nThat tension is the center of the lesson.",
+        },
+        {
+          time: 83,
+          speaker: "Instructor",
+          text: "The lesson then ties this back to Lesson 04. Observability showed where the system was weak, so now the pressure is not random. It is targeted toward real failure modes that the artifact trail already exposed.\n\nThat is why Lesson 05 is a continuation of the same loop, not a new system.",
+        },
+        {
+          time: 130,
+          speaker: "Instructor",
+          text: "The arena metaphor comes next. The judge is the referee, the executor is the current champion, and the challenger keeps sending stronger opponents.\n\nIf the judge changes, the goalposts move, and the loop stops being trustworthy.",
+        },
+        {
+          time: 268,
+          speaker: "Instructor",
+          text: "The repo walkthrough asks the learner to trace the challenger path like an operator. The questions are practical: where are harder fixtures generated, what signal chooses them, and how is the judge protected from modification?\n\nThat sets up the live demo with the right engineering posture.",
+        },
+        {
+          time: 326,
+          speaker: "Instructor",
+          text: "The hands-on lab then reinforces the theory. Judge and challenger are not the same tool, fixed selection pressure makes improvement meaningful, and curriculum pressure should be targeted instead of random.\n\nThat is the rule set the learner should carry into their own systems.",
+        },
+        {
+          time: 484,
+          speaker: "Instructor",
+          text: "The difficulty ladder segment explains how the challenge surface grows from mild finance messiness to much harder business-context cases. Nilay also makes the trade-off explicit: higher levels need stronger models, better hints, and more mutation support than the current lesson covers.\n\nThat is an important production constraint, not a bug in the idea.",
+        },
+        {
+          time: 603,
+          speaker: "Instructor",
+          text: "From there, the recording moves into the live run. Old adversarial files are cleared, new levels are generated, then the same judge evaluates the harder arena before the loop runs.\n\nThe dashboard becomes the review surface again so the learner can inspect deterministic rows, mutation-playbook rows, and anomaly reasons after challenge generation.",
+        },
+        {
+          time: 978,
+          speaker: "Instructor",
+          text: "The closing discussion broadens the frame. Nilay links code mutation, prompt mutation, and longer-term behavioral learning as overlapping mutation surfaces, then points ahead to best-of-N and re-ranking as the next mechanism in the course.\n\nLesson 05 ends by showing that pressure alone is not enough. The loop also needs a way to compare candidates before commit.",
+        },
+      ],
+      qa: [
+        {
+          question: "Why is the fixed judge the central rule in this lesson?",
+          answer:
+            "Because if the judge changes with the challenger, the system can no longer tell whether it truly improved. The lesson keeps correctness fixed so harder data increases pressure without redefining success.",
+        },
+        {
+          question: "What makes a good challenger in this lesson?",
+          answer:
+            "A good challenger creates realistic, finance-aware anomalies that target observed weaknesses. It should increase difficulty in a way the operator can still understand and debug, not just flood the system with random noise.",
+        },
+        {
+          question:
+            "Why does the lesson spend time on curriculum pressure instead of only one adversarial example?",
+          answer:
+            "Because pressure should scale. The difficulty ladder lets the loop face mild, moderate, and harder cases in an intentional order, which is more useful than one-off chaos when you want the system to improve over time.",
+        },
+      ],
+      tags: ["self-challenging AI", "adversarial loops", "CleanLoop"],
+    },
   ],
   overview: {
     heroSubheading:
@@ -472,19 +589,19 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       },
     ],
     aboutParagraphs: [
-      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first four published lessons frame the business problem, define the mutation contract, lock the exact pipeline genome, show how the orchestrator controls one bounded repair loop, and make that loop observable inside CleanLoop.",
-      "The focus is narrow on purpose: one mutable surface, one fixed judge, one repeatable control path, and one readable feedback surface. That keeps the current public lessons auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
+      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first five published lessons frame the business problem, define the mutation contract, lock the exact pipeline genome, show how the orchestrator controls one bounded repair loop, make that loop observable, and then raise pressure with a fixed judge and smarter challengers inside CleanLoop.",
+      "The focus is narrow on purpose: one mutable surface, one fixed judge, one repeatable control path, one readable feedback surface, and one curriculum of harder inputs. That keeps the current public lessons auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
     ],
     detailItems: [
       {
         title: "What is live right now?",
         description:
-          "Lessons 01 through 04 are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the current public course boundary.",
+          "Lessons 01 through 05 are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the current public course boundary.",
       },
       {
         title: "What comes next?",
         description:
-          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content. The next lesson raises pressure with a fixed judge and harder generated data.",
+          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content. The next lesson adds best-of-N candidate comparison and re-ranking before commit.",
       },
     ],
     prerequisites: {
