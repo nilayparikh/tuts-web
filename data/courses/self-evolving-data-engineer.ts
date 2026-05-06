@@ -564,10 +564,126 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       ],
       tags: ["self-challenging AI", "adversarial loops", "CleanLoop"],
     },
+    {
+      slug: "test-time-search",
+      title: "Test-Time Reranking",
+      type: "video-code",
+      duration: "8 mins",
+      videoId: "bsfxRJGhzYM",
+      description:
+        "Add best-of-N candidate search to CleanLoop. This lesson shows why reranking improves output quality only when each candidate stays bounded, isolated, and scored by the same fixed judge.",
+      objectives: [
+        "Explain why reranking is a search-depth upgrade instead of a new judge.",
+        "Trace how candidate generation, isolated evaluation, and final selection fit together.",
+        "Compare a rejected one-shot round with a stronger reranked round.",
+        "Decide when higher quality is worth extra cost and latency in a bounded AI loop.",
+      ],
+      codeUrl: CLEANLOOP_REPO_URL,
+      infoBoxes: [
+        {
+          title: "Search Depth, Not Judge Drift",
+          content:
+            "Reranking helps only when the judge stays fixed. This lesson adds candidate comparison before commit, not a softer definition of success.",
+        },
+      ],
+      stepGuides: [
+        {
+          title: "Compare One-Shot vs Reranked Mutation",
+          steps: [
+            {
+              title: "Reset and capture the baseline",
+              description:
+                "Reset the genome and run one bounded loop without reranking so you have a clean baseline before you widen search.",
+              code: "python util.py reset\npython util.py loop --max-iterations 1",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Enable best-of-N search",
+              description:
+                "Turn on reranking with two candidates and inspect which candidate survives the fixed judge.",
+              code: "python util.py loop --max-iterations 1 --rerank --candidates 2",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Review the saved evidence",
+              description:
+                "Open the dashboard or observe output so you can inspect candidate width, token cost, and the final selected attempt.",
+              code: "python util.py observe\npython util.py dashboard",
+              codeLanguage: "bash",
+            },
+          ],
+        },
+      ],
+      transcript: [
+        {
+          time: 0,
+          speaker: "Instructor",
+          text: "One candidate is often too weak. If you trust only one generation, you are gambling on a lucky answer.\n\nThis lesson introduces test-time reranking as the safer pattern: generate a few bounded candidates, compare them, and commit only the strongest survivor.",
+        },
+        {
+          time: 28,
+          speaker: "Instructor",
+          text: "The first trade-off is cost. More candidates usually improve quality, but they also add token spend and latency.\n\nThat means reranking is not free magic. It is an engineering decision you make only when the quality gain matters.",
+        },
+        {
+          time: 93,
+          speaker: "Instructor",
+          text: "Next, the recording reconnects this mechanism to CleanLoop. The loop still uses the same proposal, judge, and feedback contract.\n\nThe only change is that proposal grows from one guess into a bounded best-of-few search before the final evaluation step.",
+        },
+        {
+          time: 157,
+          speaker: "Instructor",
+          text: 'The key mental shift is comparative evaluation. A reranker does not ask, "Is this good?" It asks, "Which one is better?"\n\nThat is why the fixed judge matters so much. If the scoring surface drifts, the comparison stops being honest.',
+        },
+        {
+          time: 297,
+          speaker: "Instructor",
+          text: "The hands-on section opens Lesson 06 in the repo and explains the operator workflow. Run the one-shot path first, then rerun the same round with `--rerank --candidates 2`.\n\nWhat you inspect is not just the final score. You inspect where the candidates differ and whether the selected winner matches your expectations.",
+        },
+        {
+          time: 414,
+          speaker: "Instructor",
+          text: "The second half makes the fairness contract explicit. Candidates should run in isolation, and every candidate should face the same fixed judge.\n\nIf your hints or scoring are biased, reranking will confidently select the wrong answer for the wrong reason.",
+        },
+        {
+          time: 604,
+          speaker: "Instructor",
+          text: "The live run then shows the rerank command in CleanLoop and compares the candidates. Nilay also makes one useful disclosure: this repo demonstrates the pattern honestly, but it does not claim every real system should pay for reranking.\n\nOnly a small slice of production use cases can justify the extra cost.",
+        },
+        {
+          time: 736,
+          speaker: "Instructor",
+          text: "Near the end, the recording widens the frame with hybrid fusion. Instead of picking one full candidate, a stronger system can merge the best parts of several candidates.\n\nThat pattern is out of scope for this course, but it shows where reranking can evolve next.",
+        },
+        {
+          time: 819,
+          speaker: "Instructor",
+          text: "The takeaway is simple. Your loop can now search, compare, and choose instead of blindly committing the first answer.\n\nBut it only works because the system stays bounded. Cost, latency, and trust all stay under operator control.",
+        },
+      ],
+      qa: [
+        {
+          question: "Why is reranking different from changing the judge?",
+          answer:
+            "Because reranking spends more inference-time budget before commit, while the deterministic judge still defines success the same way for every candidate.",
+        },
+        {
+          question: "When is best-of-N search worth paying for?",
+          answer:
+            "When a better result has clear business value and one-shot quality is too unstable. If the gain does not justify the extra latency and token cost, the simpler path usually wins.",
+        },
+        {
+          question: "Why does the lesson insist on isolation and fairness?",
+          answer:
+            "Because reranking is only trustworthy when candidates do not contaminate each other and the same fixed judge evaluates all of them with the same hints and scoring rules.",
+        },
+      ],
+      tags: ["test-time reranking", "best-of-N search", "CleanLoop"],
+    },
   ],
   overview: {
     heroSubheading:
-      "Build one bounded mutation loop over messy finance data, keep the judge fixed, lock the genome, and see how the orchestrator decides what survives.",
+      "Build one bounded mutation loop over messy finance data, keep the judge fixed, widen search only when it earns its cost, and see how the orchestrator decides what survives.",
     learnItems: [
       {
         icon: "🧠",
@@ -589,19 +705,19 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       },
     ],
     aboutParagraphs: [
-      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first five published lessons frame the business problem, define the mutation contract, lock the exact pipeline genome, show how the orchestrator controls one bounded repair loop, make that loop observable, and then raise pressure with a fixed judge and smarter challengers inside CleanLoop.",
-      "The focus is narrow on purpose: one mutable surface, one fixed judge, one repeatable control path, one readable feedback surface, and one curriculum of harder inputs. That keeps the current public lessons auditable today while leaving space to evolve the rest of the course structure as new lessons go live.",
+      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first six published lessons frame the business problem, define the mutation contract, lock the exact pipeline genome, show how the orchestrator controls one bounded repair loop, make that loop observable, raise pressure with a fixed judge and smarter challengers, and then add best-of-N reranking before commit inside CleanLoop.",
+      "The focus is narrow on purpose: one mutable surface, one fixed judge, one repeatable control path, one readable feedback surface, and one bounded search budget when one-shot quality is not enough. That keeps the current public lessons auditable today while leaving space for the final safety lesson to close the course cleanly.",
     ],
     detailItems: [
       {
         title: "What is live right now?",
         description:
-          "Lessons 01 through 05 are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the current public course boundary.",
+          "Lessons 01 through 06 are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the current public course boundary.",
       },
       {
         title: "What comes next?",
         description:
-          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content. The next lesson adds best-of-N candidate comparison and re-ranking before commit.",
+          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content. The final lesson closes the course with production safety, dashboard oversight, and graduated autonomy.",
       },
     ],
     prerequisites: {
