@@ -11,7 +11,6 @@ import {
   CodeBlock,
   CodePreview,
   DangerBox,
-  HeroSection,
   InfoBox,
   NoteBox,
   ShareButtons,
@@ -390,19 +389,41 @@ export default async function BlogPostPage({
       footer={SITE_CONFIG.footer}
       maxWidth="content"
     >
-      <HeroSection
-        eyebrow={`${post.categoryTitle} · ${post.subcategoryTitle}`}
-        headline={post.title}
-        subheading={post.description}
-        primaryAction={{
-          label: `Back to ${post.subcategoryTitle}`,
-          href: `/blogs/${post.category}/${post.subcategory}/`,
-        }}
-        secondaryAction={{
-          label: "All blogs",
-          href: "/blogs/",
-        }}
-      />
+      <section className="blog-article-hero">
+        <div className="blog-kicker-row">
+          <a href={post.categoryHref} className="blog-pill blog-pill-link">
+            {post.categoryTitle}
+          </a>
+          <a
+            href={post.subcategoryHref}
+            className="blog-pill blog-pill-secondary blog-pill-link"
+          >
+            {post.subcategoryTitle}
+          </a>
+          <span className="blog-feature-meta">
+            Published {post.displayDate}
+          </span>
+          <span className="blog-feature-meta">{post.readingTime}</span>
+        </div>
+
+        <h1 className="blog-article-title">{post.title}</h1>
+        <p className="blog-article-description">{post.description}</p>
+
+        <div className="blog-article-actions">
+          <a
+            href={`/blogs/${post.category}/${post.subcategory}/`}
+            className="blog-cta-link"
+          >
+            Back to {post.subcategoryTitle}
+          </a>
+          <a
+            href="/blogs/"
+            className="blog-pill blog-pill-ghost blog-pill-link"
+          >
+            All blogs
+          </a>
+        </div>
+      </section>
 
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">
         <ol>

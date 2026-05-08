@@ -80,10 +80,6 @@ export default async function LessonPage({
   if (!course || !part) notFound();
 
   const { prev, next } = getAdjacentParts(courseSlug, partSlug);
-  const shareUrl = new URL(
-    `/${courseSlug}/${partSlug}/`,
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://tuts.localm.dev",
-  ).toString();
 
   return (
     <CoursePlayerLayout
@@ -156,7 +152,6 @@ export default async function LessonPage({
             twitterHandle={BRAND.socials.twitterHandle}
             linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
             youtubeSubscribeUrl={BRAND.socials.youtube}
-            pageUrl={shareUrl}
             shareTitle={`${part.title} — ${course.title}`}
             shareDescription={part.description ?? course.description}
             shareHashtags={part.tags ?? course.tags}
