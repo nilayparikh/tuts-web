@@ -14,19 +14,12 @@ import {
   CalloutBox,
   InfoBox,
   NoteBox,
-  SuccessBox,
-  DescriptionBox,
   StepByStepGuide,
-  MermaidDiagram,
-  PollBlock,
   Paragraph,
-  CodePreview,
   VideoTranscript,
   LessonSocialBar,
-  NotebookEmbed,
   LessonObjectives,
   GitHubRepoCard,
-  ExampleResults,
 } from "@localm/tutorial-framework";
 import { SITE_CONFIG, BRAND } from "@/config/site";
 import {
@@ -87,6 +80,10 @@ export default async function LessonPage({
   if (!course || !part) notFound();
 
   const { prev, next } = getAdjacentParts(courseSlug, partSlug);
+  const shareUrl = new URL(
+    `/${courseSlug}/${partSlug}/`,
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://tuts.localm.dev",
+  ).toString();
 
   return (
     <CoursePlayerLayout
@@ -159,6 +156,7 @@ export default async function LessonPage({
             twitterHandle={BRAND.socials.twitterHandle}
             linkedinNewsletterUrl={BRAND.socials.linkedinNewsletter}
             youtubeSubscribeUrl={BRAND.socials.youtube}
+            pageUrl={shareUrl}
             shareTitle={`${part.title} — ${course.title}`}
             shareDescription={part.description ?? course.description}
             shareHashtags={part.tags ?? course.tags}
@@ -212,9 +210,9 @@ function PartContent({
 }) {
   switch (part.type) {
     case "video":
-      return <VideoContent part={part} courseTitle={courseTitle} />;
+      return <VideoContent part={part} />;
     case "video-code":
-      return <VideoCodeContent part={part} courseTitle={courseTitle} />;
+      return <VideoCodeContent part={part} />;
     case "code":
       return <CodeContent part={part} />;
     case "reading":
@@ -256,12 +254,21 @@ function DataDrivenContent({
 }) {
   return (
     <>
-      {/* ── Group 2: Objectives (non-video types or when requested) ── */}
+      {/* ── Transcript ─────────────────────────────────────────── */}
+      {part.transcript && part.transcript.length > 0 && (
+        <VideoTranscript
+          title="Transcript"
+          defaultCollapsed
+          entries={part.transcript}
+        />
+      )}
+
+      {/* ── Learning objectives ───────────────────────────────── */}
       {showObjectives && part.objectives && part.objectives.length > 0 && (
         <LessonObjectives objectives={part.objectives} />
       )}
 
-      {/* ── Group 4: Callouts ──────────────────────────────────── */}
+      {/* ── Info boxes ─────────────────────────────────────────── */}
       {part.infoBoxes?.map((box, i) => (
         <InfoBox key={`info-${i}`} title={box.title}>
           {box.content}
@@ -274,43 +281,7 @@ function DataDrivenContent({
         </NoteBox>
       ))}
 
-      {/* ── Group 5: Visual ────────────────────────────────────── */}
-      {part.diagrams?.map((diagram, i) => (
-        <div
-          key={`diagram-${i}`}
-          style={{ minHeight: diagram.minHeight ?? "12rem" }}
-        >
-          <MermaidDiagram
-            chart={diagram.chart}
-            caption={diagram.caption}
-            alt={diagram.alt}
-          />
-        </div>
-      ))}
-
-      {part.poll && (
-        <PollBlock
-          question={part.poll.question}
-          options={part.poll.options}
-          simulatedVotes={part.poll.simulatedVotes}
-        />
-      )}
-
-      {/* ── Group 6: Hands-on ──────────────────────────────────── */}
-      {part.codePreview && (
-        <CodePreview
-          title={part.codePreview.title ?? "Code Walkthrough"}
-          description={
-            part.codePreview.description ??
-            "Key code from this lesson, explained step by step."
-          }
-          segments={part.codePreview.segments.map((s) => ({
-            ...s,
-            explanation: s.explanation ?? "",
-          }))}
-        />
-      )}
-
+      {/* ── Get started / instructions ─────────────────────────── */}
       {part.stepGuides?.map((guide, i) => (
         <StepByStepGuide
           key={`guide-${i}`}
@@ -359,33 +330,11 @@ function DataDrivenContent({
         />
       )}
 
-      {/* ── Group 7: Learning support ──────────────────────────── */}
-      {part.transcript && part.transcript.length > 0 && (
-        <VideoTranscript
-          title="Video Transcript"
-          defaultCollapsed
-          entries={part.transcript}
-        />
-      )}
-
       {part.qa && part.qa.length > 0 && (
         <section>
-          <SectionDivider label="Q & A" />
+          <SectionDivider label="Q&A" />
           <QABlock items={part.qa} />
         </section>
-      )}
-
-      {/* ── Group 8: Example Results ───────────────────────── */}
-      {(part.exampleAssessment || part.exampleRun) && (
-        <>
-          <SectionDivider label="Example Results" />
-          <ExampleResults
-            assessment={part.exampleAssessment}
-            assessmentUrl={part.exampleAssessmentUrl}
-            run={part.exampleRun}
-            runUrl={part.exampleRunUrl}
-          />
-        </>
       )}
     </>
   );
@@ -393,13 +342,7 @@ function DataDrivenContent({
 
 // ─── Video ────────────────────────────────────────────────────────────────
 
-function VideoContent({
-  part,
-  courseTitle,
-}: {
-  part: CoursePartMeta;
-  courseTitle: string;
-}) {
+function VideoContent({ part }: { part: CoursePartMeta }) {
   return (
     <>
       {/* Video embed */}
@@ -418,215 +361,30 @@ function VideoContent({
   );
 }
 
-// ─── Video with Code (70/30 split: Notebook + Video/Instructions) ──────────
+// ─── Video with Code ──────────────────────────────────────────────────────
 
-function VideoCodeContent({
-  part,
-  courseTitle,
-}: {
-  part: CoursePartMeta;
-  courseTitle: string;
-}) {
+function VideoCodeContent({ part }: { part: CoursePartMeta }) {
   return (
     <>
-      {/* ── 70/30 split: Colab (left) + Video & instructions (right) ── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "7fr 3fr",
-          gap: "var(--tf-space-4)",
-          width: "100%",
-          minHeight: "calc(100vh - 14rem)",
-          alignItems: "start",
-        }}
-      >
-        {/* ── Left column: Google Colab ────────────────────────────── */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "var(--tf-space-3)",
-            minHeight: 0,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "var(--tf-space-2)",
-              fontSize: "var(--tf-text-sm)",
-              fontWeight: 600,
-              color: "var(--tf-text-secondary)",
-              fontFamily: "var(--tf-font-mono)",
-            }}
-          >
-            <span style={{ fontSize: "var(--tf-text-base)" }}>📓</span>
-            Interactive Notebook
-          </div>
-          {part.notebookUrl || part.colabUrl ? (
-            <NotebookEmbed
-              notebookUrl={part.notebookUrl || part.colabUrl!}
-              colabUrl={part.colabUrl}
-              title={part.title}
-              height="calc(100vh - 16rem)"
-            />
-          ) : (
-            <div
-              style={{
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: "var(--tf-radius-lg)",
-                border: "1px dashed var(--tf-border-primary)",
-                background: "var(--tf-bg-secondary)",
-                color: "var(--tf-text-tertiary)",
-                fontSize: "var(--tf-text-sm)",
-                padding: "var(--tf-space-8)",
-                textAlign: "center",
-              }}
-            >
-              Colab notebook will be linked here.
-            </div>
-          )}
-        </div>
+      {part.videoId && (
+        <YouTubeEmbed
+          videoId={part.videoId}
+          title={part.title}
+          lazyLoad
+          caption={`${part.title} · ${part.duration}`}
+        />
+      )}
 
-        {/* ── Right column: Video + instructions (sticky) ─────────── */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "var(--tf-space-4)",
-            position: "sticky",
-            top: "calc(var(--tf-header-height) + var(--tf-space-4))",
-            maxHeight: "calc(100vh - var(--tf-header-height) - 2rem)",
-            overflowY: "auto",
-          }}
-        >
-          {/* Video */}
-          {part.videoId && (
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "var(--tf-space-2)",
-                  fontSize: "var(--tf-text-sm)",
-                  fontWeight: 600,
-                  color: "var(--tf-text-secondary)",
-                  fontFamily: "var(--tf-font-mono)",
-                  marginBottom: "var(--tf-space-3)",
-                }}
-              >
-                <span style={{ fontSize: "var(--tf-text-base)" }}>▶</span>
-                Video Walkthrough
-              </div>
-              <YouTubeEmbed
-                videoId={part.videoId}
-                title={part.title}
-                lazyLoad
-              />
-            </div>
-          )}
-
-          {/* Instructions / objectives */}
-          {part.objectives && part.objectives.length > 0 && (
-            <LessonObjectives
-              objectives={part.objectives}
-              title="Instructions"
-            />
-          )}
-
-          {/* Description */}
-          {part.description && (
-            <div
-              style={{
-                padding: "var(--tf-space-4)",
-                borderRadius: "var(--tf-radius-lg)",
-                background: "var(--tf-bg-secondary)",
-                border: "1px solid var(--tf-border-primary)",
-              }}
-            >
-              <p
-                style={{
-                  fontSize: "var(--tf-text-sm)",
-                  color: "var(--tf-text-secondary)",
-                  margin: 0,
-                  lineHeight: "var(--tf-leading-relaxed)",
-                }}
-              >
-                {part.description}
-              </p>
-            </div>
-          )}
-
-          {/* Source code link */}
-          {part.codeUrl && (
-            <a
-              href={part.codeUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "var(--tf-space-2)",
-                padding: "var(--tf-space-3) var(--tf-space-4)",
-                borderRadius: "var(--tf-radius-lg)",
-                background: "var(--tf-bg-tertiary)",
-                border: "1px solid var(--tf-border-primary)",
-                color: "var(--tf-text-primary)",
-                fontSize: "var(--tf-text-sm)",
-                fontWeight: 600,
-                textDecoration: "none",
-                transition: "border-color 0.15s",
-              }}
-            >
-              <span>📂</span>
-              View source on GitHub ↗
-            </a>
-          )}
-        </div>
-      </div>
-
-      {/* ── Data-driven content (below the split) ──────────────── */}
       <DataDrivenContent part={part} />
     </>
   );
 }
 
-// ─── Code (full-width Colab embed) ────────────────────────────────────────
+// ─── Code ────────────────────────────────────────────────────────────────
 
 function CodeContent({ part }: { part: CoursePartMeta }) {
   return (
     <>
-      {/* Full-width notebook embed */}
-      {part.notebookUrl || part.colabUrl ? (
-        <NotebookEmbed
-          notebookUrl={part.notebookUrl || part.colabUrl!}
-          colabUrl={part.colabUrl}
-          title={part.title}
-          height="calc(100vh - 200px)"
-        />
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: 500,
-            borderRadius: "var(--tf-radius-lg)",
-            border: "1px dashed var(--tf-border-primary)",
-            background: "var(--tf-bg-secondary)",
-            color: "var(--tf-text-tertiary)",
-            fontSize: "var(--tf-text-sm)",
-            padding: "var(--tf-space-8)",
-            textAlign: "center",
-          }}
-        >
-          Colab notebook will be linked here.
-        </div>
-      )}
-
       <DataDrivenContent part={part} showObjectives />
     </>
   );

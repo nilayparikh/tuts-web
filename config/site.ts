@@ -40,11 +40,13 @@ export const BRAND = {
 const NAV_ITEMS: NavItem[] = [
   { label: "Courses", href: "/courses/" },
   { label: "Monos", href: "/monos/" },
+  { label: "Blogs", href: "/blogs/" },
 ];
 
 const FOOTER_LINKS: FooterLink[] = [
   { label: "Courses", href: "/courses/" },
   { label: "Monos", href: "/monos/" },
+  { label: "Blogs", href: "/blogs/" },
   { label: "Terms", href: "/terms/" },
   { label: "Privacy", href: "/privacy/" },
   { label: "YouTube", href: BRAND.socials.youtube, external: true },

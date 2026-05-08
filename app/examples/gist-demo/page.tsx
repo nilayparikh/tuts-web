@@ -35,7 +35,7 @@ export default function GistDemoPage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/examples/gist-demo/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
     >
       <HeroSection
         headline="Gist & Notebook Embeds"

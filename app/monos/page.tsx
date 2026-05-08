@@ -23,7 +23,7 @@ export default function MonosHomePage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/monos/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
     >
       {/* ── Breadcrumb ────────────────────────────────────────────────────── */}
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">

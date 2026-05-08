@@ -106,7 +106,7 @@ export default function PrivacyPage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/privacy/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
     >
       <HeroSection
         eyebrow="Legal"

@@ -34,7 +34,7 @@ export default function TopicHomePage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
     >
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
       <HeroSection

@@ -72,7 +72,7 @@ export default async function CourseOverviewPage({
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: `/${slug}/` }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
       mainStyle={{ gap: "var(--tf-space-4)" }}
     >
       {/* ── Breadcrumb ────────────────────────────────────────────────────── */}

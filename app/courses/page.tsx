@@ -28,7 +28,7 @@ export default function CoursesHomePage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/courses/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
     >
       {/* ── Breadcrumb ────────────────────────────────────────────────────── */}
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">

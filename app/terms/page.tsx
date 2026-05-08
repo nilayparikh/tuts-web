@@ -70,7 +70,7 @@ export default function TermsPage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/terms/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
     >
       <HeroSection
         eyebrow="Legal"

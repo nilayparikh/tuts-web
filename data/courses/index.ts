@@ -33,6 +33,7 @@ import type {
 // ─── Import individual courses ────────────────────────────────────────────
 
 import { A2A_COURSE } from "./a2a";
+import { AGENT_DESIGN_PATTERNS_COURSE } from "./agent-design-patterns";
 import { CTX_SDLC_COURSE } from "./ctx-sdlc";
 import { SELF_EVOLVING_DATA_ENGINEER_COURSE } from "./self-evolving-data-engineer";
 import { SELF_IMPROVING_AGENTS_COURSE } from "./self-improving-agents";
@@ -42,6 +43,7 @@ import { SELF_IMPROVING_AGENTS_COURSE } from "./self-improving-agents";
 /** All courses (including drafts) — for static generation */
 export const ALL_COURSES: CourseDefinition[] = [
   A2A_COURSE,
+  AGENT_DESIGN_PATTERNS_COURSE,
   CTX_SDLC_COURSE,
   SELF_IMPROVING_AGENTS_COURSE,
   SELF_EVOLVING_DATA_ENGINEER_COURSE,

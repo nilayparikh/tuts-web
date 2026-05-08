@@ -1,4 +1,5 @@
 import type { CourseDefinition } from "./types";
+import { SELF_EVOLVING_DATA_ENGINEER_TRANSCRIPTS } from "./self-evolving-data-engineer.transcripts";
 
 const CLEANLOOP_REPO_URL =
   "https://github.com/nilayparikh/tuts-agentic-ai-examples/tree/main/self-improving-agent/cleanloop";
@@ -9,7 +10,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
     "Build an AI Data Engineer: Self-Improving Pipelines with AutoGen Framework",
   description:
     "Build one bounded AI data-engineering loop with AutoGen, a fixed judge, and safe mutation over messy finance pipelines.",
-  totalDuration: "42 mins",
+  totalDuration: "58 mins",
   tags: [
     "Data Engineering",
     "AutoGen",
@@ -78,38 +79,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
           ],
         },
       ],
-      transcript: [
-        {
-          time: 0,
-          speaker: "Instructor",
-          text: "The recording opens with the real bottleneck. Moving data is not enough anymore. When a pipeline breaks, a human still reads the failure, picks the next fix, and carries the loop memory forward.\n\nThat is the problem this course is trying to close.",
-        },
-        {
-          time: 58,
-          speaker: "Instructor",
-          text: "Next, the lesson explains Software 3.0 in practical terms. The AI sits in the messy middle layer, while the outer contract stays rigid.\n\nThat framing matters because the loop only works when the editable surface stays narrow and the enforcement layer stays fixed.",
-        },
-        {
-          time: 116,
-          speaker: "Instructor",
-          text: "From there, the recording shifts into the CleanLoop example. The README becomes the first navigation surface, then the learner sees the setup, status, and verify flow before any mutation happens.\n\nThe lesson uses that repo tour to prove that boundary-first design is visible in the project itself.",
-        },
-        {
-          time: 261,
-          speaker: "Instructor",
-          text: "The live demo then runs a short loop against messy finance CSVs. Deterministic logic handles what it can first, and the mutation path only picks up the unresolved failures.\n\nThat is the key posture for the whole course: rules first, bounded mutation second.",
-        },
-        {
-          time: 310,
-          speaker: "Instructor",
-          text: "The dashboard section shows the genome surface, mutation decisions, and evidence trail. The learner sees where deterministic decisions stop, where mutation playbooks begin, and how row-level inspection turns failure into a repair signal.\n\nThat makes the loop inspectable instead of magical.",
-        },
-        {
-          time: 701,
-          speaker: "Instructor",
-          text: "The closing slides restore the full course roadmap and the mutation-process diagram. AutoGen sits on the orchestration seam, not inside the judge. Autonomy is earned, not assumed.\n\nThe outro then points directly into Lesson 02, where the course locks the exact genome boundary.",
-        },
-      ],
+      transcript: SELF_EVOLVING_DATA_ENGINEER_TRANSCRIPTS["mutation-engine"],
       qa: [
         {
           question:
@@ -180,38 +150,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
           ],
         },
       ],
-      transcript: [
-        {
-          time: 0,
-          speaker: "Instructor",
-          text: "The recording opens with the failure mode. Self-improving systems usually do not fail because the idea is wrong. They fail because the loop mutates the wrong surface.\n\nThat sets up the whole lesson: if the mutation boundary is vague, the loop becomes noisy and hard to trust.",
-        },
-        {
-          time: 73,
-          speaker: "Instructor",
-          text: "The next section reconnects this lesson to Lesson 01. The earlier contract stays active, AutoGen stays on the orchestration seam, and the correctness boundary stays fixed.\n\nLesson 02 does not restart the system. It narrows the exact genome the loop is allowed to touch.",
-        },
-        {
-          time: 131,
-          speaker: "Instructor",
-          text: "From there, the lesson argues for one mutable file whenever the problem allows it. A single-file genome makes diffs smaller, review easier, and rollback more believable.\n\nThe recording also clarifies that bounded mutation is not just about file count. It is also about the exact problem scope the loop is meant to solve.",
-        },
-        {
-          time: 703,
-          speaker: "Instructor",
-          text: "The hands-on walkthrough then moves into CleanLoop. The runtime surface shows where deterministic normalization runs first and where the mutation playbook takes over for unresolved finance CSV failures.\n\nThat is the practical genome boundary: deterministic rules first, mutation only where the fixed logic runs out of road.",
-        },
-        {
-          time: 833,
-          speaker: "Instructor",
-          text: "The demo section validates status, verifies model connectivity, and runs the bounded evaluation flow. The lesson explains why smaller, cost-effective models such as Phi-4 can still be enough when the mutation task is tightly scoped.\n\nThe point is not model prestige. It is choosing a model that fits the bounded repair job.",
-        },
-        {
-          time: 953,
-          speaker: "Instructor",
-          text: "The closing segment introduces worktrees as the safer production posture for trial mutations and starter-genome evolution. The dashboard then becomes the review surface for evidence, validation, and future exercises.\n\nThe outro points directly into Lesson 03, where the orchestrator will decide which candidate mutations to keep and which to reject.",
-        },
-      ],
+      transcript: SELF_EVOLVING_DATA_ENGINEER_TRANSCRIPTS["pipeline-genome"],
       qa: [
         {
           question:
@@ -282,38 +221,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
           ],
         },
       ],
-      transcript: [
-        {
-          time: 0,
-          speaker: "Instructor",
-          text: "The recording opens with the control question. Once the genome is bounded, who reads the failure, asks for the next mutation, and decides whether the candidate survives?\n\nThat is the orchestrator's job. It is the control layer around the proposal step, not just another prompt wrapper.",
-        },
-        {
-          time: 55,
-          speaker: "Instructor",
-          text: "The next section walks the control diagram. The reader grounds the next move in failure evidence, the repair forge asks AutoGen for a bounded change, and the crucible plus Git decide what survives.\n\nThat keeps the loop deterministic around the agentic seam instead of turning the whole system into a black box.",
-        },
-        {
-          time: 125,
-          speaker: "Instructor",
-          text: "The hands-on portion then moves into the repo. The lesson points at the orchestration code path and explains that the pattern is sequential here, but the same reasoning applies to broader agent architectures too.\n\nWhat matters is not the exact topology. What matters is that the control steps stay explicit.",
-        },
-        {
-          time: 225,
-          speaker: "Instructor",
-          text: "From there, the live run resets the genome, evaluates the baseline, and runs one bounded iteration. The lesson shows how the loop preserves the starter surface, requests one proposal, and checks the result before anything is allowed to persist.\n\nThe model can suggest. It does not get to declare success.",
-        },
-        {
-          time: 380,
-          speaker: "Instructor",
-          text: "The dashboard segment widens the view. Nilay inspects artifacts, score movement, and row-level trace decisions so you can see deterministic handling versus mutation-playbook handling.\n\nThat evidence surface is what makes control decisions reviewable instead of mystical.",
-        },
-        {
-          time: 500,
-          speaker: "Instructor",
-          text: "The closing discussion makes the bridge to observability explicit. If you want to broaden the search space or increase pressure later, you need traces, backtesting, and clear dashboards first.\n\nThe outro points directly into Lesson 04, where observability becomes the main topic.",
-        },
-      ],
+      transcript: SELF_EVOLVING_DATA_ENGINEER_TRANSCRIPTS["orchestrator"],
       qa: [
         {
           question: "Why call the orchestrator the real control surface?",
@@ -383,48 +291,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
           ],
         },
       ],
-      transcript: [
-        {
-          time: 0,
-          speaker: "Instructor",
-          text: "The recording opens with the dashboard analogy. If you cannot see speed, fuel, warnings, or score movement, the system may still be moving, but it is moving blind. That is the lesson hook: a mutation loop without observability does not really learn.\n\nIt just keeps changing until you expose the signals that matter.",
-        },
-        {
-          time: 34,
-          speaker: "Instructor",
-          text: "Next, Nilay reconnects Lesson 04 to the earlier lessons. The course is still one system, not four disconnected demos, so the reader, proposal, crucible, and dashboard evidence all stay in play together.\n\nObservability is the layer that lets the rest of the system stay reviewable.",
-        },
-        {
-          time: 73,
-          speaker: "Instructor",
-          text: "The architecture segment explains the feedback signal directly. Run history, strategy state, live evidence, and operator control belong on the same surface because the real questions are simple: did the loop improve, is it repeating the same mistake, and should a human intervene?\n\nThat is why score movement alone is not enough.",
-        },
-        {
-          time: 148,
-          speaker: "Instructor",
-          text: "The hands-on section then moves into the lesson README and the CleanLoop repo. Nilay frames observability as external memory and points the learner at the dashboard, metric helpers, and the saved `finance_eval_history.json` artifact.\n\nThose small stored decisions are what make later autonomy safer.",
-        },
-        {
-          time: 243,
-          speaker: "Instructor",
-          text: "From there, the recording separates score from trace. The score answers whether the run improved. The trace answers what happened to one row, one proposal, or one correlation path.\n\nThe loan-application example makes the case for correlation IDs and row-level evidence across distributed systems.",
-        },
-        {
-          time: 304,
-          speaker: "Instructor",
-          text: "The implementation segment explains the storage posture. CleanLoop uses OpenTelemetry-shaped traces and simple JSON artifacts instead of a full Grafana or Prometheus stack so the example stays lightweight for learners.\n\nThe lesson still keeps the same design idea you would use in production: durable history plus searchable trace context.",
-        },
-        {
-          time: 415,
-          speaker: "Instructor",
-          text: "The dashboard walkthrough shows operator signals, score timelines, mutation evidence, invoice drill-down, and trace timelines. Nilay uses specific invoice examples to show how deterministic handling and mutation-playbook handling expose different evidence.\n\nThat is the practical meaning of the feedback signal in this lesson.",
-        },
-        {
-          time: 618,
-          speaker: "Instructor",
-          text: "The closing section points back to the exercises and the production mindset. Learners are asked to read the dashboard like operators, not spectators, and to treat missing artifacts as useful feedback instead of silent failure.\n\nThe outro then tees up the next lesson, where the loop will face more pressure without giving up control.",
-        },
-      ],
+      transcript: SELF_EVOLVING_DATA_ENGINEER_TRANSCRIPTS["observability-feedback"],
       qa: [
         {
           question:
@@ -497,53 +364,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
           ],
         },
       ],
-      transcript: [
-        {
-          time: 0,
-          speaker: "Instructor",
-          text: "The recording opens with the gym analogy. If the system only lifts easy cases, it does not get stronger. It just gets comfortable. That leads directly into the lesson claim: self-challenging loops need pressure, but they need the right kind of pressure.\n\nA fixed judge plus a smart challenger is the mechanism that makes that possible.",
-        },
-        {
-          time: 24,
-          speaker: "Instructor",
-          text: "Next, Nilay frames the two-role split. The judge defines truth, the challenger raises difficulty, and the loop must improve without being allowed to cheat.\n\nThat tension is the center of the lesson.",
-        },
-        {
-          time: 83,
-          speaker: "Instructor",
-          text: "The lesson then ties this back to Lesson 04. Observability showed where the system was weak, so now the pressure is not random. It is targeted toward real failure modes that the artifact trail already exposed.\n\nThat is why Lesson 05 is a continuation of the same loop, not a new system.",
-        },
-        {
-          time: 130,
-          speaker: "Instructor",
-          text: "The arena metaphor comes next. The judge is the referee, the executor is the current champion, and the challenger keeps sending stronger opponents.\n\nIf the judge changes, the goalposts move, and the loop stops being trustworthy.",
-        },
-        {
-          time: 268,
-          speaker: "Instructor",
-          text: "The repo walkthrough asks the learner to trace the challenger path like an operator. The questions are practical: where are harder fixtures generated, what signal chooses them, and how is the judge protected from modification?\n\nThat sets up the live demo with the right engineering posture.",
-        },
-        {
-          time: 326,
-          speaker: "Instructor",
-          text: "The hands-on lab then reinforces the theory. Judge and challenger are not the same tool, fixed selection pressure makes improvement meaningful, and curriculum pressure should be targeted instead of random.\n\nThat is the rule set the learner should carry into their own systems.",
-        },
-        {
-          time: 484,
-          speaker: "Instructor",
-          text: "The difficulty ladder segment explains how the challenge surface grows from mild finance messiness to much harder business-context cases. Nilay also makes the trade-off explicit: higher levels need stronger models, better hints, and more mutation support than the current lesson covers.\n\nThat is an important production constraint, not a bug in the idea.",
-        },
-        {
-          time: 603,
-          speaker: "Instructor",
-          text: "From there, the recording moves into the live run. Old adversarial files are cleared, new levels are generated, then the same judge evaluates the harder arena before the loop runs.\n\nThe dashboard becomes the review surface again so the learner can inspect deterministic rows, mutation-playbook rows, and anomaly reasons after challenge generation.",
-        },
-        {
-          time: 978,
-          speaker: "Instructor",
-          text: "The closing discussion broadens the frame. Nilay links code mutation, prompt mutation, and longer-term behavioral learning as overlapping mutation surfaces, then points ahead to best-of-N and re-ranking as the next mechanism in the course.\n\nLesson 05 ends by showing that pressure alone is not enough. The loop also needs a way to compare candidates before commit.",
-        },
-      ],
+      transcript: SELF_EVOLVING_DATA_ENGINEER_TRANSCRIPTS["judge-self-challenging"],
       qa: [
         {
           question: "Why is the fixed judge the central rule in this lesson?",
@@ -614,53 +435,7 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
           ],
         },
       ],
-      transcript: [
-        {
-          time: 0,
-          speaker: "Instructor",
-          text: "One candidate is often too weak. If you trust only one generation, you are gambling on a lucky answer.\n\nThis lesson introduces test-time reranking as the safer pattern: generate a few bounded candidates, compare them, and commit only the strongest survivor.",
-        },
-        {
-          time: 28,
-          speaker: "Instructor",
-          text: "The first trade-off is cost. More candidates usually improve quality, but they also add token spend and latency.\n\nThat means reranking is not free magic. It is an engineering decision you make only when the quality gain matters.",
-        },
-        {
-          time: 93,
-          speaker: "Instructor",
-          text: "Next, the recording reconnects this mechanism to CleanLoop. The loop still uses the same proposal, judge, and feedback contract.\n\nThe only change is that proposal grows from one guess into a bounded best-of-few search before the final evaluation step.",
-        },
-        {
-          time: 157,
-          speaker: "Instructor",
-          text: 'The key mental shift is comparative evaluation. A reranker does not ask, "Is this good?" It asks, "Which one is better?"\n\nThat is why the fixed judge matters so much. If the scoring surface drifts, the comparison stops being honest.',
-        },
-        {
-          time: 297,
-          speaker: "Instructor",
-          text: "The hands-on section opens Lesson 06 in the repo and explains the operator workflow. Run the one-shot path first, then rerun the same round with `--rerank --candidates 2`.\n\nWhat you inspect is not just the final score. You inspect where the candidates differ and whether the selected winner matches your expectations.",
-        },
-        {
-          time: 414,
-          speaker: "Instructor",
-          text: "The second half makes the fairness contract explicit. Candidates should run in isolation, and every candidate should face the same fixed judge.\n\nIf your hints or scoring are biased, reranking will confidently select the wrong answer for the wrong reason.",
-        },
-        {
-          time: 604,
-          speaker: "Instructor",
-          text: "The live run then shows the rerank command in CleanLoop and compares the candidates. Nilay also makes one useful disclosure: this repo demonstrates the pattern honestly, but it does not claim every real system should pay for reranking.\n\nOnly a small slice of production use cases can justify the extra cost.",
-        },
-        {
-          time: 736,
-          speaker: "Instructor",
-          text: "Near the end, the recording widens the frame with hybrid fusion. Instead of picking one full candidate, a stronger system can merge the best parts of several candidates.\n\nThat pattern is out of scope for this course, but it shows where reranking can evolve next.",
-        },
-        {
-          time: 819,
-          speaker: "Instructor",
-          text: "The takeaway is simple. Your loop can now search, compare, and choose instead of blindly committing the first answer.\n\nBut it only works because the system stays bounded. Cost, latency, and trust all stay under operator control.",
-        },
-      ],
+      transcript: SELF_EVOLVING_DATA_ENGINEER_TRANSCRIPTS["test-time-search"],
       qa: [
         {
           question: "Why is reranking different from changing the judge?",
@@ -680,10 +455,81 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       ],
       tags: ["test-time reranking", "best-of-N search", "CleanLoop"],
     },
+    {
+      slug: "production-safety",
+      title: "Conclusion & Production Safety",
+      type: "video-code",
+      duration: "8 mins",
+      videoId: "0guzOCHXE5Q",
+      description:
+        "Close the CleanLoop course with production safety. This lesson shows how sandboxing, tripwires, reset controls, and graduated autonomy turn a self-improving loop into something you can audit, contain, and actually trust.",
+      objectives: [
+        "Explain why production safety means containment, stop signals, and controlled autonomy instead of blind optimism.",
+        "Show how sandboxing and reset keep bad genome code from damaging the main loop.",
+        "Interpret the trust ladder from live runs and saved history instead of gut feel.",
+        "Use the CleanLoop safety commands to inspect containment, operator oversight, and recovery.",
+      ],
+      codeUrl: CLEANLOOP_REPO_URL,
+      infoBoxes: [
+        {
+          title: "Safety Is A System",
+          content:
+            "Production safety is not one switch. It is containment, stop signals, reset, and an autonomy policy that rises and falls with recent evidence.",
+        },
+      ],
+      stepGuides: [
+        {
+          title: "Inspect Containment, Trust, And Recovery",
+          steps: [
+            {
+              title: "Generate one fresh safety baseline",
+              description:
+                "Reset the genome, run one bounded round, and keep the saved history so the later safety commands have real evidence to inspect.",
+              code: "cd _examples/self-improving-agent/cleanloop\npython util.py reset\npython util.py loop --max-iterations 1",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Validate containment and evidence",
+              description:
+                "Run the sandbox path and the read-only observer so you can see what gets contained and which artifacts operators use to review the run.",
+              code: "python util.py sandbox --timeout 10\npython util.py observe",
+              codeLanguage: "bash",
+            },
+            {
+              title: "Inspect trust, then recover cleanly",
+              description:
+                "Check the simulated trust ladder, compare it with history-based trust, then reset to the starter baseline without losing the evidence you just generated.",
+              code: "python util.py autonomy --rounds 5\npython util.py autonomy --from-history\npython util.py reset",
+              codeLanguage: "bash",
+            },
+          ],
+        },
+      ],
+      transcript: SELF_EVOLVING_DATA_ENGINEER_TRANSCRIPTS["production-safety"],
+      qa: [
+        {
+          question: "Why is sandboxing non-negotiable in this lesson?",
+          answer:
+            "Because the genome is rewritten code. A self-improving loop needs containment around crashes, hangs, and unsafe side effects before it deserves more autonomy.",
+        },
+        {
+          question: "Why keep reset separate from deleting output artifacts?",
+          answer:
+            "Because recovery should restore the starter genome without erasing the evidence that explains what just happened. Operators still need the logs, traces, and judged history after a bad run.",
+        },
+        {
+          question:
+            "Why can the loop stay in review mode even after some good history?",
+          answer:
+            "Because the trust ladder is meant to be conservative. A few good runs are useful, but recent instability, drift, or weak rolling scores should still block automatic promotion.",
+        },
+      ],
+      tags: ["production safety", "self-improving AI", "CleanLoop"],
+    },
   ],
   overview: {
     heroSubheading:
-      "Build one bounded mutation loop over messy finance data, keep the judge fixed, widen search only when it earns its cost, and see how the orchestrator decides what survives.",
+      "Build one bounded mutation loop over messy finance data, keep the judge fixed, widen search only when it earns its cost, and close with sandboxing, reset, and graduated autonomy.",
     learnItems: [
       {
         icon: "🧠",
@@ -705,19 +551,19 @@ export const SELF_EVOLVING_DATA_ENGINEER_COURSE: CourseDefinition = {
       },
     ],
     aboutParagraphs: [
-      "This site now publishes the <strong>live</strong> version of the Self-Evolving Data Engineer course lesson by lesson. The first six published lessons frame the business problem, define the mutation contract, lock the exact pipeline genome, show how the orchestrator controls one bounded repair loop, make that loop observable, raise pressure with a fixed judge and smarter challengers, and then add best-of-N reranking before commit inside CleanLoop.",
-      "The focus is narrow on purpose: one mutable surface, one fixed judge, one repeatable control path, one readable feedback surface, and one bounded search budget when one-shot quality is not enough. That keeps the current public lessons auditable today while leaving space for the final safety lesson to close the course cleanly.",
+      "This site now publishes the complete seven-lesson Self-Evolving Data Engineer course. The series frames the business problem, defines the mutation contract, locks the exact pipeline genome, shows how the orchestrator controls one bounded repair loop, makes that loop observable, raises pressure with a fixed judge and smarter challengers, adds best-of-N reranking before commit, and closes with production safety.",
+      "The scope stays narrow on purpose: one mutable surface, one fixed judge, one repeatable control path, one readable feedback surface, and one safety ladder for containment, reset, and trust. That keeps the public course auditable from Lesson 01 through Lesson 07 instead of widening into a vague platform story.",
     ],
     detailItems: [
       {
         title: "What is live right now?",
         description:
-          "Lessons 01 through 06 are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the current public course boundary.",
+          "All seven lessons are live with published YouTube videos, the CleanLoop code surface, and the synced transcript, Q&A, and step-guide content for the full public course boundary.",
       },
       {
         title: "What comes next?",
         description:
-          "Future lessons will only appear here when their lesson titles, content, and YouTube videos are published and stable enough to treat as public site content. The final lesson closes the course with production safety, dashboard oversight, and graduated autonomy.",
+          "The course is complete. The next step is to apply the same bounded pattern to one real surface in your own system: define the genome, keep the judge fixed, add observability, then earn safety and autonomy one control at a time.",
       },
     ],
     prerequisites: {

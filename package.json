@@ -15,9 +15,13 @@
   },
   "dependencies": {
     "@localm/tutorial-framework": "file:./_common/frontend/tutorial-framework",
+    "gray-matter": "^4.0.3",
     "next": "^15.5.10",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-markdown": "^10.1.0",
+    "remark-directive": "^4.0.0",
+    "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
@@ -26,6 +30,7 @@
     "@types/react-syntax-highlighter": "^15.5.13",
     "eslint": "^9",
     "eslint-config-next": "15.3.9",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "unist-util-visit": "^5.0.0"
   }
 }

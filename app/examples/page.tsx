@@ -47,7 +47,7 @@ export default function ExamplesPage() {
     <TutorialLayout
       header={{ ...SITE_CONFIG.header, currentPath: "/examples/" }}
       footer={SITE_CONFIG.footer}
-      maxWidth="narrow"
+      maxWidth="content"
     >
       <HeroSection
         eyebrow={`${codeExamples.length} Examples`}

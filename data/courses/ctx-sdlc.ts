@@ -1,4 +1,15 @@
 import type { CourseDefinition, PartQuizQuestion } from "./types";
+import {
+  WHY_CONTEXT_ENGINEERING_TRANSCRIPT,
+  CURATE_PROJECT_CONTEXT_TRANSCRIPT,
+  INSTRUCTION_ARCHITECTURE_TRANSCRIPT,
+  PLANNING_WORKFLOWS_TRANSCRIPT,
+  IMPLEMENTATION_WORKFLOWS_TRANSCRIPT,
+  TOOLS_AND_GUARDRAILS_TRANSCRIPT,
+  SURFACE_STRATEGY_TRANSCRIPT,
+  OPERATING_MODEL_TRANSCRIPT,
+  AI_ASSISTED_SDLC_CAPSTONE_TRANSCRIPT,
+} from "./ctx-sdlc.transcripts";
 
 const lines = (...value: string[]) => value.join("\n");
 const EXAMPLE_LESSONS_BASE =
@@ -124,6 +135,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           none: 7,
         },
       },
+      transcript: WHY_CONTEXT_ENGINEERING_TRANSCRIPT,
       qa: [
         {
           question: "What is the main failure mode this course addresses?",
@@ -422,6 +434,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           },
         ],
       },
+      transcript: CURATE_PROJECT_CONTEXT_TRANSCRIPT,
       qa: [
         {
           question: "Why do docs matter if the code already exists?",
@@ -740,6 +753,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           },
         ],
       },
+      transcript: INSTRUCTION_ARCHITECTURE_TRANSCRIPT,
       qa: [
         {
           question: "Why is one huge instruction file a problem?",
@@ -1092,6 +1106,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           },
         ],
       },
+      transcript: PLANNING_WORKFLOWS_TRANSCRIPT,
       qa: [
         {
           question: "Why not let the implementer do the planning too?",
@@ -1418,6 +1433,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           },
         ],
       },
+      transcript: IMPLEMENTATION_WORKFLOWS_TRANSCRIPT,
       qa: [
         {
           question: "Why are skills useful if I already have agents?",
@@ -1744,6 +1760,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           },
         ],
       },
+      transcript: TOOLS_AND_GUARDRAILS_TRANSCRIPT,
       qa: [
         {
           question: "When should I use MCP instead of a hook?",
@@ -2014,6 +2031,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           "mixed-team": 22,
         },
       },
+      transcript: SURFACE_STRATEGY_TRANSCRIPT,
       qa: [
         {
           question:
@@ -2300,6 +2318,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           none: 22,
         },
       },
+      transcript: OPERATING_MODEL_TRANSCRIPT,
       qa: [
         {
           question:
@@ -2582,6 +2601,7 @@ export const CTX_SDLC_COURSE: CourseDefinition = {
           },
         ],
       },
+      transcript: AI_ASSISTED_SDLC_CAPSTONE_TRANSCRIPT,
       qa: [
         {
           question:
