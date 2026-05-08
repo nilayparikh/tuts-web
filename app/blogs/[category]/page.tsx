@@ -97,15 +97,13 @@ export default async function BlogCategoryPage({
           label: "All blogs",
           href: "/blogs/",
         }}
-        tags={
-          Array.from(
-            new Set(
-              traits.length > 0
-                ? traits
-                : summary.subcategories.map((item) => item.title),
-            ),
-          )
-        }
+        tags={Array.from(
+          new Set(
+            traits.length > 0
+              ? traits
+              : summary.subcategories.map((item) => item.title),
+          ),
+        )}
       />
 
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">

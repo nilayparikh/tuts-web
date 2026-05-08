@@ -78,15 +78,13 @@ export default function BlogsPage() {
               }
             : undefined
         }
-        tags={
-          Array.from(
-            new Set(
-              spotlightTraits.length > 0
-                ? spotlightTraits
-                : categories.map((category) => category.title),
-            ),
-          )
-        }
+        tags={Array.from(
+          new Set(
+            spotlightTraits.length > 0
+              ? spotlightTraits
+              : categories.map((category) => category.title),
+          ),
+        )}
       />
 
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">

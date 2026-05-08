@@ -110,11 +110,9 @@ export default async function BlogSubcategoryPage({
         }}
         imageUrl={summary.coverImage}
         imageAlt={summary.coverAlt}
-        tags={
-          Array.from(
-            new Set(traits.length > 0 ? traits.slice(0, 5) : [summary.title]),
-          )
-        }
+        tags={Array.from(
+          new Set(traits.length > 0 ? traits.slice(0, 5) : [summary.title]),
+        )}
       />
 
       <nav aria-label="Breadcrumb" className="tf-breadcrumb">
