@@ -30,5 +30,8 @@
     "**/test-results": true,
     "**/.mypy_cache": true,
     "**/.vite": true
-  }
+  },
+  "openai.apiKey": "sk-dummy",
+  "openai.apiUrl": "http://127.0.0.1:8000/v1",
+  "openai.model": "dgx-coder"
 }
